@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DailyRythmn/ViewContollerTableViewCell.swift"
+            timestampString = "569326171.126086"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "ViewContollerTableViewCell"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyRythmn.ViewContollerTableViewCell.time.getter : Swift.Int"
+                  moduleName = "DailyRythmn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/niklasgrossmann/Documents/Studium/Semester7/BA/DailyRythmn/DailyRythmn/ViewContollerTableViewCell.swift"
+                  timestampString = "565961160.42357"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "102">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyRythmn.ViewContollerTableViewCell.time.setter : Swift.Int"
+                  moduleName = "DailyRythmn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/niklasgrossmann/Documents/Studium/Semester7/BA/DailyRythmn/DailyRythmn/ViewContollerTableViewCell.swift"
+                  timestampString = "565961160.442396"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "114">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyRythmn.ViewContollerTableViewCell.init(style: __C.UITableViewCellStyle, reuseIdentifier: Swift.Optional&lt;Swift.String&gt;) -&gt; DailyRythmn.ViewContollerTableViewCell"
+                  moduleName = "DailyRythmn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/niklasgrossmann/Documents/Studium/Semester7/BA/DailyRythmn/DailyRythmn/ViewContollerTableViewCell.swift"
+                  timestampString = "565961160.444301"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "369">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyRythmn.ViewContollerTableViewCell.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;DailyRythmn.ViewContollerTableViewCell&gt;"
+                  moduleName = "DailyRythmn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/niklasgrossmann/Documents/Studium/Semester7/BA/DailyRythmn/DailyRythmn/ViewContollerTableViewCell.swift"
+                  timestampString = "565961160.446063"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "337">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
