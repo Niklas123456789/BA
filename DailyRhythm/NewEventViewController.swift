@@ -71,7 +71,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     var parkingTime: Int = 0
     
     var repeatDuration: Int = 0
-    var repeatAtWeekdays: [Int] = [0, 0, 0, 0, 0, 0, 0]
+    
+    //Starting with Sunday!
+    var repeatAtWeekdays: [Int] = [0, 0, 1, 0, 0, 0, 0]
     
     //var nextDate: Date
     //let date = Date.init(timeIntervalSinceNow: )
@@ -219,30 +221,70 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         return false
     }
-    
-    //Function that trigger wenn OK-Button is pressed
-    @IBAction func okButton(_ sender: UIButton) {
+    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Int]) -> Int{
         //calc eventTotalSeconds
         //current day
         let todaysDate = Date()
         var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
-        todaysWeekday = todaysWeekday - 1
-        print(todaysWeekday)
+        //var todaysWeekday = 7
+        print("Todays Day Nr \(todaysWeekday)")
         
-        //compair to repeatAtWeekdays
-        var distanceDaysInSecounds = 0
-        if(repeatAtWeekdays.contains(1)){
-            //today?
-            if(repeatAtWeekdays[todaysWeekday - 1] == 1){
-                //distanceDaysInSecounds stays 0
-                //TODO: totalEventSeconds
-            } else if(repeatAtWeekdays[todaysWeekday] == 12){
-                //distanceDaysInSecounds stays 0
-                //TODO: totalEventSeconds
+        //compair to repeatAtWeekdays and get next eventDay
+
+        var countDays = 0
+        
+        if (arr[todaysWeekday - 1] == 1){
+            return 0
+        }else{
+            while (true){
+                
+                if(todaysWeekday == 8){
+                    todaysWeekday = 1
+                }else if(arr[todaysWeekday - 1] != 1){
+                    countDays += 1
+                    todaysWeekday += 1
+                }else if(arr[todaysWeekday - 1] == 1){
+                    break
+                }
             }
         }
+        return countDays
         
         
+        
+        
+        
+//        if(arr.contains(1)){
+//            //today?
+//            if(arr[todaysWeekday - 1] == 1){
+//                //distanceDaysInSecounds stays 0
+//                return 0
+//                //TODO: totalEventSeconds
+//
+//                //not today
+//            } else {
+//                //TODO: wenn kein tag ausgewählt wird soll automatisch der heutige genommen werden
+//                //TODO: totalEventSeconds
+//                while(true){
+//                    if(todaysWeekday == 6 && arr[todaysWeekday - 1] != 1){
+//                        todaysWeekday = 0
+//                        countDaysTillNextCheckDay += 1
+//                    }else if(arr[todaysWeekday - 1] == 1){
+//                        return countDaysTillNextCheckDay
+//
+//                    }else{
+//                        countDaysTillNextCheckDay += 1
+//                    }
+//                }
+//            }
+//        }
+    }
+    
+    //Function that trigger wenn OK-Button is pressed
+    @IBAction func okButton(_ sender: UIButton) {
+        
+        
+        print("WEEKDAYSCOUNT: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
         
         
         ID = ID + 1
