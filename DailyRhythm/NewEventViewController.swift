@@ -236,7 +236,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             if(repeatAtWeekdays[todaysWeekday - 1] == 1){
                 //distanceDaysInSecounds stays 0
                 //TODO: totalEventSeconds
-            } else if(repeatAtWeekdays[todaysWeekday] == 1){
+            } else if(repeatAtWeekdays[todaysWeekday] == 12){
                 //distanceDaysInSecounds stays 0
                 //TODO: totalEventSeconds
             }
