@@ -266,77 +266,82 @@
                                                             </datePicker>
                                                         </subviews>
                                                     </stackView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAf-W2-i8H" userLabel="WeekdaysPicker">
-                                                        <rect key="frame" x="0.0" y="94" width="250" height="134"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="tYz-bY-wGW" userLabel="WeekdayStackView">
+                                                        <rect key="frame" x="0.0" y="94" width="250" height="32"/>
                                                         <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="tYz-bY-wGW" userLabel="WeekdayStackView">
-                                                                <rect key="frame" x="20" y="57" width="210" height="23"/>
-                                                                <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gnx-lx-UHy" userLabel="MO">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="MO" backgroundImage="LeftWhite">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="MOButton:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="ILI-ZQ-Gy8"/>
-                                                                            <action selector="moAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="GrY-bx-PZa"/>
-                                                                        </connections>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCV-Q2-Zmj" userLabel="DI">
-                                                                        <rect key="frame" x="30" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="DI" backgroundImage="White">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="diAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="C6p-8H-x6a"/>
-                                                                        </connections>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Up9-t4-zFb" userLabel="MI">
-                                                                        <rect key="frame" x="60" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="MI" backgroundImage="White">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ce-Dn-wJK" userLabel="DO">
-                                                                        <rect key="frame" x="90" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="DO" backgroundImage="White">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBp-PI-gfF" userLabel="FR">
-                                                                        <rect key="frame" x="120" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="FR" backgroundImage="White">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ee-eI-cpU" userLabel="SA">
-                                                                        <rect key="frame" x="150" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="SA" backgroundImage="White">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLD-29-eIb" userLabel="SO">
-                                                                        <rect key="frame" x="180" y="0.0" width="30" height="23"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <state key="normal" title="SO" backgroundImage="RightWhite">
-                                                                            <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="tYz-bY-wGW" secondAttribute="height" multiplier="210:23" id="cb2-Wo-0wt"/>
-                                                                </constraints>
-                                                            </stackView>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gnx-lx-UHy" userLabel="MO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="35.5" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="MO" backgroundImage="LeftWhite">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="MOButton:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="ILI-ZQ-Gy8"/>
+                                                                    <action selector="moAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="GrY-bx-PZa"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCV-Q2-Zmj" userLabel="DI">
+                                                                <rect key="frame" x="35.5" y="0.0" width="36" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="DI" backgroundImage="White">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="diAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="C6p-8H-x6a"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Up9-t4-zFb" userLabel="MI">
+                                                                <rect key="frame" x="71.5" y="0.0" width="35.5" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="MI" backgroundImage="White">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ce-Dn-wJK" userLabel="DO">
+                                                                <rect key="frame" x="107" y="0.0" width="36" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="DO" backgroundImage="White">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBp-PI-gfF" userLabel="FR">
+                                                                <rect key="frame" x="143" y="0.0" width="35.5" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="FR" backgroundImage="White">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ee-eI-cpU" userLabel="SA">
+                                                                <rect key="frame" x="178.5" y="0.0" width="36" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="SA" backgroundImage="White">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLD-29-eIb" userLabel="SO">
+                                                                <rect key="frame" x="214.5" y="0.0" width="35.5" height="32"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <state key="normal" title="SO" backgroundImage="RightWhite">
+                                                                    <color key="titleColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
+                                                                </state>
+                                                            </button>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="tYz-bY-wGW" secondAttribute="height" multiplier="210:27" id="cb2-Wo-0wt"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAf-W2-i8H" userLabel="WeekdaysPicker">
+                                                        <rect key="frame" x="0.0" y="134" width="250" height="94"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <accessibility key="accessibilityConfiguration">
+                                                            <accessibilityTraits key="traits" none="YES"/>
+                                                            <bool key="isElement" value="YES"/>
+                                                        </accessibility>
                                                     </view>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="QAf-W2-i8H" firstAttribute="centerY" secondItem="tYz-bY-wGW" secondAttribute="centerY" constant="-13" id="Orz-bC-HVz"/>
+                                                </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tgi-ww-M9c" userLabel="Bottom Stack View">
                                                 <rect key="frame" x="0.0" y="472" width="250" height="228"/>
@@ -612,7 +617,6 @@
                             <constraint firstItem="fga-Sc-FEq" firstAttribute="bottom" secondItem="JpT-C1-qIL" secondAttribute="bottom" constant="11" id="9Kn-EG-Zeg"/>
                             <constraint firstItem="GF6-p9-Thd" firstAttribute="height" secondItem="tgi-ww-M9c" secondAttribute="height" constant="-70" id="AcZ-A3-5D9"/>
                             <constraint firstItem="1jS-a4-bg6" firstAttribute="leading" secondItem="jz0-NS-l2L" secondAttribute="leading" id="B69-9g-Tgg"/>
-                            <constraint firstItem="tYz-bY-wGW" firstAttribute="trailing" secondItem="jz0-NS-l2L" secondAttribute="trailing" constant="-20" id="BT5-Zm-dC5"/>
                             <constraint firstItem="1jS-a4-bg6" firstAttribute="trailing" secondItem="jz0-NS-l2L" secondAttribute="trailing" id="DY7-6q-joS"/>
                             <constraint firstItem="7TB-m1-aWs" firstAttribute="bottom" secondItem="lp7-M8-InY" secondAttribute="bottom" constant="-12" id="DZd-e5-hyR"/>
                             <constraint firstItem="3Cf-8J-xmC" firstAttribute="width" secondItem="WOI-Cj-0cc" secondAttribute="width" constant="2" id="DfM-2A-cQZ"/>
@@ -634,7 +638,6 @@
                             <constraint firstItem="hFz-v1-ZUP" firstAttribute="leading" secondItem="jz0-NS-l2L" secondAttribute="leading" constant="14" id="NAN-i0-c7l"/>
                             <constraint firstItem="hFz-v1-ZUP" firstAttribute="bottom" secondItem="bpU-lf-dB8" secondAttribute="bottom" constant="3" id="NRP-I0-Ykc"/>
                             <constraint firstItem="Zxz-GG-khD" firstAttribute="leading" secondItem="WOI-Cj-0cc" secondAttribute="leadingMargin" constant="-16" id="OKL-L2-WM8"/>
-                            <constraint firstItem="tYz-bY-wGW" firstAttribute="leading" secondItem="jz0-NS-l2L" secondAttribute="leading" constant="20" id="OoO-44-FY6"/>
                             <constraint firstItem="jz0-NS-l2L" firstAttribute="bottom" secondItem="fh9-gm-3IM" secondAttribute="bottom" constant="16" id="Pgr-46-3qY"/>
                             <constraint firstItem="z0o-d2-qqb" firstAttribute="trailing" secondItem="jz0-NS-l2L" secondAttribute="trailing" id="RPy-PZ-L7Y"/>
                             <constraint firstItem="Y9n-uR-qrC" firstAttribute="leading" secondItem="pfj-0s-1EY" secondAttribute="trailing" constant="-375" id="RUb-fE-gnf"/>
@@ -700,7 +703,9 @@
                         <outlet property="timePicker" destination="Gn7-Yz-vOq" id="1HA-3v-gOL"/>
                         <outlet property="walkingTimePicker" destination="XZK-GY-FGu" id="TIB-wI-dyG"/>
                         <outlet property="walkingtimeLabel" destination="Ilq-0T-lnk" id="kpw-cH-EBE"/>
+                        <outlet property="weekdayPicker" destination="QAf-W2-i8H" id="1ym-Pm-xF6"/>
                         <outlet property="weekdayStackView" destination="tYz-bY-wGW" id="r6c-pk-TEW"/>
+                        <outletCollection property="weekdayPicker" destination="QAf-W2-i8H" collectionClass="NSMutableArray" id="fcN-Yo-dQ4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FXM-Pb-gME" userLabel="First Responder" sceneMemberID="firstResponder"/>

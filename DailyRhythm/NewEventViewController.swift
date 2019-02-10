@@ -14,22 +14,24 @@ var ID: Int = 0
 class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate{
 
 
+
+    @IBOutlet weak var weekdayPicker: UIView!
     var houseNrEdited = false
     @IBOutlet weak var weekdayStackView: UIStackView!
-    
     @IBOutlet weak var MOButton: UIButton!
     var mo: Bool = false
     @IBAction func moAction(_ sender: Any) {
+        print("MO pressed")
         if(mo==true){
             mo = false
             MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
-            MOButton.setTitleColor(UIColor.black, for: .normal)
+            MOButton.setTitleColor(UIColor.white, for: .normal)
         }else{
             mo = true
             MOButton.setBackgroundImage(UIImage(named: "LeftWhite"), for: .normal)
-            MOButton.setTitleColor(UIColor.white, for: .normal)
+            MOButton.setTitleColor(UIColor.black, for: .normal)
         }
-        print("MO pressed")
+        
     }
     
     @IBOutlet weak var DIButton: UIButton!
@@ -102,7 +104,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         print("heyo")
  
         weekdayStackView.layer.zPosition = 100
-        MOButton.layer.zPosition = 101
+        weekdayPicker.layer.zPosition = 1
+
+
         
         //Picker Delegates
         self.durationPicker.delegate = self
@@ -139,10 +143,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
-    @objc func tapFunction(sender:UITapGestureRecognizer) {
+    //@objc func tapFunction(sender:UITapGestureRecognizer) {
 
-        print("tap working")
-    }
+        //print("tap working")
+    //}
     
     // Capture the picker view selection
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
