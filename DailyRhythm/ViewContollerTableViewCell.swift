@@ -79,13 +79,7 @@ class ViewContollerTableViewCell: UITableViewCell {
     }
     func ausgeben(h: Int, m: Int, s: Int){
 
-//        if ((s <= 9) && (m <= 9)){
-//            self.cellTime.text = "\(h):0\(m):0\(s)"
-//        }else if (s <= 9 && s >= 0){
-//            self.cellTime.text = "\(h):\(m):0\(s)"
-//        }
-//        else if (m <= 9 && m >= 0){
-//            self.cellTime.text = "\(h):0\(m):\(s)"
+
         
         
         if(h==0){

@@ -16,20 +16,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
     var houseNrEdited = false
     
-    @IBOutlet weak var labelMO: UILabel!
-    @IBOutlet weak var backgroundMO: UIImageView!
-    @IBOutlet weak var labelDI: UILabel!
-    @IBOutlet weak var backgroundDI: UIImageView!
-    @IBOutlet weak var labelMI: UILabel!
-    @IBOutlet weak var backgroundMI: UIImageView!
-    @IBOutlet weak var labelDO: UILabel!
-    @IBOutlet weak var backgroundDO: UIImageView!
-    @IBOutlet weak var labelFR: UILabel!
-    @IBOutlet weak var backgroundFR: UIImageView!
-    @IBOutlet weak var labelSA: UILabel!
-    @IBOutlet weak var backgroundSA: UIImageView!
-    @IBOutlet weak var labelSO: UILabel!
-    @IBOutlet weak var backgroundSO: UIImageView!
     
 //
 //    @IBOutlet weak var containerStackView: UIStackView!
@@ -111,9 +97,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         parkingLabel.font = UIFont(name: Font.helveticaLight, size: 20)
         
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(NewEventViewController.tapFunction))
-        labelMO.isUserInteractionEnabled = true
-        labelMO.addGestureRecognizer(tap)
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(NewEventViewController.tapFunction))
+//        labelMO.isUserInteractionEnabled = true
+//        labelMO.addGestureRecognizer(tap)
         
         
     }
@@ -227,7 +213,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let todaysDate = Date()
         var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
         //var todaysWeekday = 7
-        print("Todays Day Nr \(todaysWeekday)")
+        print("Todays Day Nr: \(todaysWeekday)")
         
         //compair to repeatAtWeekdays and get next eventDay
 
@@ -249,42 +235,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             }
         }
         return countDays
-        
-        
-        
-        
-        
-//        if(arr.contains(1)){
-//            //today?
-//            if(arr[todaysWeekday - 1] == 1){
-//                //distanceDaysInSecounds stays 0
-//                return 0
-//                //TODO: totalEventSeconds
-//
-//                //not today
-//            } else {
-//                //TODO: wenn kein tag ausgewählt wird soll automatisch der heutige genommen werden
-//                //TODO: totalEventSeconds
-//                while(true){
-//                    if(todaysWeekday == 6 && arr[todaysWeekday - 1] != 1){
-//                        todaysWeekday = 0
-//                        countDaysTillNextCheckDay += 1
-//                    }else if(arr[todaysWeekday - 1] == 1){
-//                        return countDaysTillNextCheckDay
-//
-//                    }else{
-//                        countDaysTillNextCheckDay += 1
-//                    }
-//                }
-//            }
-//        }
+
     }
     
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButton(_ sender: UIButton) {
         
         
-        print("WEEKDAYSCOUNT: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
+        print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
         
         
         ID = ID + 1
