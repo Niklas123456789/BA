@@ -15,6 +15,38 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
 
     var houseNrEdited = false
+    @IBOutlet weak var weekdayStackView: UIStackView!
+    
+    @IBOutlet weak var MOButton: UIButton!
+    var mo: Bool = false
+    @IBAction func moAction(_ sender: Any) {
+        if(mo==true){
+            mo = false
+            MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
+            MOButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            mo = true
+            MOButton.setBackgroundImage(UIImage(named: "LeftWhite"), for: .normal)
+            MOButton.setTitleColor(UIColor.white, for: .normal)
+        }
+        print("MO pressed")
+    }
+    
+    @IBOutlet weak var DIButton: UIButton!
+    var di: Bool = false
+    @IBAction func diAction(_ sender: Any) {
+        print("DIACTION")
+    }
+    @IBOutlet weak var MIButton: UIButton!
+    var mi: Bool = false
+    @IBOutlet weak var DOButton: UIButton!
+    var dO: Bool = false
+    @IBOutlet weak var FRButton: UIButton!
+    var fr: Bool = false
+    @IBOutlet weak var SAButton: UIButton!
+    var sa: Bool = false
+    @IBOutlet weak var SOButton: UIButton!
+    var so: Bool = false
     
     
 //
@@ -59,7 +91,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     var repeatDuration: Int = 0
     
     //Starting with Sunday!
-    var repeatAtWeekdays: [Int] = [0, 0, 1, 0, 0, 0, 0]
+    var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
     
     //var nextDate: Date
     //let date = Date.init(timeIntervalSinceNow: )
@@ -69,6 +101,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         super.viewDidLoad()
         print("heyo")
  
+        weekdayStackView.layer.zPosition = 100
+        MOButton.layer.zPosition = 101
         
         //Picker Delegates
         self.durationPicker.delegate = self
@@ -207,7 +241,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         return false
     }
-    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Int]) -> Int{
+    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
         //calc eventTotalSeconds
         //current day
         let todaysDate = Date()
@@ -219,23 +253,29 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
         var countDays = 0
         
-        if (arr[todaysWeekday - 1] == 1){
+        if (arr[todaysWeekday - 1] == true){
             return 0
         }else{
             while (true){
                 
                 if(todaysWeekday == 8){
                     todaysWeekday = 1
-                }else if(arr[todaysWeekday - 1] != 1){
+                }else if(arr[todaysWeekday - 1] != true){
                     countDays += 1
                     todaysWeekday += 1
-                }else if(arr[todaysWeekday - 1] == 1){
+                }else if(arr[todaysWeekday - 1] == true){
                     break
                 }
             }
         }
         return countDays
 
+    }
+    
+    //Function Change back & white Weekdaysbuttons
+    
+    func invertButtonColor(_ sender: UIButton){
+        //if(sender.currentBackgroundImage?.isEqual())
     }
     
     //Function that trigger wenn OK-Button is pressed
