@@ -15,40 +15,109 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
 
 
-    @IBOutlet weak var weekdayPicker: UIView!
     var houseNrEdited = false
     @IBOutlet weak var weekdayStackView: UIStackView!
-    @IBOutlet weak var MOButton: UIButton!
+
     var mo: Bool = false
+    
+    @IBOutlet weak var MOButton: UIButton!
     @IBAction func moAction(_ sender: Any) {
-        print("MO pressed")
+        print("MONDAY")
         if(mo==true){
             mo = false
-            MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
-            MOButton.setTitleColor(UIColor.white, for: .normal)
-        }else{
-            mo = true
             MOButton.setBackgroundImage(UIImage(named: "LeftWhite"), for: .normal)
             MOButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            mo = true
+            MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
+            MOButton.setTitleColor(UIColor.white, for: .normal)
         }
-        
     }
-    
-    @IBOutlet weak var DIButton: UIButton!
+
     var di: Bool = false
+
+    @IBOutlet weak var DIButton: UIButton!
     @IBAction func diAction(_ sender: Any) {
-        print("DIACTION")
+        print("DIENSTAG")
+        if(di==true){
+            di = false
+            DIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
+            DIButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            di = true
+            DIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+            DIButton.setTitleColor(UIColor.white, for: .normal)
+        }
     }
     @IBOutlet weak var MIButton: UIButton!
     var mi: Bool = false
+    @IBAction func miAction(_ sender: Any) {
+        if(mi==true){
+            mi = false
+            MIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
+            MIButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            mi = true
+            MIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+            MIButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
+    
     @IBOutlet weak var DOButton: UIButton!
     var dO: Bool = false
+    @IBAction func doAction(_ sender: Any) {
+        if(dO==true){
+            dO = false
+            DOButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
+            DOButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            dO = true
+            DOButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+            DOButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
+    
     @IBOutlet weak var FRButton: UIButton!
     var fr: Bool = false
+    @IBAction func frAction(_ sender: Any) {
+        if(fr==true){
+            fr = false
+            FRButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
+            FRButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            fr = true
+            FRButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+            FRButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
+    
     @IBOutlet weak var SAButton: UIButton!
     var sa: Bool = false
+    @IBAction func saAction(_ sender: Any) {
+        if(sa==true){
+            sa = false
+            SAButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
+            SAButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            sa = true
+            SAButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+            SAButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
+    
     @IBOutlet weak var SOButton: UIButton!
     var so: Bool = false
+    @IBAction func soAction(_ sender: Any) {
+        if(so==true){
+            so = false
+            SOButton.setBackgroundImage(UIImage(named: "RightWhite"), for: .normal)
+            SOButton.setTitleColor(UIColor.black, for: .normal)
+        }else{
+            so = true
+            SOButton.setBackgroundImage(UIImage(named: "RightBlack"), for: .normal)
+            SOButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
     
     
 //
@@ -95,16 +164,23 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //Starting with Sunday!
     var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
     
+    var strPickerDate: String = ""
+    var pickerHour: Int = 0
+    var pickerMin: Int = 0
+    
     //var nextDate: Date
+    //var eventDate: Date = Date.init()
     //let date = Date.init(timeIntervalSinceNow: )
+    
+    
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         print("heyo")
- 
-        weekdayStackView.layer.zPosition = 100
-        weekdayPicker.layer.zPosition = 1
+
+        
+        
 
 
         
@@ -147,6 +223,17 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
         //print("tap working")
     //}
+    
+    @IBAction func datePickerAction(sender: AnyObject) {
+        
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HHmm"
+        strPickerDate = dateFormatter.string(from: timePicker.date)
+        var temp:Int! = Int(strPickerDate)
+        pickerMin = temp % 100
+        pickerHour = Int(temp/100)
+        print("Time datePicker: \(strPickerDate)")
+    }
     
     // Capture the picker view selection
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -247,10 +334,11 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
         //calc eventTotalSeconds
+        
         //current day
         let todaysDate = Date()
         var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
-        //var todaysWeekday = 7
+        
         print("Todays Day Nr: \(todaysWeekday)")
         
         //compair to repeatAtWeekdays and get next eventDay
@@ -273,20 +361,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             }
         }
         return countDays
+    }
 
-    }
-    
-    //Function Change back & white Weekdaysbuttons
-    
-    func invertButtonColor(_ sender: UIButton){
-        //if(sender.currentBackgroundImage?.isEqual())
-    }
     
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButton(_ sender: UIButton) {
+        datePickerAction(sender: timePicker)
         
-        
-        print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
+ //       print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
         
         
         ID = ID + 1
@@ -298,12 +380,83 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //TODO: Check adress
         
-        
+        //checks repeatAtWeekdays
+        let temp = [so, mo, di, mi, dO, fr, sa]
+//        for element in temp {
+//            print("\(element)")
+//        }
         //TODO: Save event in JSON
-
         
-//        var newEvent = Event(eventID: ID, eventName: nameTextField.text, streetName: streetTextField.text, houseNr: houseNumberTextField.text, houseNrEdited: houseNrEdited, cityName: cityTextField.text, eventNotes: notesTextField.text, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, event Date: nextDate, eventTotalSeconds: <#T##Int#>, repeatDuration: Int, repeatAtWeekdays: <#T##[Int]#>)
+        //yyy.mm.dd hh:mm
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        
+        let year =  components.year
+        let month = components.month
+        let day = components.day
+        let hour: Int! = components.hour
+        let minute: Int! = components.minute
+        
+        
+        
+        print("DATE: \(year):"+"\(month):"+"\(day)   "+"\(hour):\(minute)")
+
+        //TODO: HOURS and Minutes calc
+
+        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
+        
+        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        
+        //date.addingTimeInterval(<#T##timeInterval: TimeInterval##TimeInterval#>)
+        
+//        var newEvent = Event(eventID: ID, eventName: nameTextField.text, streetName: streetTextField.text, houseNr: houseNumberTextField.text, houseNrEdited: houseNrEdited, cityName: cityTextField.text, eventNotes: notesTextField.text, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: <#T##Int#>, repeatDuration: Int, repeatAtWeekdays: [so, mo, di, mi, dO, fr, sa])
         //TODO: push notification function
+    }
+    
+    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
+
+        var difHours: Int
+        var difMin: Int
+        
+        if (currentHours < eventHours && currentMin < eventMin){
+            difHours = eventHours - currentHours
+            difMin = eventMin - currentMin
+            
+        } else if (currentHours < eventHours && currentMin > eventMin){
+            difHours = eventHours - currentHours - 1
+            difMin = 60 - eventMin + currentMin
+            
+        } else if (currentHours > eventHours && currentMin < eventMin){
+            difHours = (-24) + (currentHours - eventHours)
+            difMin = eventMin - currentMin
+            
+        }else if (currentHours == eventHours && currentMin > eventMin){
+            difHours = -23
+            difMin = 60 - (currentMin - eventMin)
+        
+        }else if (currentHours == eventHours && currentMin < eventMin){
+            difHours = 0
+            difMin = eventMin - currentMin
+            
+        }else if (currentHours < eventHours && currentMin == eventMin){
+            difHours = eventHours - currentHours
+            difMin = 0
+            
+        }else if (currentHours > eventHours && currentMin == eventMin){
+            difHours = (-24) + (currentHours - eventHours)
+            difMin = 0
+            
+        }else if (currentHours > eventHours && currentMin > eventMin){
+            difHours = (-24) + (currentHours - eventHours) - 1
+            difMin = 60 - (currentMin - eventMin)
+            
+        //(currentHours == eventHours && currentMin == eventMin)
+        } else {
+            difHours = 0
+            difMin = 0
+        }
+        return (difHours, difMin)
     }
 }
 

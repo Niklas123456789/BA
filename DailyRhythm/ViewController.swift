@@ -113,29 +113,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 //        let emptyEvent: EventOLD = EventOLD(eventID: -1, eventName: "emptyCell", eventTotalSeconds: 3)
 //        //testEvent
-//        let testEvent0: EventOLD = EventOLD(eventID: 0, eventName: "Test0", eventTotalSeconds: 666)
+ //       let testEvent0: EventOLD = EventOLD(eventID: 0, eventName: "Test0", eventTotalSeconds: 666)
 //        let testEvent1: EventOLD = EventOLD(eventID: 1, eventName: "Test1", eventTotalSeconds: 30)
 //        let testEvent2: EventOLD = EventOLD(eventID: 2, eventName: "Test2", eventTotalSeconds: 16)
 //        let testEvent3: EventOLD = EventOLD(eventID: 3, eventName: "Test3", eventTotalSeconds: 86405 * 2)
 //        let testEvent4: EventOLD = EventOLD(eventID: 4, eventName: "Test4", eventTotalSeconds: 2000)
 //
-//        var allEventsArray = [EventOLD]()
+ //       var allEventsArray = [EventOLD]()
 //
 //        allEventsArray.append(emptyEvent)
-//        allEventsArray.append(testEvent0)
+ //       allEventsArray.append(testEvent0)
 //        allEventsArray.append(testEvent1)
 //        allEventsArray.append(testEvent2)
 //        allEventsArray.append(testEvent3)
 //        allEventsArray.append(testEvent4)
 //
-//        allEventsArray.sort(by: {$0.eventTotalSeconds < $1.eventTotalSeconds})
+ //       allEventsArray.sort(by: {$0.eventTotalSeconds < $1.eventTotalSeconds})
 //
 //        //adds to each notification an alarm
-//        pushNotifivation(allEventsArray: allEventsArray)
+ //       pushNotifivation(allEventsArray: allEventsArray)
 //
 //        //deletes all Events and then adds all Events to the Table View
-//        tableViewList.removeAll()
-//        tableViewList.append(contentsOf: allEventsArray)
+ //       tableViewList.removeAll()
+ //       tableViewList.append(contentsOf: allEventsArray)
     }
 }
 
