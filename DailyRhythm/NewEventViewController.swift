@@ -333,7 +333,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         return false
     }
     func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
-        //calc eventTotalSeconds
         
         //current day
         let todaysDate = Date()
@@ -406,52 +405,64 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
         let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
         
-        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        print(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))
+
+        //var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays) * 86400 + difHour * 3600 + difMin * 60
         
         //date.addingTimeInterval(<#T##timeInterval: TimeInterval##TimeInterval#>)
         
 //        var newEvent = Event(eventID: ID, eventName: nameTextField.text, streetName: streetTextField.text, houseNr: houseNumberTextField.text, houseNrEdited: houseNrEdited, cityName: cityTextField.text, eventNotes: notesTextField.text, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: <#T##Int#>, repeatDuration: Int, repeatAtWeekdays: [so, mo, di, mi, dO, fr, sa])
         //TODO: push notification function
+        
+        //TODO: load allEventScreen
     }
     
     func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
-
+        
         var difHours: Int
         var difMin: Int
         
+        //works
         if (currentHours < eventHours && currentMin < eventMin){
             difHours = eventHours - currentHours
             difMin = eventMin - currentMin
             
+            //works
         } else if (currentHours < eventHours && currentMin > eventMin){
             difHours = eventHours - currentHours - 1
-            difMin = 60 - eventMin + currentMin
+            difMin = 60 - (currentMin - eventMin)
             
+            //works
         } else if (currentHours > eventHours && currentMin < eventMin){
             difHours = (-24) + (currentHours - eventHours)
             difMin = eventMin - currentMin
             
+            //works
         }else if (currentHours == eventHours && currentMin > eventMin){
             difHours = -23
             difMin = 60 - (currentMin - eventMin)
-        
+            
+            //works
         }else if (currentHours == eventHours && currentMin < eventMin){
             difHours = 0
             difMin = eventMin - currentMin
             
+            //works
         }else if (currentHours < eventHours && currentMin == eventMin){
             difHours = eventHours - currentHours
             difMin = 0
             
+            //works
         }else if (currentHours > eventHours && currentMin == eventMin){
             difHours = (-24) + (currentHours - eventHours)
             difMin = 0
             
+            //works
         }else if (currentHours > eventHours && currentMin > eventMin){
-            difHours = (-24) + (currentHours - eventHours) - 1
+            difHours = (-24) + (currentHours - eventHours) + 1
             difMin = 60 - (currentMin - eventMin)
             
-        //(currentHours == eventHours && currentMin == eventMin)
+            //(currentHours == eventHours && currentMin == eventMin)
         } else {
             difHours = 0
             difMin = 0
