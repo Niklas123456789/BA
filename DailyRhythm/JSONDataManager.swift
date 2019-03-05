@@ -11,7 +11,7 @@ import Foundation
 public class JSONDataManager{
     
     //get Document Directory
-    static fileprivate func getDocumentDirectory() -> URL {
+    static func getDocumentDirectory() -> URL {
         if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             return url
         } else {
@@ -28,7 +28,7 @@ public class JSONDataManager{
         do{
             let data = try encoder.encode(object)
             if FileManager.default.fileExists(atPath: url.path) {
-                try FileManager.default.removeItem(at: url)
+                try FileManager.default.removeItem(at: url)    
             }
             FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
         }catch{
@@ -78,6 +78,7 @@ public class JSONDataManager{
             
             for fileName in files {
                 modelObjects.append(loadJSON(fileName, with: type))
+//                delete(fileName)
             }
             
             return modelObjects

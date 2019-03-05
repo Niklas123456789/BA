@@ -27,8 +27,9 @@ struct Event : Codable {
     
     var repeatDuration: Int = 0
     var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
+    var weeksTillNextEvent: Int
     
-    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool]) {
+    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
@@ -43,6 +44,7 @@ struct Event : Codable {
         self.eventTotalSeconds = eventTotalSeconds
         self.repeatDuration = repeatDuration
         self.repeatAtWeekdays = repeatAtWeekdays
+        self.weeksTillNextEvent = weeksTillNextEvent
     }
 
     

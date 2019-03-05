@@ -398,7 +398,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
 
         
-        //TODO: Save event in JSON
         
         //yyy.mm.dd hh:mm
         let date = Date()
@@ -424,17 +423,75 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
 
-        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
         print(distanceToEventInSecounds)
         
-        var eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+        let eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+        
+        
+        var weeksTillNextEvent: Int = 0
+        if repeatDuration == 0 {
+            weeksTillNextEvent = 0
+        }else if repeatDuration == 1 {
+            weeksTillNextEvent = 0
+        }else if repeatDuration == 2 {
+            weeksTillNextEvent = 1
+        }else if repeatDuration == 3 {
+            weeksTillNextEvent = 2
+        //monatlich
+        }else if repeatDuration == 4 {
+            weeksTillNextEvent = 3
+        }
 
         
-        var newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays)
+        let newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent)
+        
+        newEvent.saveEventInJSON()
         //TODO: push notification function
         
         //TODO: load allEventScreen
+//        let tableView = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+//
+//        self.navigationController?.pushViewController(tableView, animated: true)
+//
+        //self.present(tableView, animated: true, completion: nil)
     }
+    
+    func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: String) -> Int {
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date)
+        
+        let hour: Int! = components.hour
+        let minute: Int! = components.minute
+        
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HHmm"
+        strPickerDate = dateFormatter.string(from: eventDate)
+        let temp:Int! = Int(strPickerDate)
+        let eventMin = temp % 100
+        let eventHour = Int(temp/100)
+        print("Time datePicker: \(strPickerDate)")
+        
+        
+        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
+
+        
+        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        print(distanceToEventInSecounds)
+        
+        return distanceToEventInSecounds
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
         

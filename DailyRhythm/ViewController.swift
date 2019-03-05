@@ -74,7 +74,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
                 let content = UNMutableNotificationContent()
                 content.title = "\(allEventsArray[index].eventName)"
-                
+
                 //sets the content of the notification
                 if(allEventsArray[index].eventNotes == ""){
                     content.body = "Mit deinem Puffer von \(allEventsArray[index].bufferTime) Minuten musst du jetzt los!"
@@ -85,16 +85,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 //sets the notification sound
                 content.sound = UNNotificationSound.default
-                
+
                 //creates trigger with the right time
                 let totalTravelTime = allEventsArray[index].eventTotalSeconds - (allEventsArray[index].bufferTime * 60) - (allEventsArray[index].parkingTime * 60) -
                     (allEventsArray[index].walkingTime * 60) + 1
-                
+
                 if(totalTravelTime > 0){
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTravelTime), repeats: false)
-                    
+
                     let request = UNNotificationRequest(identifier: "\(allEventsArray[index].eventID)", content: content, trigger: trigger)
-                    
+
                     center.add(request, withCompletionHandler: nil)
                 }
                 //breaks while(true)-loop when every notification is set
@@ -105,11 +105,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
+    
+    
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        
+        let loadedEvents = JSONDataManager.loadAll(Event.self)
+        print(loadedEvents)
+
+
 
 //        let emptyEvent: EventOLD = EventOLD(eventID: -1, eventName: "emptyCell", eventTotalSeconds: 3)
 //        //testEvent
@@ -119,7 +128,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        let testEvent3: EventOLD = EventOLD(eventID: 3, eventName: "Test3", eventTotalSeconds: 86405 * 2)
 //        let testEvent4: EventOLD = EventOLD(eventID: 4, eventName: "Test4", eventTotalSeconds: 2000)
 //
- //       var allEventsArray = [EventOLD]()
+        var allEventsArray = [Event]()
+        var indexEventCount = 0
+
+        //add JSON-Events to table
+        for indexEventCount in 0..<loadedEvents.count {
+            allEventsArray.append(loadedEvents[indexEventCount])
+        }
+
 //
 //        allEventsArray.append(emptyEvent)
  //       allEventsArray.append(testEvent0)
@@ -128,14 +144,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        allEventsArray.append(testEvent3)
 //        allEventsArray.append(testEvent4)
 //
- //       allEventsArray.sort(by: {$0.eventTotalSeconds < $1.eventTotalSeconds})
+       allEventsArray.sort(by: {$0.eventTotalSeconds < $1.eventTotalSeconds})
 //
 //        //adds to each notification an alarm
- //       pushNotifivation(allEventsArray: allEventsArray)
+       pushNotifivation(allEventsArray: allEventsArray)
 //
 //        //deletes all Events and then adds all Events to the Table View
- //       tableViewList.removeAll()
- //       tableViewList.append(contentsOf: allEventsArray)
+       tableViewList.removeAll()
+       tableViewList.append(contentsOf: allEventsArray)
     }
 }
 
