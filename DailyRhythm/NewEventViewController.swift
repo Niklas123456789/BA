@@ -266,6 +266,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         self.view.endEditing(true)
         self.durationPicker.endEditing(true)
         self.timePicker.endEditing(true)
+        
     }
     
     
@@ -343,11 +344,11 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //compair to repeatAtWeekdays and get next eventDay
 
         var countDays = 0
-        
+        var count = 0
         if (arr[todaysWeekday - 1] == true){
             return 0
         }else{
-            while (true){
+            while (count <= 7){
                 
                 if(todaysWeekday == 8){
                     todaysWeekday = 1
@@ -357,8 +358,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 }else if(arr[todaysWeekday - 1] == true){
                     break
                 }
+                count = count + 1
             }
         }
+        print("Count to event in Days Return: \(countDays)")
         return countDays
     }
 
@@ -366,6 +369,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButton(_ sender: UIButton) {
         datePickerAction(sender: timePicker)
+        
         
  //       print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
         
@@ -379,11 +383,21 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //TODO: Check adress
         
-        //checks repeatAtWeekdays
-        let temp = [so, mo, di, mi, dO, fr, sa]
-//        for element in temp {
-//            print("\(element)")
-//        }
+        //checks repeatAtWeekdays and checks if all are false
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+        var weekdaysAreAllFalse = true
+        for element in eventWeekdays {
+            if element == true {
+                weekdaysAreAllFalse = false
+                break
+            }
+        }
+        if weekdaysAreAllFalse == true {
+            print("NO WEEKDAY SELECTED ERROR (no JSON-Event saved)")
+            return
+        }
+
+        
         //TODO: Save event in JSON
         
         //yyy.mm.dd hh:mm
@@ -401,17 +415,22 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         print("DATE: \(year):"+"\(month):"+"\(day)   "+"\(hour):\(minute)")
 
-        //TODO: HOURS and Minutes calc
+        // HOURS and Minutes between event time and now
 
         let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
         
-        print(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))
+        //TODO: ERROR when no day is selected
+        print(countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays))
+        
+        
 
-        //var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        print(distanceToEventInSecounds)
         
-        //date.addingTimeInterval(<#T##timeInterval: TimeInterval##TimeInterval#>)
+        var eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+
         
-//        var newEvent = Event(eventID: ID, eventName: nameTextField.text, streetName: streetTextField.text, houseNr: houseNumberTextField.text, houseNrEdited: houseNrEdited, cityName: cityTextField.text, eventNotes: notesTextField.text, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: <#T##Int#>, repeatDuration: Int, repeatAtWeekdays: [so, mo, di, mi, dO, fr, sa])
+        var newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays)
         //TODO: push notification function
         
         //TODO: load allEventScreen

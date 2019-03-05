@@ -14,7 +14,7 @@ struct Event : Codable {
     var eventName: String
     var streetName: String
     //ohne hausnummer?
-    var houseNr: Int = -1
+    var houseNr: String
     var houseNrEdited: Bool
     var cityName: String
     var eventNotes: String
@@ -26,9 +26,9 @@ struct Event : Codable {
     var eventTotalSeconds: Int = 0
     
     var repeatDuration: Int = 0
-    var repeatAtWeekdays: [Int] = [0, 0, 0, 0, 0, 0, 0]
+    var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
     
-    init(eventID: Int, eventName: String, streetName: String, houseNr: Int,houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Int]) {
+    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool]) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
