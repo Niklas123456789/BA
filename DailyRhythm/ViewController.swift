@@ -66,8 +66,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //empty allEventArray
         if((allEventsArray.count == 1 && allEventsArray[0].eventID == -1)){
-            
             print("ViewController allEventArray is empty")
+        }else if(allEventsArray.count == 0){
+            print("AllEventArray is empty")
         }else{
         //creates one notification for each event
             while(true){
