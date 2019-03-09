@@ -10,6 +10,7 @@
 		D73B59EE21944827000CA37B /* EventOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B59ED21944827000CA37B /* EventOLD.swift */; };
 		D73B59F021944C93000CA37B /* IterationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B59EF21944C93000CA37B /* IterationEnum.swift */; };
 		D73FA25A21C6A7B40021D954 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D73FA25921C6A7B40021D954 /* MapKit.framework */; };
+		D75EA98A223419AF00A258C7 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75EA989223419AF00A258C7 /* EventManager.swift */; };
 		D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02621EB952B00AA2617 /* EventViewController.swift */; };
 		D763E02921EDF19500AA2617 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02821EDF19500AA2617 /* Extentions.swift */; };
 		D779839A2198DD2000764577 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983992198DD2000764577 /* Constants.swift */; };
@@ -40,6 +41,7 @@
 		D73B59ED21944827000CA37B /* EventOLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventOLD.swift; sourceTree = "<group>"; };
 		D73B59EF21944C93000CA37B /* IterationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterationEnum.swift; sourceTree = "<group>"; };
 		D73FA25921C6A7B40021D954 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D75EA989223419AF00A258C7 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		D763E02621EB952B00AA2617 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		D763E02821EDF19500AA2617 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		D77983992198DD2000764577 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				D7CBCA85219324E3001F786B /* Info.plist */,
 				D77983B121A4B6B600764577 /* NewEventViewController.swift */,
 				D763E02821EDF19500AA2617 /* Extentions.swift */,
+				D75EA989223419AF00A258C7 /* EventManager.swift */,
 			);
 			path = DailyRhythm;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				D7CBCA7A219324E1001F786B /* AppDelegate.swift in Sources */,
 				D73B59EE21944827000CA37B /* EventOLD.swift in Sources */,
 				D7CAFE0721FF5C4400272E8B /* JSONDataManager.swift in Sources */,
+				D75EA98A223419AF00A258C7 /* EventManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

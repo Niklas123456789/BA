@@ -88,11 +88,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "573499974.694165"
+            timestampString = "573842180.485466"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "420"
-            endingLineNumber = "420"
+            startingLineNumber = "413"
+            endingLineNumber = "413"
             landmarkName = "okButton(_:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -154,7 +154,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     @IBOutlet weak var parkingTimePicker: UIPickerView!
     var timePickerData: [Int] = [Int]()
     
-    var duration: String = ""
+//    var duration: Int = 0
     var bufferTime: Int = 0
     var walkingTime: Int = 0
     var parkingTime: Int = 0
@@ -171,18 +171,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //var nextDate: Date
     //var eventDate: Date = Date.init()
     //let date = Date.init(timeIntervalSinceNow: )
-    
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         print("heyo")
-
-        
-        
-
-
         
         //Picker Delegates
         self.durationPicker.delegate = self
@@ -244,8 +236,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
         
         if (pickerView.isEqual(durationPicker)) {
-            duration = durationPickerData[row]
-            print("Duration Time: \(duration)")
+            repeatDuration = row
+            
+            print("Duration Time: \(repeatDuration)")
         }
         if(pickerView.isEqual(bufferPicker)) {
             bufferTime = timePickerData[row]
@@ -443,8 +436,15 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             weeksTillNextEvent = 3
         }
 
+        //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
+        var newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, timeTillNextCheck: 5, timeTillGo: (distanceToEventInSecounds - (bufferTime + walkingTime + parkingTime) * 60), driveTime: 0)
         
-        let newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent)
+        EventManager.getInstance().updateEventTimes(event: &newEvent)
+        
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(newEvent.timeTillNextCheck), repeats: false, block: { (timer) in
+            EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+        })
         
         newEvent.saveEventInJSON()
         //TODO: push notification function
@@ -457,16 +457,45 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //self.present(tableView, animated: true, completion: nil)
     }
     
-    func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: String) -> Int {
-        
+//    func updateEventTimes(event: Event) -> (Int, Int, Int){
+//
+//        var eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: repeatDuration
+//        var timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
+//        //TODO Timer that calls the updateEventTimes when timeTillnextcheck is 0
+//        //        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+//        //            updateEventTimes(event: self)
+//        //        })
+//
+//
+//
+//        var timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+//
+//        if event.weeksTillNextEvent != 0 && event.weeksTillNextEvent != 1 {
+//            eventTotalSeconds = eventTotalSeconds + ((event.weeksTillNextEvent - 1) * 604800)
+//            timeTillNextCheck = timeTillNextCheck + ((event.weeksTillNextEvent - 1) * 604800)
+//            timeTillGo = timeTillGo + ((event.weeksTillNextEvent - 1) * 604800)
+//        }
+//        return (eventTotalSeconds, timeTillNextCheck, timeTillGo)
+//    }
+    //TODO
+    func calcDriveTime(event: Event) -> Int {
+        return 0
+    }
+    
+//    func repeatTimeCheck(event: inout Event) {
+//        EventManager.getInstance().updateEventTimes(event: &event)
+//    }
+    
+    func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: Int) -> Int {
+
         let date = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date)
-        
+
         let hour: Int! = components.hour
         let minute: Int! = components.minute
-        
-        
+
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
         strPickerDate = dateFormatter.string(from: eventDate)
@@ -474,14 +503,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let eventMin = temp % 100
         let eventHour = Int(temp/100)
         print("Time datePicker: \(strPickerDate)")
-        
-        
+
+
         let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
 
-        
+
         let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
         print(distanceToEventInSecounds)
-        
+
         return distanceToEventInSecounds
     }
     

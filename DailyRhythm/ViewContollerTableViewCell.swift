@@ -38,12 +38,12 @@ class ViewContollerTableViewCell: UITableViewCell {
         self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
         
-        if(time <= 86400 * 2){
+        if(time <= 86400){
             
             startTimer(timeInSeconds: time)
         } else {
-            //was tun wenn Zeit noch über 48h?
-            self.cellTime.text = "+48h"
+            //was tun wenn Zeit noch über 24h?
+            self.cellTime.text = "+24h"
         }
     } 
     func startTimer(timeInSeconds: Int){
@@ -52,7 +52,7 @@ class ViewContollerTableViewCell: UITableViewCell {
         
         
         var secondsLeft: Int = timeInSeconds
-        if(time <= 86400 * 2){
+        if(time <= 86400){
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
             

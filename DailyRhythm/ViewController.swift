@@ -36,7 +36,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        }
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName
-        cell.checkTwoDays(time: tableViewList[indexPath.row].eventTotalSeconds)
+        cell.checkTwoDays(time: tableViewList[indexPath.row].timeTillGo)
         
         return(cell)
     }
@@ -54,60 +54,66 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
 
     //NOTIFICATIONS
-    func pushNotifivation(allEventsArray: [Event]){
-        
-        //TODO alle bestehenden notifications löschen
-        
-        var index = 0
-        let numberOfNotifications = allEventsArray.count
-        //removes all existing pending notifications before creating new ones
-        let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-        
-        //empty allEventArray
-        if((allEventsArray.count == 1 && allEventsArray[0].eventID == -1)){
-            print("ViewController allEventArray is empty")
-        }else if(allEventsArray.count == 0){
-            print("AllEventArray is empty")
-        }else{
-        //creates one notification for each event
-            while(true){
-
-                let content = UNMutableNotificationContent()
-                content.title = "\(allEventsArray[index].eventName)"
-
-                //sets the content of the notification
-                if(allEventsArray[index].eventNotes == ""){
-                    content.body = "Mit deinem Puffer von \(allEventsArray[index].bufferTime) Minuten musst du jetzt los!"
-                }else{
-                    content.body = allEventsArray[index].eventNotes
-                }
-                //adds vibration
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                //sets the notification sound
-                content.sound = UNNotificationSound.default
-
-                //creates trigger with the right time
-                let totalTravelTime = allEventsArray[index].eventTotalSeconds - (allEventsArray[index].bufferTime * 60) - (allEventsArray[index].parkingTime * 60) -
-                    (allEventsArray[index].walkingTime * 60) + 1
-
-                if(totalTravelTime > 0){
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTravelTime), repeats: false)
-
-                    let request = UNNotificationRequest(identifier: "\(allEventsArray[index].eventID)", content: content, trigger: trigger)
-
-                    center.add(request, withCompletionHandler: nil)
-                }
-                //breaks while(true)-loop when every notification is set
-                index = index + 1
-                if(index == numberOfNotifications){
-                    break
-                }
-            }
-        }
+//    func pushNotifivation(allEventsArray: [Event]){
+//
+//        //TODO alle bestehenden notifications löschen
+//
+//        var index = 0
+//        let numberOfNotifications = allEventsArray.count
+//        //removes all existing pending notifications before creating new ones
+//        let center = UNUserNotificationCenter.current()
+//        center.removeAllPendingNotificationRequests()
+//
+//        //empty allEventArray
+//        if((allEventsArray.count == 1 && allEventsArray[0].eventID == -1)){
+//            print("ViewController allEventArray is empty")
+//        }else if(allEventsArray.count == 0){
+//            print("AllEventArray is empty")
+//        }else{
+//        //creates one notification for each event
+//            while(true){
+//
+//                let content = UNMutableNotificationContent()
+//                content.title = "\(allEventsArray[index].eventName)"
+//
+//                //sets the content of the notification
+//                if(allEventsArray[index].eventNotes == ""){
+//                    content.body = "Mit deinem Puffer von \(allEventsArray[index].bufferTime) Minuten musst du jetzt los!"
+//                }else{
+//                    content.body = allEventsArray[index].eventNotes
+//                }
+//                //adds vibration
+//                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+//                //sets the notification sound
+//                content.sound = UNNotificationSound.default
+//
+//                //creates trigger with the right time
+//                //TODO: wegzeit miteinberechnen
+//                let totalTravelTime = allEventsArray[index].eventTotalSeconds - (allEventsArray[index].bufferTime * 60) - (allEventsArray[index].parkingTime * 60) -
+//                    (allEventsArray[index].walkingTime * 60) + 1
+//
+//                if(totalTravelTime > 0){
+//                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTravelTime), repeats: false)
+//
+//                    let request = UNNotificationRequest(identifier: "\(allEventsArray[index].eventID)", content: content, trigger: trigger)
+//
+//                    center.add(request, withCompletionHandler: nil)
+//                }
+//                //breaks while(true)-loop when every notification is set
+//                index = index + 1
+//                if(index == numberOfNotifications){
+//                    break
+//                }
+//            }
+//        }
+//    }
+    //TODO
+    
+    
+    //TODO
+    func calcDriveTime(event:Event) -> Int {
+        return 0
     }
-    
-    
 
     
     override func viewDidLoad() {
@@ -130,11 +136,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        let testEvent4: EventOLD = EventOLD(eventID: 4, eventName: "Test4", eventTotalSeconds: 2000)
 //
         var allEventsArray = [Event]()
-        var indexEventCount = 0
+
 
         //add JSON-Events to table
         for indexEventCount in 0..<loadedEvents.count {
+            
+            //loads Events into allEventArray
+            
             allEventsArray.append(loadedEvents[indexEventCount])
+            //calc the time till the you have to go timer should trigger
+            //TODO: actual wegzeit einberechnen
+            let timeTillGo = allEventsArray[indexEventCount].calcDiffInSecOfNowAndEventDate(eventDate: allEventsArray[indexEventCount].eventDate, eventWeekdays: allEventsArray[indexEventCount].repeatAtWeekdays, duration: allEventsArray[indexEventCount].repeatDuration) - ((allEventsArray[indexEventCount].bufferTime + allEventsArray[indexEventCount].walkingTime + allEventsArray[indexEventCount].parkingTime) * 60)
+            
+            allEventsArray[indexEventCount].timeTillGo = timeTillGo
         }
 
 //
@@ -145,10 +159,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        allEventsArray.append(testEvent3)
 //        allEventsArray.append(testEvent4)
 //
-       allEventsArray.sort(by: {$0.eventTotalSeconds < $1.eventTotalSeconds})
+       allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
 //
 //        //adds to each notification an alarm
-       pushNotifivation(allEventsArray: allEventsArray)
+       //pushNotifivation(allEventsArray: allEventsArray)
 //
 //        //deletes all Events and then adds all Events to the Table View
        tableViewList.removeAll()

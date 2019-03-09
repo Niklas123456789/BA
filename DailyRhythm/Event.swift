@@ -10,6 +10,10 @@ import Foundation
 
 struct Event : Codable {
     
+    var strPickerDate: String = ""
+    var pickerHour: Int = 0
+    var pickerMin: Int = 0
+    
     var eventID: Int
     var eventName: String
     var streetName: String
@@ -29,7 +33,11 @@ struct Event : Codable {
     var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
     var weeksTillNextEvent: Int
     
-    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int) {
+    var timeTillNextCheck: Int
+    var timeTillGo: Int
+    var driveTime: Int
+    
+    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, timeTillNextCheck: Int, timeTillGo: Int, driveTime: Int) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
@@ -45,9 +53,14 @@ struct Event : Codable {
         self.repeatDuration = repeatDuration
         self.repeatAtWeekdays = repeatAtWeekdays
         self.weeksTillNextEvent = weeksTillNextEvent
+        self.timeTillNextCheck = timeTillNextCheck
+        self.timeTillGo = timeTillGo
+        self.driveTime = driveTime
     }
 
-    
+    func setEventTotalSecounds(newEventTotalSeconds: Int){
+       // self.eventTotalSeconds = newEventTotalSeconds
+    }
     
     func saveEventInJSON(){
         JSONDataManager.saveIntoJSON(self, with: String(eventID))
@@ -55,5 +68,125 @@ struct Event : Codable {
     
     func deleteEventInJSON(){
         JSONDataManager.delete(String(eventID))
+    }
+    //TODO: duration not included in calc
+    mutating func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: Int) -> Int {
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date)
+        
+        let hour: Int! = components.hour
+        let minute: Int! = components.minute
+        
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HHmm"
+        strPickerDate = dateFormatter.string(from: eventDate)
+        let temp:Int! = Int(strPickerDate)
+        let eventMin = temp % 100
+        let eventHour = Int(temp/100)
+        print("Time datePicker: \(strPickerDate)")
+        
+        
+        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
+        
+        
+        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        print(distanceToEventInSecounds)
+        
+        return distanceToEventInSecounds
+    }
+    
+    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
+        
+        var difHours: Int
+        var difMin: Int
+        
+        //works
+        if (currentHours < eventHours && currentMin < eventMin){
+            difHours = eventHours - currentHours
+            difMin = eventMin - currentMin
+            
+            //works
+        } else if (currentHours < eventHours && currentMin > eventMin){
+            difHours = eventHours - currentHours - 1
+            difMin = 60 - (currentMin - eventMin)
+            
+            //works
+        } else if (currentHours > eventHours && currentMin < eventMin){
+            difHours = (-24) + (currentHours - eventHours)
+            difMin = eventMin - currentMin
+            
+            //works
+        }else if (currentHours == eventHours && currentMin > eventMin){
+            difHours = -23
+            difMin = 60 - (currentMin - eventMin)
+            
+            //works
+        }else if (currentHours == eventHours && currentMin < eventMin){
+            difHours = 0
+            difMin = eventMin - currentMin
+            
+            //works
+        }else if (currentHours < eventHours && currentMin == eventMin){
+            difHours = eventHours - currentHours
+            difMin = 0
+            
+            //works
+        }else if (currentHours > eventHours && currentMin == eventMin){
+            difHours = (-24) + (currentHours - eventHours)
+            difMin = 0
+            
+            //works
+        }else if (currentHours > eventHours && currentMin > eventMin){
+            difHours = (-24) + (currentHours - eventHours) + 1
+            difMin = 60 - (currentMin - eventMin)
+            
+            //(currentHours == eventHours && currentMin == eventMin)
+        } else {
+            difHours = 0
+            difMin = 0
+        }
+        return (difHours, difMin)
+    }
+    
+    
+    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
+        
+        //current day
+        let todaysDate = Date()
+        var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
+        
+        print("Todays Day Nr: \(todaysWeekday)")
+        
+        //compair to repeatAtWeekdays and get next eventDay
+        
+        var countDays = 0
+        var count = 0
+        if (arr[todaysWeekday - 1] == true){
+            return 0
+        }else{
+            while (count <= 7){
+                
+                if(todaysWeekday == 8){
+                    todaysWeekday = 1
+                }else if(arr[todaysWeekday - 1] != true){
+                    countDays += 1
+                    todaysWeekday += 1
+                }else if(arr[todaysWeekday - 1] == true){
+                    break
+                }
+                count = count + 1
+            }
+        }
+        print("Count to event in Days Return: \(countDays)")
+        return countDays
+    }
+    
+    
+    //TODO
+    func calcDriveTime(event:Event) -> Int {
+        return 0
     }
 }
