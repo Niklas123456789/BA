@@ -30,43 +30,43 @@ class ViewContollerTableViewCell: UITableViewCell {
     }
 
     
-    func checkTwoDays(time: Int){
+    func checkTwoDays(time: Int, event: Event){
         //change Fonts
 //        self.cellLabel.font = UIFont (name: Font.thinFont, size: 30)
 //        self.cellLabel.font = self.cellLabel.font.withSize(34)
+        self.cellLabel.layer.zPosition = 10
         
         self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
         
         if(time <= 86400){
             
-            startTimer(timeInSeconds: time)
+            startTimer(timeInSeconds: time, event: event)
         } else {
             //was tun wenn Zeit noch über 24h?
             self.cellTime.text = "+24h"
         }
     } 
-    func startTimer(timeInSeconds: Int){
-        
-
-        
+    func startTimer(timeInSeconds: Int, event: Event){
         
         var secondsLeft: Int = timeInSeconds
         if(time <= 86400){
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
             
-            
             var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
             
             self.ausgeben(h: h, m: m, s: s)
             secondsLeft = secondsLeft - 1
+            
+            if secondsLeft == 0 {
+                //benachrichtigung muss raus
+                EventManager.getInstance().pushNotifivation(event: event)
+            }
             if secondsLeft == -1 {
                     //schoener machen
                     self.backgroundColor = UIColor.red
-                    
-                    //benachrichtigung muss raus
-                    
+                
                 //muss noch an event angepasst werden
             }else if(secondsLeft == -10){
                 self.timer.invalidate()
@@ -74,7 +74,7 @@ class ViewContollerTableViewCell: UITableViewCell {
         }
         )}else{
             //was tun wenn zeit noch über 24h?
-            self.cellTime.text = "+48h"
+            self.cellTime.text = "+24h"
         }
     }
     func ausgeben(h: Int, m: Int, s: Int){

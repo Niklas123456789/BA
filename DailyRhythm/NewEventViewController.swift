@@ -32,6 +32,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
             MOButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
 
     var di: Bool = false
@@ -48,6 +49,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             DIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             DIButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     @IBOutlet weak var MIButton: UIButton!
     var mi: Bool = false
@@ -61,6 +63,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             MIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             MIButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     
     @IBOutlet weak var DOButton: UIButton!
@@ -75,6 +78,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             DOButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             DOButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     
     @IBOutlet weak var FRButton: UIButton!
@@ -89,6 +93,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             FRButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             FRButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     
     @IBOutlet weak var SAButton: UIButton!
@@ -103,6 +108,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             SAButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             SAButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     
     @IBOutlet weak var SOButton: UIButton!
@@ -117,6 +123,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             SOButton.setBackgroundImage(UIImage(named: "RightBlack"), for: .normal)
             SOButton.setTitleColor(UIColor.white, for: .normal)
         }
+        checkEnableOkButton()
     }
     
     
@@ -153,6 +160,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     @IBOutlet weak var walkingTimePicker: UIPickerView!
     @IBOutlet weak var parkingTimePicker: UIPickerView!
     var timePickerData: [Int] = [Int]()
+    @IBOutlet weak var okButton: UIButton!
     
 //    var duration: Int = 0
     var bufferTime: Int = 0
@@ -289,6 +297,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = (view as? UILabel) ?? UILabel()
         
+        
         if(pickerView.isEqual(durationPicker)){
             //label.textColor = .black
             label.textAlignment = .center
@@ -311,6 +320,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     
     //jumps between textFields when pressing return on keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        checkEnableOkButton()
         switch textField {
             
         case nameTextField:
@@ -356,6 +366,24 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         print("Count to event in Days Return: \(countDays)")
         return countDays
+    }
+    
+    func checkEnableOkButton() {
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+//        var weekdaysAreAllFalse = true
+//        for element in eventWeekdays {
+//            if element == true {
+//                weekdaysAreAllFalse = false
+//                break
+//            }
+//        }
+//        print(weekdaysAreAllFalse)
+//        TODO: Add alle anderen pflichtfelder
+        if (eventWeekdays.contains(true) && nameTextField.text?.isEmpty == false) {
+            okButton.setImage(UIImage(named: "OK"), for: .normal)
+        }else{
+            okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+        }
     }
 
     
@@ -409,17 +437,31 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
         // HOURS and Minutes between event time and now
 
-        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
+        let(difHour, difMin, subSec) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
         
         //TODO: ERROR when no day is selected
+        
+        
         print(countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays))
         
         
 
-        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
-        print(distanceToEventInSecounds)
+        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60 - subSec
         
-        let eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+        
+        print("DifHour: \(difHour) DifMin: \(difMin)")
+        var todaysDate = Date()
+        print("TodaysDate: \(todaysDate)")
+        var eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: todaysDate), minute: Calendar.current.component(.minute, from: todaysDate), second: 0, of: Date())!
+        
+        //sets eventDate only seconds to 0
+        print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
+        eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+        
+        eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
+        eventDate = Calendar.current.date(byAdding: .day, value: countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays), to: eventDate)!
+        print("EventDate afer creating: \(eventDate)")
+        
         
         
         var weeksTillNextEvent: Int = 0
@@ -435,16 +477,24 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }else if repeatDuration == 4 {
             weeksTillNextEvent = 3
         }
+        
+        //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
 
         //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
         var newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, timeTillNextCheck: 5, timeTillGo: (distanceToEventInSecounds - (bufferTime + walkingTime + parkingTime) * 60), driveTime: 0)
         
-        EventManager.getInstance().updateEventTimes(event: &newEvent)
+        newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
+        print("After NewEvent called updateEventTimes: \(newEvent)")
         
+        if newEvent.timeTillNextCheck <= 86400 { EventManager.getInstance().repeatTimeCheck(event: &newEvent) }
+        else{
+            print("before repeatTimeCheck")
+            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(newEvent.timeTillNextCheck), repeats: false, block: { (timer) in
+                print("In timer repeatTimecheck")
+                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+            })
+        }
         
-        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(newEvent.timeTillNextCheck), repeats: false, block: { (timer) in
-            EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-        })
         
         newEvent.saveEventInJSON()
         //TODO: push notification function
@@ -505,10 +555,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         print("Time datePicker: \(strPickerDate)")
 
 
-        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
+        let(difHour, difMin, subSec) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
 
 
-        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
+        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60 - subSec
         print(distanceToEventInSecounds)
 
         return distanceToEventInSecounds
@@ -522,58 +572,58 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     
     
     
-    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
-        
-        var difHours: Int
-        var difMin: Int
-        
-        //works
-        if (currentHours < eventHours && currentMin < eventMin){
-            difHours = eventHours - currentHours
-            difMin = eventMin - currentMin
-            
-            //works
-        } else if (currentHours < eventHours && currentMin > eventMin){
-            difHours = eventHours - currentHours - 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        } else if (currentHours > eventHours && currentMin < eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours == eventHours && currentMin > eventMin){
-            difHours = -23
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        }else if (currentHours == eventHours && currentMin < eventMin){
-            difHours = 0
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours < eventHours && currentMin == eventMin){
-            difHours = eventHours - currentHours
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin == eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin > eventMin){
-            difHours = (-24) + (currentHours - eventHours) + 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //(currentHours == eventHours && currentMin == eventMin)
-        } else {
-            difHours = 0
-            difMin = 0
-        }
-        return (difHours, difMin)
-    }
+//    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
+//
+//        var difHours: Int
+//        var difMin: Int
+//
+//        //works
+//        if (currentHours < eventHours && currentMin < eventMin){
+//            difHours = eventHours - currentHours
+//            difMin = eventMin - currentMin
+//
+//            //works
+//        } else if (currentHours < eventHours && currentMin > eventMin){
+//            difHours = eventHours - currentHours - 1
+//            difMin = 60 - (currentMin - eventMin)
+//
+//            //works
+//        } else if (currentHours > eventHours && currentMin < eventMin){
+//            difHours = (-24) + (currentHours - eventHours)
+//            difMin = eventMin - currentMin
+//
+//            //works
+//        }else if (currentHours == eventHours && currentMin > eventMin){
+//            difHours = -23
+//            difMin = 60 - (currentMin - eventMin)
+//
+//            //works
+//        }else if (currentHours == eventHours && currentMin < eventMin){
+//            difHours = 0
+//            difMin = eventMin - currentMin
+//
+//            //works
+//        }else if (currentHours < eventHours && currentMin == eventMin){
+//            difHours = eventHours - currentHours
+//            difMin = 0
+//
+//            //works
+//        }else if (currentHours > eventHours && currentMin == eventMin){
+//            difHours = (-24) + (currentHours - eventHours)
+//            difMin = 0
+//
+//            //works
+//        }else if (currentHours > eventHours && currentMin > eventMin){
+//            difHours = (-24) + (currentHours - eventHours) + 1
+//            difMin = 60 - (currentMin - eventMin)
+//
+//            //(currentHours == eventHours && currentMin == eventMin)
+//        } else {
+//            difHours = 0
+//            difMin = 0
+//        }
+//        return (difHours, difMin)
+//    }
 }
 
 
