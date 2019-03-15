@@ -149,71 +149,48 @@ class EventManager {
         return countDays
     }
     
-    func updateEventTimes(event: inout Event) -> Event{
-        
-        var eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
-        var timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
-        
-        
-        var timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-        //TODO: Soll nicht beim ersten mal erstellen passieren, sodass ein event was alle 3 woche geht diese woche startet
-        if event.weeksTillNextEvent != 0 && event.weeksTillNextEvent != 1 {
-            eventTotalSeconds = eventTotalSeconds + ((event.weeksTillNextEvent - 1) * 604800)
-            timeTillNextCheck = timeTillNextCheck + ((event.weeksTillNextEvent - 1) * 604800)
-            timeTillGo = timeTillGo + ((event.weeksTillNextEvent - 1) * 604800)
-        }
-        
-        event.eventTotalSeconds = eventTotalSeconds
-        event.timeTillNextCheck = timeTillNextCheck
-        event.timeTillGo = timeTillGo
-        
-        return event
-    }
+//    func updateEventTimes(event: inout Event) -> Event{
+//
+//        var eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
+//        var timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
+//
+//
+//        var timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+//        //TODO: Soll nicht beim ersten mal erstellen passieren, sodass ein event was alle 3 woche geht diese woche startet
+//        if event.weeksTillNextEvent != 0 && event.weeksTillNextEvent != 1 {
+//            eventTotalSeconds = eventTotalSeconds + ((event.weeksTillNextEvent - 1) * 604800)
+//            timeTillNextCheck = timeTillNextCheck + ((event.weeksTillNextEvent - 1) * 604800)
+//            timeTillGo = timeTillGo + ((event.weeksTillNextEvent - 1) * 604800)
+//        }
+//
+//        event.eventTotalSeconds = eventTotalSeconds
+//        event.timeTillNextCheck = timeTillNextCheck
+//        event.timeTillGo = timeTillGo
+//
+//        return event
+//    }
     
     //<24h
     func repeatTimeCheck(event: inout Event) {
         
         EventManager.getInstance().updateJSONEvents()
         
-        event.eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
-        event.timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
-        event.timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+//        event.eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
+//        event.timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
+//        event.timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
         
         //let loadedEvents = JSONDataManager.loadAll(Event.self)
         
-        
-        // 1 min
-        if event.timeTillGo <= 60 {
-            print("Push event notification")
-            self.pushNotifivation(event: event)
-            return
-        // 3 min check every 30 sec
-        } else if event.timeTillGo <= 180 {
-            event.timeTillNextCheck = 30
-            print("Set timeTillNextCheck: \(event.timeTillNextCheck)")
-        // 10 min check every 3 min
-        } else if event.timeTillGo <= 600 {
-            event.timeTillNextCheck = 180
-            print("Set timeTillNextCheck: \(event.timeTillNextCheck)")
-        // 25 min check every 5 min
-        } else if event.timeTillGo <= 1500 {
-            event.timeTillNextCheck = 300
-            print("Set timeTillNextCheck: \(event.timeTillNextCheck)")
-        //60 min check every 10 min
-        } else if event.timeTillGo <= 3600 {
-            event.timeTillNextCheck = 600
-            print("Set timeTillNextCheck: \(event.timeTillNextCheck)")
-        }
+        let timeTillNextCheck = getTimeTillNextCheckAction(from: event)
         
         //ViewController().updateTableViewList(event: event)
         var newEvent = event
-        
-        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(event.timeTillNextCheck), repeats: false, block: { (timer) in
-            
-            EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-        })
+        if timeTillNextCheck > 0 {
+            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+            })
+        }
     }
-    
     func updateJSONEvents() {
         var loadedEvents = JSONDataManager.loadAll(Event.self)
         let todaysDate = Date()
@@ -234,9 +211,38 @@ class EventManager {
             }
         }
     }
-    
-    func pushNotifivation(event: Event){
+    var testValue = 0
+    func createNotification(for event: Event){
+
         //removes all existing pending notifications before creating new ones
+        
+        var center = UNUserNotificationCenter.current()
+        var content = UNMutableNotificationContent()
+        content.title = event.eventName
+        if (event.eventNotes.isEmpty) {
+            content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los!"
+        } else {
+            content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los! \nNotiz: \(event.eventNotes)"
+        }
+        //content.subtitle = "Unterschrift"
+        content.sound = UNNotificationSound.default
+        
+        let todaysDate = Date()
+        var secondsNow = Calendar.current.component(.second, from: todaysDate)
+        //that the notification doesn't go off by 1 min
+        if secondsNow == 0 {secondsNow = 59}
+        
+        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(60 - secondsNow)), repeats: false)
+        var request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
+        center.add(request) { (error) in
+            if (error != nil) {
+                print("error creating notification for id: \(event.eventID): \(error!.localizedDescription)")
+            } else {
+                print("created notification with id: \(event.eventID) and notes: \(event.eventNotes)")
+            }
+        }
+        
+        /*
         let center = UNUserNotificationCenter.current()
         //center.removeAllPendingNotificationRequests()
 
@@ -250,9 +256,9 @@ class EventManager {
             content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los! \nNotiz: \(event.eventNotes)"
        // }
         //adds vibration
-        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
         //sets the notification sound
         content.sound = UNNotificationSound.default
+        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
 
         //creates trigger with the right time
         //TODO: wegzeit miteinberechnen
@@ -268,14 +274,85 @@ class EventManager {
         let request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
 
         center.add(request, withCompletionHandler: nil)
+        */
 
+    }
+    
+    func getTimeTillNextCheck(from event: Event) -> Int {
+        
+        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration)
+        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+        
+        if timeTillNextCheck / 2 <= 86400 {
+            
+            if timeTillGo <= 60 {
+//                    print("Push event notification")
+//                    self.createNotification(for: event)
+                return -1
+                // 3 min check every 30 sec
+            } else if timeTillGo <= 180 {
+                timeTillNextCheck = 30
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                // 10 min check every 3 min
+            } else if timeTillGo <= 600 {
+                timeTillNextCheck = 180
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                // 25 min check every 5 min
+            } else if timeTillGo <= 1500 {
+                timeTillNextCheck = 300
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                //60 min check every 10 min
+            } else if timeTillGo <= 3600 {
+                timeTillNextCheck = 600
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+            }
+        } else {
+            timeTillNextCheck = timeTillNextCheck / 2
+        }
+        return timeTillNextCheck
+        
+    }
+    
+    func getTimeTillNextCheckAction(from event: Event) -> Int {
+        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration)
+        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+        
+        if timeTillNextCheck / 2 <= 86400 {
+            
+            if timeTillGo <= 60 {
+                print("Push event notification")
+                self.createNotification(for: event)
+                return -1
+                // 3 min check every 30 sec
+            } else if timeTillGo <= 180 {
+                timeTillNextCheck = 30
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                // 10 min check every 3 min
+            } else if timeTillGo <= 600 {
+                timeTillNextCheck = 180
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                // 25 min check every 5 min
+            } else if timeTillGo <= 1500 {
+                timeTillNextCheck = 300
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                //60 min check every 10 min
+            } else if timeTillGo <= 3600 {
+                timeTillNextCheck = 600
+                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+            }
+        } else {
+            timeTillNextCheck = timeTillNextCheck / 2
+        }
+        return timeTillNextCheck
     }
     
     func getTimeTillGo(event: Event) -> Int {
         var temp = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration)
         temp = (temp - (event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)
         if temp <= 0 {
-            return 1
+            return 0
         }
         return temp
     }

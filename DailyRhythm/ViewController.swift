@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName
-        cell.checkTwoDays(time: tableViewList[indexPath.row].timeTillGo, event: tableViewList[indexPath.row])
+        cell.checkTwoDays(time: EventManager.getInstance().getTimeTillGo(event: tableViewList[indexPath.row]), event: tableViewList[indexPath.row])
         
         return(cell)
     }
@@ -73,7 +73,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     
-
+    
+/*
     //NOTIFICATIONS
     func pushNotifivation(allEventsArray: [Event]){
         var index = 0
@@ -125,7 +126,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-
+*/
     
     //TODO
     func calcDriveTime(event:Event) -> Int {
@@ -137,20 +138,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         var allEventsArray = [Event]()
-        
+        //self.tableView.rowHeight = 95
         EventManager.getInstance().updateJSONEvents()
         
         allEventsArray = JSONDataManager.loadAll(Event.self)
         
         var index = 0
         for event in allEventsArray {
-            allEventsArray[index].timeTillGo =  calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - calcDriveTime(event: event) - 1
+            allEventsArray[index].timeTillGo =  calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - calcDriveTime(event: event) /* - 1 */
             print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
             index = index + 1
         }
         print(allEventsArray)
-
-
         //add JSON-Events to table
         for indexEventCount in 0..<allEventsArray.count {
             //loads Events into allEventArray
@@ -162,9 +161,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             //allEventsArray[indexEventCount].timeTillGo = timeTillGo
         }
-
-//
-//        allEventsArray.append(emptyEvent)
+        //        allEventsArray.append(emptyEvent)
  //       allEventsArray.append(testEvent0)
 //        allEventsArray.append(testEvent1)
 //        allEventsArray.append(testEvent2)

@@ -395,7 +395,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
  //       print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
         
         
-        ID = ID + 1
+        //ID = ID + 1
+        let eventID = UUID().uuidString
+        print("Event ID: \(eventID)")
+        
         print("WEGZEIT:\(walkingTime)")
         
         if (houseNumberTextField == nil) {
@@ -481,19 +484,28 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
 
         //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
-        var newEvent = Event(eventID: ID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, eventTotalSeconds: distanceToEventInSecounds, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, timeTillNextCheck: 5, timeTillGo: (distanceToEventInSecounds - (bufferTime + walkingTime + parkingTime) * 60), driveTime: 0)
+        var newEvent = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0)
         
-        newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
+//        var new2Event = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0)
+        
+        
+        //newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
         print("After NewEvent called updateEventTimes: \(newEvent)")
+        let timeTillNextCheck = EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent)
         
-        if newEvent.timeTillNextCheck <= 86400 { EventManager.getInstance().repeatTimeCheck(event: &newEvent) }
-        else{
-            print("before repeatTimeCheck")
-            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(newEvent.timeTillNextCheck), repeats: false, block: { (timer) in
-                print("In timer repeatTimecheck")
-                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-            })
+        if timeTillNextCheck <= -1 {
+            print("Return because timeTillNextCheck returned negativ")
+            return
         }
+        //timer that triggers the reapeat of timeTillNextCheck
+        print("before repeatTimeCheck")
+        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+            print("In timer repeatTimecheck")
+            if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
+                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+            }
+        })
+        
         
         
         newEvent.saveEventInJSON()

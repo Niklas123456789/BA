@@ -36,7 +36,7 @@ class ViewContollerTableViewCell: UITableViewCell {
 //        self.cellLabel.font = self.cellLabel.font.withSize(34)
         self.cellLabel.layer.zPosition = 10
         
-        self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
+        //self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
         
         if(time <= 86400){
@@ -59,9 +59,9 @@ class ViewContollerTableViewCell: UITableViewCell {
             self.ausgeben(h: h, m: m, s: s)
             secondsLeft = secondsLeft - 1
             
-            if secondsLeft == 0 {
+            if secondsLeft == 1 {
                 //benachrichtigung muss raus
-                EventManager.getInstance().pushNotifivation(event: event)
+                //EventManager.getInstance().createNotification(for: event)
             }
             if secondsLeft == -1 {
                     //schoener machen

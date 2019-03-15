@@ -14,7 +14,7 @@ struct Event : Codable {
     var pickerHour: Int = 0
     var pickerMin: Int = 0
     
-    var eventID: Int
+    var eventID: String
     var eventName: String
     var streetName: String
     //ohne hausnummer?
@@ -27,17 +27,17 @@ struct Event : Codable {
     var bufferTime: Int
     
     var eventDate: Date
-    var eventTotalSeconds: Int = 0
+//    var eventTotalSeconds: Int = 0
     
     var repeatDuration: Int = 0
     var repeatAtWeekdays: [Bool] = [false, false, false, false, false, false, false]
     var weeksTillNextEvent: Int
     
-    var timeTillNextCheck: Int
+//    var timeTillNextCheck: Int
     var timeTillGo: Int
     var driveTime: Int
     
-    init(eventID: Int, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, eventTotalSeconds: Int, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, timeTillNextCheck: Int, timeTillGo: Int, driveTime: Int) {
+    init(eventID: String, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, driveTime: Int, timeTillGo: Int) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
@@ -49,11 +49,11 @@ struct Event : Codable {
         self.walkingTime = walkingTime
         self.bufferTime = bufferTime
         self.eventDate = eventDate
-        self.eventTotalSeconds = eventTotalSeconds
+//        self.eventTotalSeconds = eventTotalSeconds
         self.repeatDuration = repeatDuration
         self.repeatAtWeekdays = repeatAtWeekdays
         self.weeksTillNextEvent = weeksTillNextEvent
-        self.timeTillNextCheck = timeTillNextCheck
+//        self.timeTillNextCheck = timeTillNextCheck
         self.timeTillGo = timeTillGo
         self.driveTime = driveTime
     }
@@ -63,11 +63,11 @@ struct Event : Codable {
     }
     
     func saveEventInJSON(){
-        JSONDataManager.saveIntoJSON(self, with: String(eventID))
+        JSONDataManager.saveIntoJSON(self, with: "\(eventID)")
     }
     
     func deleteEventInJSON(){
-        JSONDataManager.delete(String(eventID))
+        JSONDataManager.delete("\(eventID)")
     }
     //TODO: duration not included in calc
     mutating func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: Int) -> Int {
