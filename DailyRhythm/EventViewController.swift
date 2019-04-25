@@ -107,8 +107,8 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     
     func createDirectionsReuest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request
     {
-        let latitude = 10000.0
-        let longitude = 10000.0
+        let latitude = 48.151256
+        let longitude = 11.623152
         let testDestination: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         
         let destinationCoordiate        = getCenterLocation(for: mapView).coordinate
@@ -149,7 +149,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     func startTimer(timeInSeconds: Int, event: Event){
         
         var secondsLeft: Int = timeInSeconds
-        if(timeInSeconds <= 86400){
+        if(timeInSeconds <= 86400) {
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
                 
