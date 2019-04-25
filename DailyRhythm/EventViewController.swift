@@ -20,11 +20,13 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     var timer: Timer!
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
+    let regionInMeters: Double = 10000
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         checkLocationServices()
+        getDirections()
 
         // Do any additional setup after loading the view.
         
@@ -70,6 +72,58 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    func centerViewOnUserLocation() {
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+    
+    func getDirections() {
+        guard let location = locationManager.location?.coordinate else {
+            //TODO: Inform user that there is no current location
+            return
+        }
+        
+        let request = createDirectionsReuest(from: location)
+        let directions = MKDirections(request: request)
+        
+        directions.calculate { [unowned self] (response, error) in
+            guard let response = response else { return } //TODO: Alarm because no route found
+            
+            for route in response.routes {
+                self.mapView.addOverlay(route.polyline)
+                self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+            }
+        }
+    }
+    
+    func createDirectionsReuest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request
+    {
+        let latitude = 10000.0
+        let longitude = 10000.0
+        let testDestination: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let destinationCoordiate        = getCenterLocation(for: mapView).coordinate
+        let startingLocation            = MKPlacemark(coordinate: coordinate)
+        let destination                 = MKPlacemark(coordinate: testDestination)
+        
+        let request                     = MKDirections.Request()
+        request.source                  = MKMapItem(placemark: startingLocation)
+        request.destination             = MKMapItem(placemark: destination)
+        request.transportType           = .automobile
+        request.requestsAlternateRoutes = true
+        
+        return request
+    }
+    
     func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
@@ -85,7 +139,9 @@ class EventViewController: UIViewController, MKMapViewDelegate {
             break
         case .authorizedAlways:
             mapView.showsUserLocation = true
-            //mapView.showsTraffic = true
+            mapView.showsTraffic = true
+            //centerViewOnUserLocation()
+            locationManager.startUpdatingLocation()
             break
         }
     }
@@ -171,10 +227,23 @@ extension Date
 extension EventViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+        guard let location = locations.last else { return }
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion.init(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+        mapView.setRegion(region, animated: true)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAuthorization()
+    }
+}
+
+extension EventViewController {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+        //TODO: routenfarbe anpassen. vllt hellblau
+        renderer.strokeColor = .blue
         
+        return renderer
     }
 }
