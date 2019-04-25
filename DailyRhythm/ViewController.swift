@@ -41,7 +41,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        }
         
         //writes the cellLabels
-        cell.cellLabel.text = tableViewList[indexPath.row].eventName
+        cell.cellLabel.text = tableViewList[indexPath.row].eventName.capitalizingFirstLetter()
         cell.checkTwoDays(time: EventManager.getInstance().getTimeTillGo(event: tableViewList[indexPath.row]), event: tableViewList[indexPath.row])
         
         return(cell)
@@ -296,4 +296,3 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return countDays
     }
 }
-

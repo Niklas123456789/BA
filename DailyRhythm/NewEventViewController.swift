@@ -509,14 +509,12 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
         newEvent.saveEventInJSON()
+        
+
+        
         //TODO: push notification function
         
-        //TODO: load allEventScreen
-//        let tableView = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-//
-//        self.navigationController?.pushViewController(tableView, animated: true)
-//
-        //self.present(tableView, animated: true, completion: nil)
+
     }
     
 //    func updateEventTimes(event: Event) -> (Int, Int, Int){

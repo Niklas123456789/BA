@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -607,6 +607,7 @@
                                         </state>
                                         <connections>
                                             <action selector="okButton:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="Nfw-7W-PHb"/>
+                                            <segue destination="BYZ-38-t0r" kind="presentation" id="L4k-VZ-sa4"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -799,6 +800,9 @@
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x7m-C5-9fK">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="528.5"/>
                                         <color key="backgroundColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="A89-xh-sfJ" id="cmZ-vi-SNO"/>
+                                        </connections>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="eif-G9-JqR">
                                         <rect key="frame" x="0.0" y="543.5" width="382" height="77"/>
@@ -897,6 +901,7 @@
                             <constraint firstItem="3bZ-nj-E36" firstAttribute="trailing" secondItem="h1P-l1-20q" secondAttribute="trailing" constant="-18" id="ial-Ih-eex"/>
                             <constraint firstItem="x7m-C5-9fK" firstAttribute="leading" secondItem="h1P-l1-20q" secondAttribute="leading" constant="16" id="icD-IR-4Yg"/>
                             <constraint firstItem="h1P-l1-20q" firstAttribute="top" secondItem="x7m-C5-9fK" secondAttribute="top" id="jp0-0v-lat"/>
+                            <constraint firstItem="ZKd-Tt-qJj" firstAttribute="centerX" secondItem="h1P-l1-20q" secondAttribute="centerX" id="jtX-sd-Dze"/>
                             <constraint firstItem="veY-EJ-Zzi" firstAttribute="leading" secondItem="h1P-l1-20q" secondAttribute="leading" constant="16" id="lI9-N0-OGf"/>
                             <constraint firstItem="2vS-mY-8Ov" firstAttribute="width" secondItem="x7m-C5-9fK" secondAttribute="width" id="nKX-P5-zQw"/>
                             <constraint firstItem="h1P-l1-20q" firstAttribute="bottom" secondItem="3bZ-nj-E36" secondAttribute="bottom" constant="20" id="qOU-s2-pxj"/>
@@ -910,10 +915,12 @@
                         <viewLayoutGuide key="safeArea" id="h1P-l1-20q"/>
                     </view>
                     <connections>
+                        <outlet property="mapView" destination="x7m-C5-9fK" id="AwV-48-cwn"/>
                         <outlet property="nameLabel" destination="YHu-ez-foi" id="PkE-C3-SrF"/>
                         <outlet property="notesLabel" destination="COi-np-tIj" id="a8x-2x-XZH"/>
                         <outlet property="streetAndNrLabel" destination="4vx-Vv-aoJ" id="Hob-o4-tLr"/>
                         <outlet property="timeLabel" destination="VKE-DH-754" id="aKz-ld-cZN"/>
+                        <outlet property="timeTillGoLabel" destination="ZKd-Tt-qJj" id="6TO-72-SQ4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YnD-IS-KtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -922,19 +929,19 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Back_white" width="120" height="120"/>
-        <image name="Exit_white" width="119" height="119"/>
-        <image name="Info_white" width="120" height="120"/>
-        <image name="LeftWhite" width="49" height="41"/>
-        <image name="Navigation_white" width="120" height="120"/>
-        <image name="OK_white_grey" width="120" height="120"/>
-        <image name="Plus_white" width="120" height="120"/>
-        <image name="RightWhite" width="49" height="41"/>
-        <image name="Settings_white" width="120" height="120"/>
-        <image name="White" width="49" height="41"/>
+        <image name="Back_white" width="250" height="250"/>
+        <image name="Exit_white" width="248" height="248"/>
+        <image name="Info_white" width="250" height="250"/>
+        <image name="LeftWhite" width="204" height="171"/>
+        <image name="Navigation_white" width="250" height="250"/>
+        <image name="OK_white_grey" width="250" height="250"/>
+        <image name="Plus_white" width="250" height="250"/>
+        <image name="RightWhite" width="204" height="171"/>
+        <image name="Settings_white" width="250" height="250"/>
+        <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="rVY-NE-BpK"/>
-        <segue reference="fZa-51-Kma"/>
+        <segue reference="Wji-eA-c2v"/>
     </inferredMetricsTieBreakers>
 </document>

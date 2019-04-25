@@ -206,6 +206,7 @@ class EventManager {
                     event.deleteEventInJSON()
                 } else {
                     //TODO: check if event is repeated
+                    
                 }
                 
             }
@@ -216,8 +217,8 @@ class EventManager {
 
         //removes all existing pending notifications before creating new ones
         
-        var center = UNUserNotificationCenter.current()
-        var content = UNMutableNotificationContent()
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
         content.title = event.eventName
         if (event.eventNotes.isEmpty) {
             content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los!"
@@ -232,7 +233,7 @@ class EventManager {
         //that the notification doesn't go off by 1 min
         if secondsNow == 0 {secondsNow = 59}
         
-        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(60 - secondsNow)), repeats: false)
+        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(61 - secondsNow)), repeats: false)
         var request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
         center.add(request) { (error) in
             if (error != nil) {
@@ -321,12 +322,22 @@ class EventManager {
         
         if timeTillNextCheck / 2 <= 86400 {
             
-            if timeTillGo <= 60 {
+            if timeTillGo < 0 {
+                print("Event \(event.eventName) has passed already")
+                self.checkIfEventShouldRepeat(for: event)
+                return -1
+            } else if timeTillGo <= 60 {
                 print("Push event notification")
                 self.createNotification(for: event)
-                return -1
+                //TODO: anpassen TimeInterval
+                //repeats if needed event 5 min after notification went of
+                let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(300.0), repeats: false, block: { (timer) in
+                    self.checkIfEventShouldRepeat(for: event)
+                })
+                
+                return 0
                 // 3 min check every 30 sec
-            } else if timeTillGo <= 180 {
+            }else if timeTillGo <= 180 {
                 timeTillNextCheck = 30
                 print("Set timeTillNextCheck: \(timeTillNextCheck)")
                 // 10 min check every 3 min
@@ -347,6 +358,34 @@ class EventManager {
         }
         return timeTillNextCheck
     }
+    //repeats event after notification
+    func checkIfEventShouldRepeat(for event: Event) {
+        var weeksTillNextEvent: Double = 0
+        
+        //event has repeatDuration
+        if event.repeatDuration != 0 {
+            if event.repeatDuration == 1 {
+                weeksTillNextEvent = 0.0
+            }else if event.repeatDuration == 2 {
+                weeksTillNextEvent = 1.0
+            }else if event.repeatDuration == 3 {
+                weeksTillNextEvent = 2.0
+                //monatlich
+            }else if event.repeatDuration == 4 {
+                weeksTillNextEvent = 3.0
+            }
+        }
+        var newEvent = event
+        newEvent.eventDate = newEvent.eventDate.addingTimeInterval(TimeInterval(weeksTillNextEvent * 604800))
+        newEvent.saveEventInJSON()
+        //calls repeatTimeCheck after all weeks minus 1 day
+        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(weeksTillNextEvent * 604800.0 - 86400.0), repeats: false, block: { (timer) in
+            print("\(event.eventName) In timer repeatTimecheck")
+            if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
+                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+            }
+        })
+    }
     
     func getTimeTillGo(event: Event) -> Int {
         var temp = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration)
@@ -355,5 +394,21 @@ class EventManager {
             return 0
         }
         return temp
+    }
+    //when called you have to check if eventID is "-1"
+    func getEventwithID(eventID: String) -> Event {
+        var allEventsArray = [Event]()
+        updateJSONEvents()
+        var noEvent = Event(eventID: "-1", eventName: "noEvent", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false,false,false,false,false,false,false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0)
+        
+        allEventsArray = JSONDataManager.loadAll(Event.self)
+        //seach for event with the same UUID
+        for tempEvent in allEventsArray
+        {
+            if (tempEvent.eventID == eventID){
+                return tempEvent
+            }
+        }
+        return noEvent
     }
 }
