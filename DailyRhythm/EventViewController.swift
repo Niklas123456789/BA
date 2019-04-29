@@ -21,6 +21,10 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
     let regionInMeters: Double = 10000
+    var lat: Double = 0.0
+    var long: Double = 0.0
+    let group = DispatchGroup()
+    var firstCall = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +96,9 @@ class EventViewController: UIViewController, MKMapViewDelegate {
             return
         }
         
-        let request = createDirectionsReuest(from: location)
+        /*let request = */
+        createDirectionsReuest(from: location)
+        /*
         let directions = MKDirections(request: request)
         
         directions.calculate { [unowned self] (response, error) in
@@ -103,25 +109,95 @@ class EventViewController: UIViewController, MKMapViewDelegate {
                 self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             }
         }
+         */
     }
+    func getAddress(from event: Event) -> String {
+        var address: String = ""
+        //if event.houseNrEdited == true {
+            address = "Germany, \(event.cityName), \(event.streetName) \(event.houseNr)"
+        //} else {
+        //    address = "\(event.streetName), \(event.cityName)"
+        //}
+        return address
+    }
+    /*
+    func addressToLocation(address: String) {
+        let geoCoder = CLGeocoder()
+        
+        geoCoder.geocodeAddressString(address) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location
+                else {
+                    // TODO handle no location found
+                    print("ERROR no location found")
+                    return
+                }
+            self.lat = location.coordinate.latitude
+            print(self.lat)
+            self.long = location.coordinate.longitude
+        }
+        // Use your location
+    }
+    */
+//    func locationToCLLocationCoordinate2D(location: CLLocation) {
+//        self.createDirectionsReuest(from: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
+//    }
     
-    func createDirectionsReuest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request
+    func createDirectionsReuest(from coordinate: CLLocationCoordinate2D) /*-> MKDirections.Request*/
     {
-        let latitude = 48.151256
-        let longitude = 11.623152
-        let testDestination: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+//        let latitude = 48.151256
+//        let longitude = 11.623152
+//        let testDestination: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
+        let addressEvent = getAddress(from: event)
+        print("AddressEvent: \(addressEvent)")
+        group.enter()
+        //addressToLocation(address: addressEvent)
+        let geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(addressEvent) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location
+                else {
+                    // TODO handle no location found
+                    print("ERROR no location found")
+                    return
+            }
+            self.lat = location.coordinate.latitude
+            print(self.lat)
+            self.long = location.coordinate.longitude
+            self.group.leave()
+            self.group.notify(queue: DispatchQueue.main, execute: {
+                let destinationEvent: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                
+                let startingLocation            = MKPlacemark(coordinate: coordinate)
+                let destination                 = MKPlacemark(coordinate: destinationEvent)
+                
+                let request                     = MKDirections.Request()
+                request.source                  = MKMapItem(placemark: startingLocation)
+                request.destination             = MKMapItem(placemark: destination)
+                request.transportType           = .automobile
+                request.requestsAlternateRoutes = true
+                //return request
+                self.displayDirectionsOverlay(for: MKDirections(request: request))
+            })
+        }
+        /*
+        //print("Latitude: \(lat) Longitude: \(long)")
+        let destinationEvent: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: long)
         
         let destinationCoordiate        = getCenterLocation(for: mapView).coordinate
         let startingLocation            = MKPlacemark(coordinate: coordinate)
-        let destination                 = MKPlacemark(coordinate: testDestination)
+        let destination                 = MKPlacemark(coordinate: destinationEvent)
         
         let request                     = MKDirections.Request()
         request.source                  = MKMapItem(placemark: startingLocation)
         request.destination             = MKMapItem(placemark: destination)
         request.transportType           = .automobile
         request.requestsAlternateRoutes = true
-        
-        return request
+        */
+        //return request
     }
     
     func checkLocationAuthorization() {
@@ -204,6 +280,25 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
+    
+    func displayDirectionsOverlay(for directions: MKDirections) {
+        directions.calculate { [unowned self] (response, error) in
+            guard let response = response else { return } //TODO: Alarm because no route found
+            
+            print("found \(response.routes.count) routes")
+            
+            response.routes.first!.expectedTravelTime
+            
+            
+            for route in response.routes {
+                self.mapView.addOverlay(route.polyline)
+                print("description \(self.mapView.overlays.last!.description)")
+            }
+            //self.mapView.addOverlay(response.routes.first!.polyline)
+            let boundingRect = response.routes.first!.polyline.boundingMapRect
+            self.mapView.setVisibleMapRect(boundingRect, edgePadding: UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30), animated: true)
+        }
+    }
 }
 
 extension String {
@@ -230,7 +325,10 @@ extension EventViewController: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion.init(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-        mapView.setRegion(region, animated: true)
+        if (firstCall) {
+            firstCall = false
+            mapView.setRegion(region, animated: false)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -242,8 +340,13 @@ extension EventViewController {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
         //TODO: routenfarbe anpassen. vllt hellblau
-        renderer.strokeColor = .blue
-        
+        if mapView.overlays.count == 1 {
+            renderer.strokeColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
+            renderer.lineWidth = 5
+        } else {
+            renderer.strokeColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 0.5)
+            renderer.lineWidth = 5
+        }
         return renderer
     }
 }
