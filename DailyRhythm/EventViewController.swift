@@ -9,23 +9,78 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Contacts
+
 
 class EventViewController: UIViewController, MKMapViewDelegate {
 
+    @IBOutlet weak var infoStack: UIStackView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var streetAndNrLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
     @IBOutlet weak var timeTillGoLabel: UILabel!
+    @IBOutlet weak var showHideInfosButton: UIButton!
     var timer: Timer!
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
-    let regionInMeters: Double = 10000
+    let regionInMeters: Double = 1000
     var lat: Double = 0.0
     var long: Double = 0.0
     let group = DispatchGroup()
     var firstCall = true
+    @IBOutlet weak var myLocationButton: UIButton!
+    var address = ""
     
+    @IBAction func showHideInfos(_ sender: Any) {
+        if infoStack.isHidden {
+            animateView(view: infoStack, toHidden: false)
+            animateLabelDown(view: nameLabel, toHidden: false)
+            animateLabelDown(view: streetAndNrLabel, toHidden: false)
+            animateLabelDown(view: timeLabel, toHidden: false)
+            animateLabelDown(view: notesLabel, toHidden: false)
+            showHideInfosButton.setImage(UIImage(named: "Down"), for: .normal)
+        } else {
+            animateView(view: infoStack, toHidden: true)
+            animateLabelUp(view: nameLabel, toHidden: true)
+            animateLabelUp(view: streetAndNrLabel, toHidden: true)
+            animateLabelUp(view: timeLabel, toHidden: true)
+            animateLabelUp(view: notesLabel, toHidden: true)
+            showHideInfosButton.setImage(UIImage(named: "Up"), for: .normal)
+        }
+    }
+    
+    private func animateView(view: UIView, toHidden hidden: Bool) {
+        UIView.animate(withDuration: 0.8, delay: 0.05, options: [], animations: {
+            view.isHidden = hidden
+        }, completion: nil)
+    }
+    private func animateLabelDown(view: UIView, toHidden hidden: Bool) {
+        UIView.animate(withDuration: 0.05, delay: 0, options: [], animations: {
+            view.isHidden = hidden
+        }, completion: nil)
+    }
+    private func animateLabelUp(view: UIView, toHidden hidden: Bool) {
+        UIView.animate(withDuration: 0.05, delay: 0.8, options: [], animations: {
+            view.isHidden = hidden
+        }, completion: nil)
+    }
+    
+    @IBAction func openMapsAction(_ sender: Any) {
+        let coordinates = CLLocationCoordinate2DMake(lat, long)
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+        
+        let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center), MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)]
+        
+        let placemark = MKPlacemark(coordinate: coordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = nameLabel.text
+        mapItem.openInMaps(launchOptions: options)
+    }
+    @IBAction func myLocationButtonPressed(_ sender: Any) {
+        centerViewOnUserLocation()
+        //print("myLocationButten pressed")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -33,7 +88,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         getDirections()
 
         // Do any additional setup after loading the view.
-        
+        myLocationButton.layer.zPosition = 10
         //nameLabel.text = ViewController.tableViewList
         
         nameLabel.text = tableViewList[cellClickedIndex].eventName
@@ -112,7 +167,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
          */
     }
     func getAddress(from event: Event) -> String {
-        var address: String = ""
+        address = ""
         //if event.houseNrEdited == true {
             address = "Germany, \(event.cityName), \(event.streetName) \(event.houseNr)"
         //} else {
@@ -168,6 +223,14 @@ class EventViewController: UIViewController, MKMapViewDelegate {
             print(self.lat)
             self.long = location.coordinate.longitude
             self.group.leave()
+            
+            // show artwork on map
+            let mapMarker = MapMarker(title: "\(event.eventName.capitalizingFirstLetter())",
+                                  locationName: "\(event.streetName.capitalizingFirstLetter()) \(event.houseNr)",
+                                  discipline: "",
+                                  coordinate: CLLocationCoordinate2D(latitude: self.lat, longitude: self.long))
+            self.mapView.addAnnotation(mapMarker)
+            
             self.group.notify(queue: DispatchQueue.main, execute: {
                 let destinationEvent: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                 
@@ -245,7 +308,8 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         }
     }
     func ausgeben(h: Int, m: Int, s: Int){
-
+        //TODO: Center Text correctly
+        timeTillGoLabel.textAlignment = .center
         if(h==0){
             if(abs(s) <= 9 && s >= 0){
                 self.timeTillGoLabel.text = "\(m):0\(s)"
