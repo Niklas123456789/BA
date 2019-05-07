@@ -51,7 +51,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func animateView(view: UIView, toHidden hidden: Bool) {
-        UIView.animate(withDuration: 0.8, delay: 0.05, options: [], animations: {
+        UIView.animate(withDuration: 0.8, delay: 0.0, options: .curveEaseInOut, animations: {
             view.isHidden = hidden
         }, completion: nil)
     }

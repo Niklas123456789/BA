@@ -846,7 +846,6 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="116" id="L6t-oc-Ebc"/>
-                                            <constraint firstItem="VKE-DH-754" firstAttribute="leading" secondItem="eif-G9-JqR" secondAttribute="leading" constant="16" id="x7U-QR-M7d"/>
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:01:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZKd-Tt-qJj">
@@ -857,7 +856,6 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="eif-G9-JqR" firstAttribute="leading" secondItem="acg-KJ-vWu" secondAttribute="leading" constant="16" id="KHW-8e-wGN"/>
                                     <constraint firstItem="ZKd-Tt-qJj" firstAttribute="centerX" secondItem="eif-G9-JqR" secondAttribute="centerX" id="o9Z-bQ-A3O"/>
                                 </constraints>
                             </stackView>
