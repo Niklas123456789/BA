@@ -15,7 +15,9 @@ import Contacts
 class EventViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var infoStack: UIStackView!
+    @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var nameLabel: UILabel!
+    
     @IBOutlet weak var streetAndNrLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
@@ -32,23 +34,165 @@ class EventViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var myLocationButton: UIButton!
     var address = ""
     
-    @IBAction func showHideInfos(_ sender: Any) {
-        if infoStack.isHidden {
-            animateView(view: infoStack, toHidden: false)
-            animateLabelDown(view: nameLabel, toHidden: false)
-            animateLabelDown(view: streetAndNrLabel, toHidden: false)
-            animateLabelDown(view: timeLabel, toHidden: false)
-            animateLabelDown(view: notesLabel, toHidden: false)
-            showHideInfosButton.setImage(UIImage(named: "Down"), for: .normal)
-        } else {
-            animateView(view: infoStack, toHidden: true)
-            animateLabelUp(view: nameLabel, toHidden: true)
-            animateLabelUp(view: streetAndNrLabel, toHidden: true)
-            animateLabelUp(view: timeLabel, toHidden: true)
-            animateLabelUp(view: notesLabel, toHidden: true)
-            showHideInfosButton.setImage(UIImage(named: "Up"), for: .normal)
+    //Interaction card view
+    enum CardState {
+        case expanded
+        case collapsed
+    }
+    var cardViewController: CardViewController!
+    //var visualEffectView: UIVisualEffectView!
+    
+    let cardHeight: CGFloat = 600
+    let cardHandleAreaHeight: CGFloat = 165
+    
+    var cardVisible = false
+    var nextState: CardState {
+        return cardVisible ? .collapsed : .expanded
+    }
+    
+    var runningAnimations = [UIViewPropertyAnimator]()
+    var animationProgressWhenInterrupted : CGFloat = 0
+    
+    
+    func setupCard() {
+//        visualEffectView = UIVisualEffectView()
+//        visualEffectView.frame = self.view.frame
+//        self.view.addSubview(visualEffectView)
+//        visualEffectView.isHidden = true
+        
+        cardViewController = CardViewController(nibName: "CardViewController", bundle: nil)
+        self.addChild(cardViewController)
+        self.view.addSubview(cardViewController.view)
+        cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight - self.timeLabel.frame.height - self.buttonsStack.frame.height, width: self.view.bounds.width, height: cardHeight)
+        cardViewController.view.clipsToBounds = true
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewController.handleCardTap(recognizer:)))
+        let panGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewController.handleCardPan(recognizer:)))
+        
+        cardViewController.handleArea.addGestureRecognizer(tapGestureRecognizer)
+        cardViewController.handleArea.addGestureRecognizer(panGestureRecognizer)
+        showHideInfosButton.addGestureRecognizer(tapGestureRecognizer)
+        showHideInfosButton.addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    @objc
+    func handleCardTap(recognizer:UITapGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            animateTransitionIfNeeded(state: nextState, duration: 0.9)
+        default:
+            break
         }
     }
+    @objc
+    func handleCardPan(recognizer:UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            //start
+            startInteractiveTransition(state: nextState, duration: 0.9)
+        case .changed:
+            //update
+            let translation = recognizer.translation(in: self.cardViewController.handleArea)
+            let translationInfo = recognizer.translation(in: self.showHideInfosButton)
+            var fractionComplete = translation.y / cardHeight
+            var fractionCompleteInfo = translationInfo.y / infoStack.frame.height
+            
+            fractionComplete = cardVisible ? fractionComplete : -fractionComplete
+            //fractionCompleteInfo = fractionCom
+            updateInteractiveTransition(fractionCompleted: fractionComplete)
+        case .ended:
+            //continue
+            contignueInteractiveTransition()
+        default:
+            break
+        }
+        
+    }
+    func animateTransitionIfNeeded(state:CardState, duration: TimeInterval) {
+        if (runningAnimations.isEmpty) {
+            let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight + self.buttonsStack.frame.height + self.timeLabel.frame.height
+                    //self.visualEffectView.isHidden = false
+                case .collapsed:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleAreaHeight + self.buttonsStack.frame.height + self.timeLabel.frame.height
+                    break
+                }
+            }
+            frameAnimator.addCompletion { _ in
+                self.cardVisible = !self.cardVisible
+                self.runningAnimations.removeAll()
+            }
+            frameAnimator.startAnimation()
+            runningAnimations.append(frameAnimator)
+            
+            let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
+                switch state {
+                case .expanded:
+                    var temp = self.cardViewController.view.layer
+                    temp.cornerRadius = 12
+                case .collapsed:
+                    var temp2 = self.cardViewController.view.layer
+                    temp2.cornerRadius = 0
+                }
+            }
+            cornerRadiusAnimator.startAnimation()
+            runningAnimations.append(cornerRadiusAnimator)
+            /* BLUR
+            let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.visualEffectView.effect = UIBlurEffect(style: .dark)
+                case .collapsed:
+                    self.visualEffectView.effect = nil
+                }
+            }
+            blurAnimator.startAnimation()
+            runningAnimations.append(blurAnimator)
+            */
+        }
+    }
+    
+    func startInteractiveTransition (state: CardState, duration: TimeInterval) {
+        if runningAnimations.isEmpty {
+            animateTransitionIfNeeded(state: state, duration: duration)
+        }
+        for animator in runningAnimations {
+            animator.pauseAnimation()
+            animationProgressWhenInterrupted = animator.fractionComplete
+        }
+    }
+    
+    func updateInteractiveTransition(fractionCompleted:CGFloat) {
+        for animator in runningAnimations {
+            animator.fractionComplete = fractionCompleted + animationProgressWhenInterrupted
+        }
+        
+    }
+    func contignueInteractiveTransition() {
+        for animator in runningAnimations {
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+        }
+    }
+    
+//    @IBAction func showHideInfos(_ sender: Any) {
+//        if infoStack.isHidden {
+//            animateView(view: infoStack, toHidden: false)
+//            animateLabelDown(view: nameLabel, toHidden: false)
+//            animateLabelDown(view: streetAndNrLabel, toHidden: false)
+//            animateLabelDown(view: timeLabel, toHidden: false)
+//            animateLabelDown(view: notesLabel, toHidden: false)
+//            showHideInfosButton.setImage(UIImage(named: "Down"), for: .normal)
+//        } else {
+//            animateView(view: infoStack, toHidden: true)
+//            animateLabelUp(view: nameLabel, toHidden: true)
+//            animateLabelUp(view: streetAndNrLabel, toHidden: true)
+//            animateLabelUp(view: timeLabel, toHidden: true)
+//            animateLabelUp(view: notesLabel, toHidden: true)
+//            showHideInfosButton.setImage(UIImage(named: "Up"), for: .normal)
+//        }
+//    }
     
     private func animateView(view: UIView, toHidden hidden: Bool) {
         UIView.animate(withDuration: 0.8, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -88,7 +232,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         getDirections()
 
         // Do any additional setup after loading the view.
-        myLocationButton.layer.zPosition = 10
+        //myLocationButton.layer.zPosition = -1
         //nameLabel.text = ViewController.tableViewList
         
         nameLabel.text = tableViewList[cellClickedIndex].eventName
@@ -115,6 +259,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
         ausgeben(h: t, m: m, s: s)
         startTimer(timeInSeconds: timeTillGo, event: event)
+        setupCard()
     }
     func setupLocationManager() {
         locationManager.delegate = self
@@ -339,7 +484,7 @@ class EventViewController: UIViewController, MKMapViewDelegate {
                 }
             }
         }
-        print(("\(h):\(m):\(s)"))
+        //print(("\(h):\(m):\(s)"))
     }
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)

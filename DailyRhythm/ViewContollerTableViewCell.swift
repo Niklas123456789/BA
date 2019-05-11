@@ -111,7 +111,7 @@ class ViewContollerTableViewCell: UITableViewCell {
                 }
             }
         }
-        print(("\(h):\(m):\(s)"))
+        //print(("\(h):\(m):\(s)"))
     }
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
