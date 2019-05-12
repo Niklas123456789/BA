@@ -64,7 +64,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellClickedIndex = indexPath.row
-        performSegue(withIdentifier: "segue", sender: self)
+        performSegue(withIdentifier: "segue2", sender: self)
     }
 
     //set hight of each cell too 95

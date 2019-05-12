@@ -11,6 +11,7 @@
 		D73B59F021944C93000CA37B /* IterationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B59EF21944C93000CA37B /* IterationEnum.swift */; };
 		D7413BB422870E32007A4229 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7413BB322870E32007A4229 /* CardViewController.xib */; };
 		D7413BB622870EA2007A4229 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7413BB522870EA2007A4229 /* CardViewController.swift */; };
+		D74741F422882D3700CCFE6D /* EventViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74741F322882D3700CCFE6D /* EventViewController2.swift */; };
 		D757AD302280326900445133 /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D757AD2F2280326900445133 /* MapMarker.swift */; };
 		D75EA98A223419AF00A258C7 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75EA989223419AF00A258C7 /* EventManager.swift */; };
 		D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02621EB952B00AA2617 /* EventViewController.swift */; };
@@ -44,6 +45,7 @@
 		D73B59EF21944C93000CA37B /* IterationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterationEnum.swift; sourceTree = "<group>"; };
 		D7413BB322870E32007A4229 /* CardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
 		D7413BB522870EA2007A4229 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
+		D74741F322882D3700CCFE6D /* EventViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController2.swift; sourceTree = "<group>"; };
 		D757AD2F2280326900445133 /* MapMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		D75EA989223419AF00A258C7 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		D763E02621EB952B00AA2617 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				D7CBCA9B2193514A001F786B /* TimerController.swift */,
 				D73B59ED21944827000CA37B /* EventOLD.swift */,
 				D763E02621EB952B00AA2617 /* EventViewController.swift */,
+				D74741F322882D3700CCFE6D /* EventViewController2.swift */,
 				D7CBCA7D219324E1001F786B /* Main.storyboard */,
 				D7CBCA9921934389001F786B /* ViewContollerTableViewCell.swift */,
 				D7CBCA80219324E3001F786B /* Assets.xcassets */,
@@ -262,6 +265,7 @@
 				D7CBCA9A21934389001F786B /* ViewContollerTableViewCell.swift in Sources */,
 				D77983B221A4B6B600764577 /* NewEventViewController.swift in Sources */,
 				D7CAFE0521FF59E800272E8B /* Event.swift in Sources */,
+				D74741F422882D3700CCFE6D /* EventViewController2.swift in Sources */,
 				D7413BB622870EA2007A4229 /* CardViewController.swift in Sources */,
 				D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */,
 				D779839A2198DD2000764577 /* Constants.swift in Sources */,

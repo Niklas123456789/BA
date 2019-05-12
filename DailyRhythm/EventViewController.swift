@@ -63,7 +63,8 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         cardViewController = CardViewController(nibName: "CardViewController", bundle: nil)
         self.addChild(cardViewController)
         self.view.addSubview(cardViewController.view)
-        cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight - self.timeLabel.frame.height - self.buttonsStack.frame.height, width: self.view.bounds.width, height: cardHeight)
+        self.view.bringSubviewToFront(cardViewController.view)
+        cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight /*- self.timeLabel.frame.height - self.buttonsStack.frame.height*/, width: self.view.bounds.width, height: cardHeight)
         cardViewController.view.clipsToBounds = true
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewController.handleCardTap(recognizer:)))
