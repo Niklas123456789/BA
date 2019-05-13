@@ -56,6 +56,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         } else {
             eventNotes = tableViewList[cellClickedIndex].eventNotes
         }
+        
         //cardViewController.nameLabel.text = tableViewList[cellClickedIndex].streetName
         //self.setCardLabels(name: tableViewList[cellClickedIndex].eventName, street: tableViewList[cellClickedIndex].streetName, houseNr: tableViewList[cellClickedIndex].houseNr, city: tableViewList[cellClickedIndex].cityName, notes: eventNotes, bufferTime: tableViewList[cellClickedIndex].bufferTime, walkingTime: tableViewList[cellClickedIndex].walkingTime, parkingTime: tableViewList[cellClickedIndex].parkingTime)
         // Do any additional setup after loading the view.
@@ -118,13 +119,15 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     }
     
     func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){
-        cardViewController.nameLabel.text! = name
-        cardViewController.streetLabel.text! = "\(street) + \(houseNr)"
-        cardViewController.cityLabel.text! = city
-        cardViewController.notesLabel.text? = notes
-        /*cardViewController.bufferTime.text! = "\(bufferTime)"
-        cardViewController.walkingTime.text! = "\(walkingTime)"
-        cardViewController.parkingTime.text! = "\(parkingTime)"*/
+        
+        CardViewController.getInstance().nameLabel?.text = name
+        //cardViewController.nameLabel?.text? = name
+        /*cardViewController.streetLabel?.text? = "\(street) + \(houseNr)"
+        cardViewController.cityLabel?.text? = city
+        cardViewController.notesLabel?.text? = notes
+        cardViewController.bufferTime?.text? = "\(bufferTime)"
+        cardViewController.walkingTime?.text? = "\(walkingTime)"
+        cardViewController.parkingTime?.text? = "\(parkingTime)"*/
     }
     
     @objc
