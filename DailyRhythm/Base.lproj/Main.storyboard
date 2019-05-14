@@ -947,7 +947,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ynS-82-wOp">
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ynS-82-wOp">
                                 <rect key="frame" x="0.0" y="727" width="381" height="170"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -963,8 +963,11 @@
                                             <constraint firstAttribute="width" secondItem="gCG-Zb-hnc" secondAttribute="height" multiplier="70:70" id="RNu-ix-HA7"/>
                                         </constraints>
                                         <state key="normal" image="Back_white"/>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="presentation" id="Veq-mI-925"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4z-W5-meR" userLabel="Info_Button">
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4z-W5-meR" userLabel="Info_Button">
                                         <rect key="frame" x="148" y="0.0" width="65" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="S4z-W5-meR" secondAttribute="height" multiplier="70:70" id="t8x-UI-aLO"/>
@@ -982,6 +985,7 @@
                                             <color key="titleShadowColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
+                                            <action selector="openMapsAction:" destination="T6v-ab-WMQ" eventType="touchUpInside" id="Wgx-qJ-tHj"/>
                                             <action selector="openMapsAction:" destination="A89-xh-sfJ" eventType="touchUpInside" id="bNy-br-enH"/>
                                         </connections>
                                     </button>
@@ -1013,6 +1017,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
+                                    <action selector="myLocationButtonPressed:" destination="T6v-ab-WMQ" eventType="touchUpInside" id="DNe-Zq-TRg"/>
                                     <action selector="myLocationButtonPressed:" destination="A89-xh-sfJ" eventType="touchUpInside" id="Wr3-wJ-fr7"/>
                                 </connections>
                             </button>
@@ -1032,7 +1037,7 @@
                             <constraint firstItem="ynS-82-wOp" firstAttribute="top" secondItem="NA8-E8-wAD" secondAttribute="bottom" id="VtJ-ez-2EI"/>
                             <constraint firstItem="ynS-82-wOp" firstAttribute="width" secondItem="Tcs-1S-3cu" secondAttribute="width" constant="20" id="XQS-FO-Y0q"/>
                             <constraint firstItem="ynS-82-wOp" firstAttribute="top" secondItem="qKN-AA-39A" secondAttribute="bottom" constant="-135" id="iVL-mZ-Z8t"/>
-                            <constraint firstItem="Axf-bF-Tnf" firstAttribute="bottom" secondItem="NA8-E8-wAD" secondAttribute="bottom" constant="-180" id="peM-et-fZ7"/>
+                            <constraint firstItem="Axf-bF-Tnf" firstAttribute="bottom" secondItem="NA8-E8-wAD" secondAttribute="bottom" priority="250" constant="-180" id="peM-et-fZ7"/>
                             <constraint firstItem="xbZ-CR-00c" firstAttribute="leading" secondItem="qKN-AA-39A" secondAttribute="leading" id="tXl-99-yu3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qKN-AA-39A"/>
@@ -1041,6 +1046,7 @@
                         <outlet property="buttonsStack" destination="Tcs-1S-3cu" id="MN0-K6-0Sy"/>
                         <outlet property="coverView" destination="ynS-82-wOp" id="juw-mr-4J6"/>
                         <outlet property="mapView" destination="NA8-E8-wAD" id="SoL-a4-jLf"/>
+                        <outlet property="myLocationButton" destination="Axf-bF-Tnf" id="1bm-cr-hf8"/>
                         <outlet property="timeLabel" destination="xbZ-CR-00c" id="gAg-V8-Mlo"/>
                     </connections>
                 </viewController>
@@ -1065,6 +1071,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="fZa-51-Kma"/>
+        <segue reference="Veq-mI-925"/>
     </inferredMetricsTieBreakers>
 </document>

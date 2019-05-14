@@ -17,6 +17,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var coverView: UIView!
+    @IBOutlet weak var myLocationButton: UIButton!
     let locationManager = CLLocationManager()
     let regionInMeters: Double = 1000
     var timer: Timer!
@@ -51,11 +52,13 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         checkLocationServices()
         getDirections()
-        if (tableViewList[cellClickedIndex].eventNotes == nil) {
+        if (tableViewList[cellClickedIndex].eventNotes.isEmpty) {
             eventNotes = ""
         } else {
             eventNotes = tableViewList[cellClickedIndex].eventNotes
         }
+        
+        myLocationButton.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
         
         //cardViewController.nameLabel.text = tableViewList[cellClickedIndex].streetName
         //self.setCardLabels(name: tableViewList[cellClickedIndex].eventName, street: tableViewList[cellClickedIndex].streetName, houseNr: tableViewList[cellClickedIndex].houseNr, city: tableViewList[cellClickedIndex].cityName, notes: eventNotes, bufferTime: tableViewList[cellClickedIndex].bufferTime, walkingTime: tableViewList[cellClickedIndex].walkingTime, parkingTime: tableViewList[cellClickedIndex].parkingTime)
@@ -96,6 +99,16 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         //visualEffectView = UIVisualEffectView()
         //visualEffectView.frame = self.view.frame
         //self.view.addSubview(visualEffectView)
+//        self.view.translatesAutoresizingMaskIntoConstraints = false
+//        let verticalConstraint = NSLayoutConstraint(item: self.myLocationButton.frame, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: cardViewController.handleArea.topAnchor, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 100)
+//        view.addConstraint(verticalConstraint)
+        
+//        myLocationButton.translatesAutoresizingMaskIntoConstraints = true
+//        var temp = cardViewController.view
+//        myLocationButton.center = CGPoint(x: 0, y: temp?.bounds.maxY ?? 300 - 100)
+//        myLocationButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        
+        
         
         cardViewController = CardViewController(nibName:"CardViewController", bundle:nil)
         //TODO: setCardLabels()
@@ -112,10 +125,13 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         
         cardViewController.handleArea.addGestureRecognizer(tapGestureRecognizer)
         cardViewController.handleArea.addGestureRecognizer(panGestureRecognizer)
+        
         self.view.bringSubviewToFront(cardViewController.view)
+        
         self.view.bringSubviewToFront(coverView)
         self.view.bringSubviewToFront(buttonsStack)
         self.view.bringSubviewToFront(timeLabel)
+
     }
     
     func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){
@@ -160,6 +176,22 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     
     func animateTransitionIfNeeded (state:CardState, duration:TimeInterval) {
         if runningAnimations.isEmpty {
+            let myLoationButtonAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight - 110
+                case .collapsed:
+                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight
+                    
+                }
+            }
+            
+            myLoationButtonAnimator.addCompletion { (_) in
+                self.runningAnimations.removeAll()
+            }
+            myLoationButtonAnimator.startAnimation()
+            runningAnimations.append(myLoationButtonAnimator)
+            
             let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
                 switch state {
                 case .expanded:
@@ -235,6 +267,10 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             //Show POP UP that location is turned off
         }
     }
+    @IBAction func myLocationButtonPressed(_ sender: Any) {
+        centerViewOnUserLocation()
+        //print("myLocationButten pressed")
+    }
     func getDirections() {
         guard let location = locationManager.location?.coordinate else {
             //TODO: Inform user that there is no current location
@@ -244,6 +280,18 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         /*let request = */
         createDirectionsReuest(from: location)
     }
+    @IBAction func openMapsAction(_ sender: Any) {
+        let coordinates = CLLocationCoordinate2DMake(lat, long)
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+        
+        let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center), MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)]
+        
+        let placemark = MKPlacemark(coordinate: coordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = cardViewController.nameLabel?.text
+        mapItem.openInMaps(launchOptions: options)
+    }
+    
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
@@ -361,11 +409,16 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             
             print("found \(response.routes.count) routes")
             
-            response.routes.first!.expectedTravelTime
+            var quickestExpectedTravelTime = response.routes.first!.expectedTravelTime
+            var (t, h, m) = self.secondsToHoursMinutesSeconds(seconds: Int(quickestExpectedTravelTime/60))
+            
+            print("quickestExpectedTravelTime: \(h) Std. \(m) Min.")
+            print("quickestExpectedTravelTime: \(quickestExpectedTravelTime)")
             
             
             for route in response.routes {
                 self.mapView.addOverlay(route.polyline)
+                //route.polyline.coordinate
                 print("description \(self.mapView.overlays.last!.description)")
             }
             //self.mapView.addOverlay(response.routes.first!.polyline)

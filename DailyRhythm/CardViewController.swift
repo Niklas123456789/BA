@@ -27,19 +27,32 @@ class CardViewController: UIViewController {
         return instance
     }
     override func viewDidLoad() {
-        let event = tableViewList[cellClickedIndex]
-        setCardLabels(name: tableViewList[cellClickedIndex].eventName, street: tableViewList[cellClickedIndex].streetName, houseNr: tableViewList[cellClickedIndex].houseNr, city: tableViewList[cellClickedIndex].cityName, notes: tableViewList[cellClickedIndex].eventNotes, eventTime: tableViewList[cellClickedIndex].eventDate.toString(dateFormat: "HH:mm  dd-MM-yyyy"))
+        setCardLabels(
+            name: tableViewList[cellClickedIndex].eventName,
+            street: tableViewList[cellClickedIndex].streetName,
+            houseNr: tableViewList[cellClickedIndex].houseNr,
+            city: tableViewList[cellClickedIndex].cityName,
+            notes: tableViewList[cellClickedIndex].eventNotes,
+            eventTime: tableViewList[cellClickedIndex].eventDate.toString(dateFormat: "HH:mm  dd-MM-yyyy"),
+            bufferTime: tableViewList[cellClickedIndex].bufferTime,
+            walkingTime: tableViewList[cellClickedIndex].walkingTime,
+            parkingTime: tableViewList[cellClickedIndex].parkingTime)
     }
     
-    func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, eventTime: String){
-        nameLabel?.text! = name
-        streetLabel?.text! = "\(street) \(houseNr)"
-        cityLabel?.text! = city
-        notesLabel?.text? = notes
+    func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, eventTime: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){
+        nameLabel?.text! = name.capitalizingFirstLetter()
+        streetLabel?.text! = "\(street.capitalizingFirstLetter()) \(houseNr)"
+        cityLabel?.text! = city.capitalizingFirstLetter()
+        if (notes.isEmpty) {
+            notesLabel?.text? = ""
+        }else{
+            notesLabel?.text? = "Notizen: \(notes.capitalizingFirstLetter())"
+        }
+        
         timeLabel?.text! = eventTime
         //print(bufferTime.description)
-        /*bufferLabel?.text! = "\(bufferTime)"
+        bufferLabel?.text! = "\(bufferTime)"
         walkingLabel?.text! = "\(walkingTime)"
-        parkingLabel?.text! = "\(parkingTime)"*/
+        parkingLabel?.text! = "\(parkingTime)"
     }
 }
