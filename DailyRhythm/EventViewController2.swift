@@ -21,6 +21,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var expectedTimeLabel: UILabel!
     
+    
     let locationManager = CLLocationManager()
     let regionInMeters: Double = 1000
     var timer: Timer!
@@ -52,6 +53,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         mapView.delegate = self
         checkLocationServices()
         getDirections()
@@ -69,6 +71,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         activityIndicator.style = UIActivityIndicatorView.Style.gray
         activityIndicator.startAnimating()
         
+        
         view.addSubview(activityIndicator)
         view.bringSubviewToFront(activityIndicator)
         var event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
@@ -85,7 +88,6 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         //setCardLabels(name: event.eventName, street: event.streetName, houseNr: event.houseNr, city: event.cityName, notes: event.eventNotes, bufferTime: event.bufferTime, walkingTime: event.walkingTime, parkingTime: event.parkingTime)
         
         setupCard()
-        self.view.bringSubviewToFront(expectedTimeLabel)
     }
     
     func setupCard() {
@@ -174,9 +176,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             let myLoationButtonAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
                 switch state {
                 case .expanded:
-                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight - 110
+                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight - 70
                 case .collapsed:
-                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight
+                    self.myLocationButton.frame.origin.y = self.view.frame.height - self.cardHeight + 75
                     
                 }
             }
@@ -421,7 +423,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print("quickestExpectedTravelTime: \(h) Std. \(m) Min.")
             print("quickestExpectedTravelTime: \(quickestExpectedTravelTime)")
             
-            self.expectedTimeLabel.center = CGPoint(x: response.routes.first!.polyline.boundingMapRect.midX, y: response.routes.first!.polyline.boundingMapRect.midY)
+            //self.expectedTimeLabel.center = CGPoint(x: response.routes.first!.polyline.boundingMapRect.midX, y: response.routes.first!.polyline.boundingMapRect.midY)
             
             for route in response.routes {
                 self.mapView.addOverlay(route.polyline)
@@ -431,7 +433,25 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             }
             //self.mapView.addOverlay(response.routes.first!.polyline)
             let boundingRect = response.routes.first!.polyline.boundingMapRect
-            self.mapView.setVisibleMapRect(boundingRect, edgePadding: UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30), animated: true)
+            self.group.enter()
+            self.mapView.setVisibleMapRect(boundingRect, edgePadding: UIEdgeInsets(top: 60, left: 60, bottom: 80, right: 60), animated: true)
+            self.group.leave()
+            self.group.notify(queue: DispatchQueue.main, execute: {
+                /* expectedTravelTimeLabel */
+                let expectedTravelTimeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+                //print("\(response.routes.first!.polyline.boundingMapRect.midX)")
+//                expectedTravelTimeLabel.center = response.routes.first!.polyline.coordinate)
+//                expectedTravelTimeLabel.textAlignment = .center
+//                expectedTravelTimeLabel.text = "I'm a test label"
+//                self.view.addSubview(expectedTravelTimeLabel)
+                
+                let position2 = CLLocationCoordinate2D(latitude: (self.lat + (self.locationManager.location?.coordinate.latitude)!) / 2, longitude: (self.long + (self.locationManager.location?.coordinate.longitude)!) / 2)
+                let position = CLLocationCoordinate2D(latitude: 10, longitude: 10)
+                
+                let marker = MapMarker(title: "Title", locationName: "Name", discipline: "Discipline", coordinate: position2)
+                
+                self.mapView.addAnnotation(marker)
+            })
         }
     }
     func setupLocationManager() {
@@ -514,5 +534,25 @@ extension EventViewController2 {
         }
         return renderer
     }
+    // 1
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // 2
+        guard let annotation = annotation as? MapMarker else { return nil }
+        // 3
+        let identifier = "marker"
+        var view: MKMarkerAnnotationView
+        // 4
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            as? MKMarkerAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+            // 5
+            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        return view
+    }
 }
-

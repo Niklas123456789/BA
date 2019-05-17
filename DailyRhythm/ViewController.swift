@@ -23,7 +23,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return instance
     }
 
-    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    /* delete Event */
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            // handle delete (by removing the data from your array and updating the tableview)
+            var allEventsArray = [Event]()
+            
+            EventManager.getInstance().updateJSONEvents()
+            
+            allEventsArray = JSONDataManager.loadAll(Event.self)
+            
+            JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
+            
+            tableViewList.remove(at: indexPath.row)
+            
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+            tableView.endUpdates()
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //Number of cells equal to listings in tableViewList
