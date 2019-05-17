@@ -18,6 +18,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var coverView: UIView!
     @IBOutlet weak var myLocationButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var expectedTimeLabel: UILabel!
+    
     let locationManager = CLLocationManager()
     let regionInMeters: Double = 1000
     var timer: Timer!
@@ -60,26 +63,14 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         
         myLocationButton.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
         
-        //cardViewController.nameLabel.text = tableViewList[cellClickedIndex].streetName
-        //self.setCardLabels(name: tableViewList[cellClickedIndex].eventName, street: tableViewList[cellClickedIndex].streetName, houseNr: tableViewList[cellClickedIndex].houseNr, city: tableViewList[cellClickedIndex].cityName, notes: eventNotes, bufferTime: tableViewList[cellClickedIndex].bufferTime, walkingTime: tableViewList[cellClickedIndex].walkingTime, parkingTime: tableViewList[cellClickedIndex].parkingTime)
-        // Do any additional setup after loading the view.
-        //myLocationButton.layer.zPosition = -1
-        //nameLabel.text = ViewController.tableViewList
+        activityIndicator.center = self.mapView.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor.black
+        activityIndicator.style = UIActivityIndicatorView.Style.gray
+        activityIndicator.startAnimating()
         
-        //nameLabel.text = tableViewList[cellClickedIndex].eventName
-        //nameLabel.text = nameLabel.text?.capitalizingFirstLetter()
-        //var street = tableViewList[cellClickedIndex].streetName
-        //street = street.capitalizingFirstLetter()
-        //streetAndNrLabel.text = "\(street) \(tableViewList[cellClickedIndex].houseNr)"
-        //var eventTime = tableViewList[cellClickedIndex].eventDate.toString(dateFormat: "HH:mm  dd-MM-yyyy")
-        
-//        if (tableViewList[cellClickedIndex].eventNotes.isEmpty) {
-//            notesLabel.text = "Keine Notizen"
-//            notesLabel.textColor = UIColor.gray
-//        } else {
-//            notesLabel.text = tableViewList[cellClickedIndex].eventNotes.capitalizingFirstLetter()
-//            notesLabel.textColor = UIColor.black
-//        }
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
         var event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
         if event.eventID == "-1" {
             print("getEventwithID returned noEvent")
@@ -92,7 +83,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         startTimer(timeInSeconds: timeTillGo, event: event)
         //cardViewController.nameLabel.text = "Hallo"
         //setCardLabels(name: event.eventName, street: event.streetName, houseNr: event.houseNr, city: event.cityName, notes: event.eventNotes, bufferTime: event.bufferTime, walkingTime: event.walkingTime, parkingTime: event.parkingTime)
+        
         setupCard()
+        self.view.bringSubviewToFront(expectedTimeLabel)
     }
     
     func setupCard() {
@@ -131,6 +124,8 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         self.view.bringSubviewToFront(coverView)
         self.view.bringSubviewToFront(buttonsStack)
         self.view.bringSubviewToFront(timeLabel)
+        self.view.bringSubviewToFront(activityIndicator)
+        
 
     }
     
@@ -362,7 +357,15 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         let event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
         let addressEvent = getAddress(from: event)
         print("AddressEvent: \(addressEvent)")
+        
         group.enter()
+        /* starts loading animation */
+        activityIndicator.center = self.mapView.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor.black
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
+        
         //addressToLocation(address: addressEvent)
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(addressEvent) { (placemarks, error) in
@@ -378,6 +381,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print(self.lat)
             self.long = location.coordinate.longitude
             self.group.leave()
+            self.activityIndicator.stopAnimating()
             
             // show artwork on map
             let mapMarker = MapMarker(title: "\(event.eventName.capitalizingFirstLetter())",
@@ -408,6 +412,8 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             guard let response = response else { return } //TODO: Alarm because no route found
             
             print("found \(response.routes.count) routes")
+//            var routes2 = response.routes
+//            routes2.sort(by:)
             
             var quickestExpectedTravelTime = response.routes.first!.expectedTravelTime
             var (t, h, m) = self.secondsToHoursMinutesSeconds(seconds: Int(quickestExpectedTravelTime/60))
@@ -415,9 +421,11 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print("quickestExpectedTravelTime: \(h) Std. \(m) Min.")
             print("quickestExpectedTravelTime: \(quickestExpectedTravelTime)")
             
+            self.expectedTimeLabel.center = CGPoint(x: response.routes.first!.polyline.boundingMapRect.midX, y: response.routes.first!.polyline.boundingMapRect.midY)
             
             for route in response.routes {
                 self.mapView.addOverlay(route.polyline)
+                
                 //route.polyline.coordinate
                 print("description \(self.mapView.overlays.last!.description)")
             }
