@@ -20,6 +20,13 @@ class CardViewController: UIViewController {
     @IBOutlet weak var bufferLabel: UILabel?
     @IBOutlet weak var walkingLabel: UILabel?
     @IBOutlet weak var parkingLabel: UILabel?
+    @IBOutlet weak var expectedTravelTimeLabelMin: UILabel?
+    @IBOutlet weak var expectedTravelTimeLabelHours: UILabel!
+    @IBOutlet weak var stundenLabel1: UILabel!
+    @IBOutlet weak var hoursLabel1: UILabel!
+    @IBOutlet weak var stundenLabel2: UILabel!
+    @IBOutlet weak var totalHoursLabel: UILabel!
+    @IBOutlet weak var totalMinLabel: UILabel!
     
     private static let instance = CardViewController()
     
@@ -37,6 +44,8 @@ class CardViewController: UIViewController {
             bufferTime: tableViewList[cellClickedIndex].bufferTime,
             walkingTime: tableViewList[cellClickedIndex].walkingTime,
             parkingTime: tableViewList[cellClickedIndex].parkingTime)
+        
+        setExpectedTravelTime()
     }
     
     func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, eventTime: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){
@@ -55,4 +64,42 @@ class CardViewController: UIViewController {
         walkingLabel?.text! = "\(walkingTime)"
         parkingLabel?.text! = "\(parkingTime)"
     }
+    
+    func setExpectedTravelTime() {
+        var timer: Timer?
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer) in
+            if ((expectedTravelTime == -1) || (expectedTravelTimeUpdated == false)) {
+                print("no expectedTavelTime")
+                self.handleArea.isUserInteractionEnabled = false
+            } else {
+                if (expectedTravelTime > 60) {
+                    var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)
+                    self.expectedTravelTimeLabelMin?.text! = "\(m)"
+                    self.hoursLabel1.text = "\(h)"
+                    self.stundenLabel1.isHidden = false
+                } else {
+                    self.expectedTravelTimeLabelMin?.text! = "~\(expectedTravelTime)"
+                    
+                    
+                }
+                //TODO: calc insgasammte Zeit
+                self.setTotalTravelTime()
+                timer.invalidate()
+            }
+        })
+    }
+    func setTotalTravelTime() {
+        var totalTravelTime = Int(bufferLabel!.text!)! + Int(walkingLabel!.text!)! + Int(parkingLabel!.text!)! + expectedTravelTime
+        if (totalTravelTime > 60) {
+            var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: totalTravelTime)
+            self.totalMinLabel.text = "\(m)"
+            self.totalHoursLabel.text = "\(h)"
+            self.stundenLabel2.isHidden = false
+        } else {
+            self.totalMinLabel.text = "\(totalTravelTime)"
+        }
+        self.handleArea.isUserInteractionEnabled = true
+        print("setTotalTravelTime \(totalTravelTime)")
+    }
+    
 }

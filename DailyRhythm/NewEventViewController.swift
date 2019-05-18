@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import MapKit
+import CoreLocation
 
 var ID: Int = 0
 
@@ -161,6 +163,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     @IBOutlet weak var parkingTimePicker: UIPickerView!
     var timePickerData: [Int] = [Int]()
     @IBOutlet weak var okButton: UIButton!
+    let group2 = DispatchGroup()
     
 //    var duration: Int = 0
     var bufferTime: Int = 0
@@ -271,6 +274,36 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
+    func checkAddressIsValid(address: String) -> Bool {
+        let geoCoder = CLGeocoder()
+        let group = DispatchGroup()
+        var valid = false
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: false, block: { (timer) in
+            geoCoder.cancelGeocode()
+        })
+        group.enter()
+        geoCoder.geocodeAddressString(address) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location
+                else {
+                    // TODO handle no location found
+                    print("ERROR no location found \(error.debugDescription)")
+                    valid = false
+                    return
+            }
+            group.leave()
+            valid = true
+        }
+        group.leave()
+        group.notify(queue: DispatchQueue.main) {
+            return valid
+        }
+        print("checkAddressIsValid Ende Return: \(valid)")
+        return valid
+    }
+    
     
     
     
@@ -317,7 +350,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
-    
+    //TODO: Change Keyboardlayout with hide keyboard button
     //jumps between textFields when pressing return on keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         checkEnableOkButton()
@@ -379,10 +412,19 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        }
 //        print(weekdaysAreAllFalse)
 //        TODO: Add alle anderen pflichtfelder
-        if (eventWeekdays.contains(true) && nameTextField.text?.isEmpty == false) {
-            okButton.setImage(UIImage(named: "OK"), for: .normal)
-        }else{
-            okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+        group2.enter()
+        print("group2.enter()")
+        var validAddress = checkAddressIsValid(address: "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)")
+        group2.leave()
+        print("group2.leave() validAddress: \(validAddress)")
+        group2.notify(queue: DispatchQueue.main) {
+            if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false && validAddress == true) {
+                self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+                //okButton.isUserInteractionEnabled = true
+            }else{
+                self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+                //okButton.isUserInteractionEnabled = false
+            }
         }
     }
 
