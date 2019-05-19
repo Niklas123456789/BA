@@ -20,6 +20,7 @@
 		D763E02921EDF19500AA2617 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02821EDF19500AA2617 /* Extentions.swift */; };
 		D779839A2198DD2000764577 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983992198DD2000764577 /* Constants.swift */; };
 		D77983B221A4B6B600764577 /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983B121A4B6B600764577 /* NewEventViewController.swift */; };
+		D7CAC2A022916A4F00E648C0 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAC29F22916A4F00E648C0 /* Helper.swift */; };
 		D7CAFE0521FF59E800272E8B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAFE0421FF59E800272E8B /* Event.swift */; };
 		D7CAFE0721FF5C4400272E8B /* JSONDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAFE0621FF5C4400272E8B /* JSONDataManager.swift */; };
 		D7CBCA7A219324E1001F786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CBCA79219324E1001F786B /* AppDelegate.swift */; };
@@ -56,6 +57,7 @@
 		D763E02821EDF19500AA2617 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		D77983992198DD2000764577 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D77983B121A4B6B600764577 /* NewEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
+		D7CAC29F22916A4F00E648C0 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D7CAFE0421FF59E800272E8B /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		D7CAFE0621FF5C4400272E8B /* JSONDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDataManager.swift; sourceTree = "<group>"; };
 		D7CBCA76219324E1001F786B /* DailyRhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyRhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +144,7 @@
 				D75EA989223419AF00A258C7 /* EventManager.swift */,
 				D745467F228F3511001598E7 /* InfoViewController.swift */,
 				D7448D5422901840005AE20A /* TimeMarker.swift */,
+				D7CAC29F22916A4F00E648C0 /* Helper.swift */,
 			);
 			path = DailyRhythm;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				D7CBCA9A21934389001F786B /* ViewContollerTableViewCell.swift in Sources */,
 				D77983B221A4B6B600764577 /* NewEventViewController.swift in Sources */,
 				D7448D5522901840005AE20A /* TimeMarker.swift in Sources */,
+				D7CAC2A022916A4F00E648C0 /* Helper.swift in Sources */,
 				D7CAFE0521FF59E800272E8B /* Event.swift in Sources */,
 				D7454680228F3511001598E7 /* InfoViewController.swift in Sources */,
 				D74741F422882D3700CCFE6D /* EventViewController2.swift in Sources */,

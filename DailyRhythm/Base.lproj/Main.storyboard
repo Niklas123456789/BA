@@ -157,7 +157,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="133.33333333333334" y="133.25892857142856"/>
+            <point key="canvasLocation" x="-461" y="182"/>
         </scene>
         <!--New Event View Controller-->
         <scene sceneID="T5T-qF-Sd5">
@@ -611,7 +611,7 @@
                                         </state>
                                         <connections>
                                             <action selector="okButton:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="Nfw-7W-PHb"/>
-                                            <segue destination="BYZ-38-t0r" kind="presentation" id="L4k-VZ-sa4"/>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="segue3" id="e53-aH-S1N"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -725,7 +725,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FXM-Pb-gME" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="5fM-df-mEE"/>
             </objects>
-            <point key="canvasLocation" x="885.50724637681162" y="133.25892857142856"/>
+            <point key="canvasLocation" x="1519" y="119"/>
         </scene>
         <!--Info View Controller-->
         <scene sceneID="6OD-Sl-3tT">
@@ -795,7 +795,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bvQ-zq-Gp3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="123.18840579710145" y="828.34821428571422"/>
+            <point key="canvasLocation" x="-930" y="931"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="6Xl-5C-djH">
@@ -1102,7 +1102,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YnD-IS-KtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133.33333333333334" y="-567.1875"/>
+            <point key="canvasLocation" x="-462" y="-713"/>
         </scene>
         <!--Event View Controller2-->
         <scene sceneID="daJ-oO-az7">
@@ -1222,7 +1222,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O3t-ZW-yfC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="840.57971014492762" y="-567.1875"/>
+            <point key="canvasLocation" x="1142" y="-727"/>
         </scene>
     </scenes>
     <resources>
@@ -1241,6 +1241,6 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="L4k-VZ-sa4"/>
+        <segue reference="e53-aH-S1N"/>
     </inferredMetricsTieBreakers>
 </document>

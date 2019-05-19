@@ -34,7 +34,11 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
             MOButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
+        
+//        checkAddressIsValid({
+//            jkfgskjfgjsD
+//        })
     }
 
     var di: Bool = false
@@ -51,7 +55,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             DIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             DIButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     @IBOutlet weak var MIButton: UIButton!
     var mi: Bool = false
@@ -65,7 +69,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             MIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             MIButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     
     @IBOutlet weak var DOButton: UIButton!
@@ -80,7 +84,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             DOButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             DOButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     
     @IBOutlet weak var FRButton: UIButton!
@@ -95,7 +99,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             FRButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             FRButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     
     @IBOutlet weak var SAButton: UIButton!
@@ -110,7 +114,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             SAButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
             SAButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     
     @IBOutlet weak var SOButton: UIButton!
@@ -125,7 +129,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             SOButton.setBackgroundImage(UIImage(named: "RightBlack"), for: .normal)
             SOButton.setTitleColor(UIColor.white, for: .normal)
         }
-        checkEnableOkButton()
+        startCheckingValityOfFields()
     }
     
     
@@ -273,39 +277,116 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
     }
     
-    
-    func checkAddressIsValid(address: String) -> Bool {
+    /*func checkAddressIsValid() -> Bool {
         let geoCoder = CLGeocoder()
-        let group = DispatchGroup()
+        var address = "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)"
         var valid = false
         
-        let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: false, block: { (timer) in
+        func helpFunc(placemarks: [CLPlacemark]) -> Bool{
+            print("In helpFunc")
+            if placemarks.isEmpty {
+                valid = false
+                return false
+            } else {
+                print("TRUUUUE")
+                valid = true
+                return true
+            }
+        }
+        
+        geoCoder.geocodeAddressString(address) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location,
+                helpFunc(placemarks: placemarks)
+            else {
+                    // TODO handle no location found
+                    print("ERROR no location found \(error.debugDescription)")
+                    return
+                
+            }
+        }
+        return valid
+    }*/
+    func enableOkCheck() {
+        print("in enableOkCheck")
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+        //TODO: Add alle anderen pflichtfelder
+        if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false ) {
+            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+            //okButton.isUserInteractionEnabled = true
+        }else{
+            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+            //okButton.isUserInteractionEnabled = false
+        }
+        
+        
+    }
+    
+    func checkAddressIsValid() {
+        let geoCoder = CLGeocoder()
+        let group = DispatchGroup()
+        var address = "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)"
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 100, repeats: false, block: { (timer) in
             geoCoder.cancelGeocode()
         })
         group.enter()
+        
         geoCoder.geocodeAddressString(address) { (placemarks, error) in
             guard
                 let placemarks = placemarks,
                 let location = placemarks.first?.location
-                else {
-                    // TODO handle no location found
-                    print("ERROR no location found \(error.debugDescription)")
-                    valid = false
-                    return
+            else {
+                // TODO handle no location found
+                print("ERROR no location found \(error.debugDescription)")
+                return
             }
-            group.leave()
-            valid = true
+            self.enableOkCheck()
+//            if error == nil {
+//                self.enableOkCheck()
+//            } else {
+//                print("ERROR no location found \(error.debugDescription)")
+//            }
         }
-        group.leave()
-        group.notify(queue: DispatchQueue.main) {
-            return valid
-        }
-        print("checkAddressIsValid Ende Return: \(valid)")
-        return valid
     }
     
+    func readyToCheckAddress() -> Bool {
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+        if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false && self.cityTextField.text?.isEmpty == false) {
+            return true
+        } else {
+            
+            return false
+        }
+    }
     
+    func startCheckingValityOfFields() {
+        if (readyToCheckAddress() == true) {
+            Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 100) {
+                //do stuff cause address found
+                self.enableOkCheck()
+            }
+        }
+    }
     
+    static func shake(view: UIView, for duration: TimeInterval = 0.5, withTranslation translation: CGFloat = 10) {
+        let propertyAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 0.3) {
+            //view.layer.borderColor = UIColor.red.cgColor
+            //view.layer.borderWidth = 1
+            view.transform = CGAffineTransform(translationX: translation, y: 0)
+        }
+        
+        propertyAnimator.addAnimations({
+            view.transform = CGAffineTransform(translationX: 0, y: 0)
+        }, delayFactor: 0.2)
+        
+        propertyAnimator.addCompletion { (_) in
+            view.layer.borderWidth = 0
+        }
+        
+        propertyAnimator.startAnimation()
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -353,7 +434,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //TODO: Change Keyboardlayout with hide keyboard button
     //jumps between textFields when pressing return on keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        checkEnableOkButton()
+        startCheckingValityOfFields()
         switch textField {
             
         case nameTextField:
@@ -401,36 +482,45 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         return countDays
     }
     
-    func checkEnableOkButton() {
-        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
-//        var weekdaysAreAllFalse = true
-//        for element in eventWeekdays {
-//            if element == true {
-//                weekdaysAreAllFalse = false
-//                break
-//            }
-//        }
-//        print(weekdaysAreAllFalse)
-//        TODO: Add alle anderen pflichtfelder
-        group2.enter()
-        print("group2.enter()")
-        var validAddress = checkAddressIsValid(address: "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)")
-        group2.leave()
-        print("group2.leave() validAddress: \(validAddress)")
-        group2.notify(queue: DispatchQueue.main) {
-            if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false && validAddress == true) {
-                self.okButton.setImage(UIImage(named: "OK"), for: .normal)
-                //okButton.isUserInteractionEnabled = true
-            }else{
-                self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
-                //okButton.isUserInteractionEnabled = false
-            }
-        }
-    }
+
 
     
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButton(_ sender: UIButton) {
+        print("--------------OK BUTTON---------------")
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+        var weekdaysAreAllFalse = true
+        for element in eventWeekdays {
+            if element == true {
+                weekdaysAreAllFalse = false
+                break
+            }
+        }
+        if (okButton.currentImage == UIImage(named: "OK_white_grey")){
+            /* shake */
+            if weekdaysAreAllFalse == true {
+                NewEventViewController.shake(view: MOButton)
+                NewEventViewController.shake(view: DIButton)
+                NewEventViewController.shake(view: MIButton)
+                NewEventViewController.shake(view: DOButton)
+                NewEventViewController.shake(view: FRButton)
+                NewEventViewController.shake(view: SAButton)
+                NewEventViewController.shake(view: SOButton)
+                print("NO WEEKDAY SELECTED ERROR (no JSON-Event saved)")
+            }
+            if (self.nameTextField.text?.isEmpty == true) {
+                
+                NewEventViewController.shake(view: nameTextField)
+            }
+            if (cityTextField.text?.isEmpty == true) {
+                NewEventViewController.shake(view: cityTextField)
+                
+            }
+            return
+        }
+        
+
+        
         datePickerAction(sender: timePicker)
         
         
@@ -449,20 +539,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //TODO: Check adress
         
-        //checks repeatAtWeekdays and checks if all are false
-        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
-        var weekdaysAreAllFalse = true
-        for element in eventWeekdays {
-            if element == true {
-                weekdaysAreAllFalse = false
-                break
-            }
-        }
-        if weekdaysAreAllFalse == true {
-            print("NO WEEKDAY SELECTED ERROR (no JSON-Event saved)")
-            return
-        }
 
+        
+        
         
         
         //yyy.mm.dd hh:mm
@@ -494,9 +573,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60 - subSec
         
         
-        print("DifHour: \(difHour) DifMin: \(difMin)")
+        //print("DifHour: \(difHour) DifMin: \(difMin)")
         var todaysDate = Date()
-        print("TodaysDate: \(todaysDate)")
+        //print("TodaysDate: \(todaysDate)")
         var eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: todaysDate), minute: Calendar.current.component(.minute, from: todaysDate), second: 0, of: Date())!
         
         //sets eventDate only seconds to 0
@@ -505,7 +584,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
         eventDate = Calendar.current.date(byAdding: .day, value: countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays), to: eventDate)!
-        print("EventDate afer creating: \(eventDate)")
+        //print("EventDate afer creating: \(eventDate)")
         
         
         
@@ -532,7 +611,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
         //newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
-        print("After NewEvent called updateEventTimes: \(newEvent)")
+        //print("After NewEvent called updateEventTimes: \(newEvent)")
         let timeTillNextCheck = EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent)
         
         if timeTillNextCheck <= -1 {
@@ -553,7 +632,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         newEvent.saveEventInJSON()
         
 
-        
+        //self.present(ViewController.getInstance(), animated: true, completion: nil)
+        //self.navigationController?.pushViewController(viewController, animated: true)
+        //self.present(viewController, animated: true, completion: nil)
         //TODO: push notification function
         
 
@@ -676,6 +757,16 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        }
 //        return (difHours, difMin)
 //    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if(identifier == "segue3") {
+            if (self.okButton.currentImage == UIImage(named: "OK")) {
+                return true
+            }
+            
+        }
+        return false
+    }
 }
 
 

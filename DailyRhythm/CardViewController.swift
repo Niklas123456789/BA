@@ -67,18 +67,18 @@ class CardViewController: UIViewController {
     
     func setExpectedTravelTime() {
         var timer: Timer?
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (timer) in
             if ((expectedTravelTime == -1) || (expectedTravelTimeUpdated == false)) {
                 print("no expectedTavelTime")
                 self.handleArea.isUserInteractionEnabled = false
             } else {
                 if (expectedTravelTime > 60) {
                     var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)
-                    self.expectedTravelTimeLabelMin?.text! = "\(m)"
+                    self.expectedTravelTimeLabelMin?.text! = "\(m + 1)"
                     self.hoursLabel1.text = "\(h)"
                     self.stundenLabel1.isHidden = false
                 } else {
-                    self.expectedTravelTimeLabelMin?.text! = "~\(expectedTravelTime)"
+                    self.expectedTravelTimeLabelMin?.text! = "\(expectedTravelTime + 1)"
                     
                     
                 }
@@ -92,11 +92,11 @@ class CardViewController: UIViewController {
         var totalTravelTime = Int(bufferLabel!.text!)! + Int(walkingLabel!.text!)! + Int(parkingLabel!.text!)! + expectedTravelTime
         if (totalTravelTime > 60) {
             var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: totalTravelTime)
-            self.totalMinLabel.text = "\(m)"
+            self.totalMinLabel.text = "\(m + 1)"
             self.totalHoursLabel.text = "\(h)"
             self.stundenLabel2.isHidden = false
         } else {
-            self.totalMinLabel.text = "\(totalTravelTime)"
+            self.totalMinLabel.text = "\(totalTravelTime + 1)"
         }
         self.handleArea.isUserInteractionEnabled = true
         print("setTotalTravelTime \(totalTravelTime)")
