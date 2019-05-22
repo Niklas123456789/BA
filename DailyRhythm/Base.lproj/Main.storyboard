@@ -247,7 +247,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="250" height="86"/>
                                                         <subviews>
                                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5fc-1O-fqT">
-                                                                <rect key="frame" x="0.0" y="0.0" width="89" height="86"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="122.5" height="86"/>
                                                                 <color key="tintColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="deviceRGB"/>
                                                                 <accessibility key="accessibilityConfiguration">
                                                                     <accessibilityTraits key="traits" searchField="YES"/>
@@ -257,10 +257,9 @@
                                                                 </constraints>
                                                             </pickerView>
                                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gn7-Yz-vOq">
-                                                                <rect key="frame" x="94" y="0.0" width="156" height="86"/>
+                                                                <rect key="frame" x="127.5" y="0.0" width="122.5" height="86"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="86" id="0H9-K7-fK7"/>
-                                                                    <constraint firstAttribute="width" constant="156" id="azw-pM-zLY"/>
                                                                 </constraints>
                                                                 <date key="date" timeIntervalSinceReferenceDate="564488451.86105895">
                                                                     <!--2018-11-21 10:20:51 +0000-->
@@ -271,6 +270,9 @@
                                                                 </connections>
                                                             </datePicker>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="Gn7-Yz-vOq" firstAttribute="width" secondItem="5fc-1O-fqT" secondAttribute="width" id="qrO-60-jFf"/>
+                                                        </constraints>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="tYz-bY-wGW" userLabel="WeekdayStackView">
                                                         <rect key="frame" x="0.0" y="94" width="250" height="31"/>
@@ -589,7 +591,7 @@
                                         </constraints>
                                         <state key="normal" image="Exit_white"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="presentation" id="fZa-51-Kma"/>
+                                            <action selector="exitButtonAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="FiD-es-e39"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zGg-pu-se4" userLabel="Info_Button">
@@ -610,8 +612,7 @@
                                             <color key="titleShadowColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="okButton:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="Nfw-7W-PHb"/>
-                                            <segue destination="BYZ-38-t0r" kind="show" identifier="segue3" id="e53-aH-S1N"/>
+                                            <action selector="okButtonAction:" destination="zTR-Mp-B5E" eventType="touchUpInside" id="Nfw-7W-PHb"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -717,9 +718,15 @@
                         <outlet property="parkingTimePicker" destination="693-fu-h19" id="Qfr-g2-fi7"/>
                         <outlet property="streetTextField" destination="bpU-lf-dB8" id="4gz-uG-S0t"/>
                         <outlet property="timePicker" destination="Gn7-Yz-vOq" id="1HA-3v-gOL"/>
+                        <outlet property="titleLabel" destination="pfj-0s-1EY" id="EC8-uV-U3A"/>
                         <outlet property="walkingTimePicker" destination="XZK-GY-FGu" id="TIB-wI-dyG"/>
                         <outlet property="walkingtimeLabel" destination="Ilq-0T-lnk" id="kpw-cH-EBE"/>
                         <outlet property="weekdayStackView" destination="tYz-bY-wGW" id="r6c-pk-TEW"/>
+                        <segue destination="T6v-ab-WMQ" kind="show" identifier="exitToEvent" id="biw-ZC-yrp"/>
+                        <segue destination="T6v-ab-WMQ" kind="show" identifier="saveSettings" id="3Zu-lv-Hpd"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="exit" id="scd-9f-SyV"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="saveNewSettings" id="oDq-As-L5o"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="saveEvent" id="QaS-ms-p1s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FXM-Pb-gME" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1132,14 +1139,17 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                             <segue destination="BYZ-38-t0r" kind="presentation" id="Veq-mI-925"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4z-W5-meR" userLabel="Info_Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4z-W5-meR" userLabel="Info_Button">
                                         <rect key="frame" x="148" y="0.0" width="65" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="S4z-W5-meR" secondAttribute="height" multiplier="70:70" id="t8x-UI-aLO"/>
                                         </constraints>
-                                        <state key="normal">
+                                        <state key="normal" image="Settings_white">
                                             <color key="titleShadowColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="zTR-Mp-B5E" kind="show" identifier="segueSettings" id="xgJ-Hz-oo8"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZA1-Da-tEv" userLabel="Navigation_Button">
                                         <rect key="frame" x="296" y="0.0" width="65" height="65"/>
@@ -1240,7 +1250,8 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="e53-aH-S1N"/>
+        <segue reference="biw-ZC-yrp"/>
+        <segue reference="xgJ-Hz-oo8"/>
+        <segue reference="QaS-ms-p1s"/>
     </inferredMetricsTieBreakers>
 </document>

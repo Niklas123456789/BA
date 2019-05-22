@@ -14,6 +14,7 @@ import Contacts
 
 var expectedTravelTime: Int = -1
 var expectedTravelTimeUpdated: Bool = false
+var settingsSelected: Bool = false
 class EventViewController2: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var buttonsStack: UIStackView!
@@ -47,7 +48,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     //var visualEffectView:UIVisualEffectView!
     
     let cardHeight:CGFloat = 320
-    let cardHandleAreaHeight:CGFloat = 65
+    let cardHandleAreaHeight:CGFloat = 60
     
     var cardVisible = false
     var nextState:CardState {
@@ -139,8 +140,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         self.view.bringSubviewToFront(cardViewController.view)
         
         self.view.bringSubviewToFront(coverView)
-        self.view.bringSubviewToFront(buttonsStack)
+        
         self.view.bringSubviewToFront(timeLabel)
+        self.view.bringSubviewToFront(buttonsStack)
         self.view.bringSubviewToFront(activityIndicator)
         
 
@@ -211,7 +213,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                     self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight - 40
                     self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 225, right: 50), animated: true)
                 case .collapsed:
-                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleAreaHeight - 140
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleAreaHeight - 135
                     
                     self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 120, right: 50), animated: true)
                 }
@@ -531,6 +533,18 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             //centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
             break
+        }
+    }
+//    override func performSegue(withIdentifier identifier: String, sender: Any?) {
+//        if identifier == "segueSettings" {
+//            print("performs segue")
+//            settingsSelected = true
+//        }
+//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueSettings" {
+            print("performs segue to settings")
+            settingsSelected = true
         }
     }
 }

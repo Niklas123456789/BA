@@ -182,10 +182,12 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     var strPickerDate: String = ""
     var pickerHour: Int = 0
     var pickerMin: Int = 0
+    @IBOutlet weak var titleLabel: UILabel!
     
     //var nextDate: Date
     //var eventDate: Date = Date.init()
     //let date = Date.init(timeIntervalSinceNow: )
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,6 +224,72 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        labelMO.isUserInteractionEnabled = true
 //        labelMO.addGestureRecognizer(tap)
         
+        /* this screen is setting screen */
+        print("Settingselected: \(settingsSelected)")
+        if settingsSelected == true {
+            nameTextField.text = tableViewList[cellClickedIndex].eventName
+            streetTextField.text = tableViewList[cellClickedIndex].streetName
+            houseNumberTextField.text = tableViewList[cellClickedIndex].houseNr
+            cityTextField.text = tableViewList[cellClickedIndex].cityName
+            notesTextField.text = tableViewList[cellClickedIndex].eventNotes
+            
+            /* picker */
+            durationPicker.selectRow(tableViewList[cellClickedIndex].repeatDuration, inComponent: 0, animated: true)
+            bufferPicker.selectRow(tableViewList[cellClickedIndex].bufferTime, inComponent: 0, animated: true)
+            walkingTimePicker.selectRow(tableViewList[cellClickedIndex].walkingTime, inComponent: 0, animated: true)
+            parkingTimePicker.selectRow(tableViewList[cellClickedIndex].parkingTime, inComponent: 0, animated: true)
+            
+            /* timePicker */
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat =  "HH:mm"
+            strPickerDate = dateFormatter.string(from: tableViewList[cellClickedIndex].eventDate)
+            if let date = dateFormatter.date(from: "\(strPickerDate)") {
+                timePicker.date = date
+            }
+            
+            /* days */
+            repeatAtWeekdays = tableViewList[cellClickedIndex].repeatAtWeekdays
+            if (repeatAtWeekdays[0] == true) {
+                mo = true
+                MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
+                MOButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[1] == true) {
+                di = true
+                DIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+                DIButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[2] == true) {
+                mi = true
+                MIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+                MIButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[3] == true) {
+                dO = true
+                DOButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+                DOButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[4] == true) {
+                fr = true
+                FRButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+                FRButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[5] == true) {
+                sa = true
+                SAButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
+                SAButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            if (repeatAtWeekdays[6] == true) {
+                so = true
+                SOButton.setBackgroundImage(UIImage(named: "RightBlack"), for: .normal)
+                SOButton.setTitleColor(UIColor.white, for: .normal)
+            }
+            titleLabel.text = "Einstellungen"
+            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+        }
+        
+        // neues ereigniss hidden "Neues Ereignis"
+        //settingsSelected = false
         
     }
     
@@ -232,7 +300,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //}
     
     @IBAction func datePickerAction(sender: AnyObject) {
-        
         var dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
         strPickerDate = dateFormatter.string(from: timePicker.date)
@@ -486,7 +553,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
     
     //Function that trigger wenn OK-Button is pressed
-    @IBAction func okButton(_ sender: UIButton) {
+    @IBAction func okButtonAction(_ sender: UIButton) {
         print("--------------OK BUTTON---------------")
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         var weekdaysAreAllFalse = true
@@ -628,8 +695,13 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         })
         
         
+        if (settingsSelected == false) {
+            newEvent.saveEventInJSON()
+            self.performSegue(withIdentifier: "saveEvent", sender: nil)
+        } else {
+            
+        }
         
-        newEvent.saveEventInJSON()
         
 
         //self.present(ViewController.getInstance(), animated: true, completion: nil)
@@ -758,14 +830,57 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        return (difHours, difMin)
 //    }
     
+    @IBAction func exitButtonAction(_ sender: Any) {
+        if (settingsSelected == false) {
+            self.performSegue(withIdentifier: "exit", sender: nil)
+        } else {
+            self.performSegue(withIdentifier: "exitToEvent", sender: nil)
+            settingsSelected = false
+            titleLabel.text = "Neues Ereignis"
+        }
+        
+    }
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if(identifier == "segue3") {
+        if(identifier == "saveNewEvent" || identifier == "saveEvent") {
             if (self.okButton.currentImage == UIImage(named: "OK")) {
                 return true
+            } else {
+                //TODO: Rückmeldung via vibration
             }
-            
+        }
+        if (identifier == "exit" || identifier == "exitToEvent") {
+            return true
         }
         return false
+    }
+    /* picker row hight */
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        if pickerView.isEqual(durationPicker) {
+            print("duration picker")
+            //durationPicker.rowSize(forComponent: 200)
+            
+            return 32
+        }
+        return 22
+    }
+    /* textFields max length */
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if textField.isEqual(notesTextField) {
+            let currentCharacterCount = textField.text?.utf16.count ?? 0
+            if range.length + range.location > currentCharacterCount {
+                return false
+            }
+            let newLength = currentCharacterCount + string.count - range.length
+            return newLength <= 70
+        } else {
+            let currentCharacterCount = textField.text?.utf16.count ?? 0
+            if range.length + range.location > currentCharacterCount {
+                return false
+            }
+            let newLength = currentCharacterCount + string.count - range.length
+            return newLength <= 42
+        }
     }
 }
 

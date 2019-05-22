@@ -45,6 +45,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.reloadData()
             tableView.endUpdates()
         }
+        if (editingStyle == .insert) {
+            print("insert")
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
