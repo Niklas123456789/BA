@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import MapKit
 import CoreLocation
+import AudioToolbox
 
 var ID: Int = 0
 
@@ -168,6 +169,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     var timePickerData: [Int] = [Int]()
     @IBOutlet weak var okButton: UIButton!
     let group2 = DispatchGroup()
+    var validAddess = false
     
 //    var duration: Int = 0
     var bufferTime: Int = 0
@@ -187,6 +189,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //var nextDate: Date
     //var eventDate: Date = Date.init()
     //let date = Date.init(timeIntervalSinceNow: )
+    
+    @objc func doneClicked() {
+        view.endEditing(true)
+    }
     
 
     override func viewDidLoad() {
@@ -219,6 +225,19 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         walkingtimeLabel.font = UIFont(name: Font.helveticaLight, size: 20)
         parkingLabel.font = UIFont(name: Font.helveticaLight, size: 20)
         
+        titleLabel.text = "Neues Ereignis"
+        
+        /* adding Done button to keyboard */
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        nameTextField.inputAccessoryView = toolBar
+        streetTextField.inputAccessoryView = toolBar
+        houseNumberTextField.inputAccessoryView = toolBar
+        cityTextField.inputAccessoryView = toolBar
+        notesTextField.inputAccessoryView = toolBar
         
 //        let tap = UITapGestureRecognizer(target: self, action: #selector(NewEventViewController.tapFunction))
 //        labelMO.isUserInteractionEnabled = true
@@ -239,6 +258,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             walkingTimePicker.selectRow(tableViewList[cellClickedIndex].walkingTime, inComponent: 0, animated: true)
             parkingTimePicker.selectRow(tableViewList[cellClickedIndex].parkingTime, inComponent: 0, animated: true)
             
+            startCheckingValityOfFields()
             /* timePicker */
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat =  "HH:mm"
@@ -285,7 +305,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 SOButton.setTitleColor(UIColor.white, for: .normal)
             }
             titleLabel.text = "Einstellungen"
-            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+            //self.okButton.setImage(UIImage(named: "OK"), for: .normal)
         }
         
         // neues ereigniss hidden "Neues Ereignis"
@@ -307,6 +327,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         pickerMin = temp % 100
         pickerHour = Int(temp/100)
         print("Time datePicker: \(strPickerDate)")
+        view.endEditing(true)
+
+        startCheckingValityOfFields()
+
     }
     
     // Capture the picker view selection
@@ -316,9 +340,13 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //closes Keyboard
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+        view.endEditing(true)
+        startCheckingValityOfFields()
         
         if (pickerView.isEqual(durationPicker)) {
             repeatDuration = row
+            
+            
             
             print("Duration Time: \(repeatDuration)")
         }
@@ -341,6 +369,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         self.view.endEditing(true)
         self.durationPicker.endEditing(true)
         self.timePicker.endEditing(true)
+        
         
     }
     
@@ -382,6 +411,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false ) {
             self.okButton.setImage(UIImage(named: "OK"), for: .normal)
             //okButton.isUserInteractionEnabled = true
+            Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 60) {
+                self.validAddess = true
+            }
         }else{
             self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
             //okButton.isUserInteractionEnabled = false
@@ -390,7 +422,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
     }
     
-    func checkAddressIsValid() {
+    /*func checkAddressIsValid() {
         let geoCoder = CLGeocoder()
         let group = DispatchGroup()
         var address = "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)"
@@ -416,7 +448,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //                print("ERROR no location found \(error.debugDescription)")
 //            }
         }
-    }
+    }*/
     
     func readyToCheckAddress() -> Bool {
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
@@ -430,10 +462,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     
     func startCheckingValityOfFields() {
         if (readyToCheckAddress() == true) {
-            Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 100) {
+            
                 //do stuff cause address found
                 self.enableOkCheck()
-            }
+            
         }
     }
     
@@ -583,10 +615,12 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 NewEventViewController.shake(view: cityTextField)
                 
             }
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
             return
         }
-        
-
+        if(validAddess == false) {return}
+        //validAddess = false
         
         datePickerAction(sender: timePicker)
         
@@ -696,10 +730,19 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
         if (settingsSelected == false) {
+            if (validAddess == false) {
+                
+            }
             newEvent.saveEventInJSON()
             self.performSegue(withIdentifier: "saveEvent", sender: nil)
-        } else {
+            EventManager.getInstance().updateJSONEvents()
             
+        } else {
+            eventInSettings.deleteEventInJSON()
+            newEvent.saveEventInJSON()
+            EventManager.getInstance().updateJSONEvents()
+            settingsSelected = false
+            self.performSegue(withIdentifier: "saveSettings", sender: nil)
         }
         
         
@@ -846,6 +889,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 return true
             } else {
                 //TODO: Rückmeldung via vibration
+                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
         }
         if (identifier == "exit" || identifier == "exitToEvent") {

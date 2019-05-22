@@ -233,7 +233,7 @@
                                                         <rect key="frame" x="0.0" y="92" width="250" height="33"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="zTR-Mp-B5E" id="8Zf-7z-1Lk"/>
                                                         </connections>
@@ -725,7 +725,6 @@
                         <segue destination="T6v-ab-WMQ" kind="show" identifier="exitToEvent" id="biw-ZC-yrp"/>
                         <segue destination="T6v-ab-WMQ" kind="show" identifier="saveSettings" id="3Zu-lv-Hpd"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="exit" id="scd-9f-SyV"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="saveNewSettings" id="oDq-As-L5o"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="saveEvent" id="QaS-ms-p1s"/>
                     </connections>
                 </viewController>
@@ -1250,7 +1249,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="biw-ZC-yrp"/>
+        <segue reference="3Zu-lv-Hpd"/>
         <segue reference="xgJ-Hz-oo8"/>
         <segue reference="QaS-ms-p1s"/>
     </inferredMetricsTieBreakers>

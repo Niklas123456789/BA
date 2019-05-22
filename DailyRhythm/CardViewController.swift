@@ -27,6 +27,7 @@ class CardViewController: UIViewController {
     @IBOutlet weak var stundenLabel2: UILabel!
     @IBOutlet weak var totalHoursLabel: UILabel!
     @IBOutlet weak var totalMinLabel: UILabel!
+    @IBOutlet weak var sumLine: UIImageView!
     
     private static let instance = CardViewController()
     
@@ -77,6 +78,7 @@ class CardViewController: UIViewController {
                     self.expectedTravelTimeLabelMin?.text! = "\(m + 1)"
                     self.hoursLabel1.text = "\(h)"
                     self.stundenLabel1.isHidden = false
+                    
                 } else {
                     self.expectedTravelTimeLabelMin?.text! = "\(expectedTravelTime + 1)"
                     

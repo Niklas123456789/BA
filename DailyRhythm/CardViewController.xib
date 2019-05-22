@@ -24,6 +24,7 @@
                 <outlet property="streetLabel" destination="8oH-r8-crp" id="62d-9h-PAn"/>
                 <outlet property="stundenLabel1" destination="R8T-xX-xlD" id="X1g-3h-k4C"/>
                 <outlet property="stundenLabel2" destination="I2m-jh-kY7" id="Co7-ff-bOa"/>
+                <outlet property="sumLine" destination="pwG-vT-fYC" id="6XC-LO-8oF"/>
                 <outlet property="timeLabel" destination="ZzB-C4-giU" id="pPD-5n-zJH"/>
                 <outlet property="totalHoursLabel" destination="QKm-Oo-bjn" id="eRX-fa-Xdu"/>
                 <outlet property="totalMinLabel" destination="0Ed-Es-ELy" id="mzd-aS-px4"/>
@@ -192,7 +193,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Wegzeit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mdb-Wa-98A">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Insg." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mdb-Wa-98A">
                             <rect key="frame" x="305" y="119" width="95" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -200,7 +201,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pwG-vT-fYC">
-                            <rect key="frame" x="256" y="115" width="100" height="1"/>
+                            <rect key="frame" x="252" y="115" width="104" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
