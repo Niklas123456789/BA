@@ -197,6 +197,12 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /* only if new event is made currentEvent = tableViewList[cellClickedIndex] */
+        if (settingsSelected == false) {
+            currentEvent = tableViewList[cellClickedIndex]
+        }
+        
         print("heyo")
         
         //Picker Delegates
@@ -246,29 +252,29 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         /* this screen is setting screen */
         print("Settingselected: \(settingsSelected)")
         if settingsSelected == true {
-            nameTextField.text = tableViewList[cellClickedIndex].eventName
-            streetTextField.text = tableViewList[cellClickedIndex].streetName
-            houseNumberTextField.text = tableViewList[cellClickedIndex].houseNr
-            cityTextField.text = tableViewList[cellClickedIndex].cityName
-            notesTextField.text = tableViewList[cellClickedIndex].eventNotes
+            nameTextField.text = currentEvent.eventName
+            streetTextField.text = currentEvent.streetName
+            houseNumberTextField.text = currentEvent.houseNr
+            cityTextField.text = currentEvent.cityName
+            notesTextField.text = currentEvent.eventNotes
             
             /* picker */
-            durationPicker.selectRow(tableViewList[cellClickedIndex].repeatDuration, inComponent: 0, animated: true)
-            bufferPicker.selectRow(tableViewList[cellClickedIndex].bufferTime, inComponent: 0, animated: true)
-            walkingTimePicker.selectRow(tableViewList[cellClickedIndex].walkingTime, inComponent: 0, animated: true)
-            parkingTimePicker.selectRow(tableViewList[cellClickedIndex].parkingTime, inComponent: 0, animated: true)
+            durationPicker.selectRow(currentEvent.repeatDuration, inComponent: 0, animated: true)
+            bufferPicker.selectRow(currentEvent.bufferTime, inComponent: 0, animated: true)
+            walkingTimePicker.selectRow(currentEvent.walkingTime, inComponent: 0, animated: true)
+            parkingTimePicker.selectRow(currentEvent.parkingTime, inComponent: 0, animated: true)
             
             startCheckingValityOfFields()
             /* timePicker */
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat =  "HH:mm"
-            strPickerDate = dateFormatter.string(from: tableViewList[cellClickedIndex].eventDate)
+            strPickerDate = dateFormatter.string(from: currentEvent.eventDate)
             if let date = dateFormatter.date(from: "\(strPickerDate)") {
                 timePicker.date = date
             }
             
             /* days */
-            repeatAtWeekdays = tableViewList[cellClickedIndex].repeatAtWeekdays
+            repeatAtWeekdays = currentEvent.repeatAtWeekdays
             if (repeatAtWeekdays[0] == true) {
                 mo = true
                 MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
@@ -719,32 +725,36 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             print("Return because timeTillNextCheck returned negativ")
             return
         }
-        //timer that triggers the reapeat of timeTillNextCheck
-        print("before repeatTimeCheck")
-        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-            print("In timer repeatTimecheck")
-            if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
-                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-            }
-        })
+        Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 60) {
+            self.validAddess = true
         
-        
-        if (settingsSelected == false) {
-            if (validAddess == false) {
-                
-            }
-            newEvent.saveEventInJSON()
-            self.performSegue(withIdentifier: "saveEvent", sender: nil)
-            EventManager.getInstance().updateJSONEvents()
+            //timer that triggers the reapeat of timeTillNextCheck
+            print("before repeatTimeCheck")
+            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                print("In timer repeatTimecheck")
+                if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
+                    EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+                }
+            })
             
-        } else {
-            eventInSettings.deleteEventInJSON()
-            newEvent.saveEventInJSON()
-            EventManager.getInstance().updateJSONEvents()
-            settingsSelected = false
-            self.performSegue(withIdentifier: "saveSettings", sender: nil)
+            
+            if (settingsSelected == false) {
+                if (self.validAddess == false) {
+                    return
+                }
+                newEvent.saveEventInJSON()
+                self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                EventManager.getInstance().updateJSONEvents()
+                
+            } else {
+                currentEvent.deleteEventInJSON()
+                newEvent.saveEventInJSON()
+                currentEvent = newEvent
+                EventManager.getInstance().updateJSONEvents()
+//                settingsSelected = false
+                self.performSegue(withIdentifier: "saveSettings", sender: nil)
+            }
         }
-        
         
 
         //self.present(ViewController.getInstance(), animated: true, completion: nil)

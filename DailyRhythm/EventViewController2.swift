@@ -15,7 +15,7 @@ import Contacts
 var expectedTravelTime: Int = -1
 var expectedTravelTimeUpdated: Bool = false
 var settingsSelected: Bool = false
-var eventInSettings = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0)
+var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0)
 class EventViewController2: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var buttonsStack: UIStackView!
@@ -64,6 +64,13 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if(settingsSelected == true) {
+            settingsSelected = false
+        } else {
+            currentEvent = tableViewList[cellClickedIndex]
+        }
+        
+        
         
         mapView.delegate = self
         //mapView.register(TimeMarkerView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
@@ -71,10 +78,10 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         checkLocationServices()
         getDirections()
         expectedTravelTimeUpdated = false
-        if (tableViewList[cellClickedIndex].eventNotes.isEmpty) {
+        if (currentEvent.eventNotes.isEmpty) {
             eventNotes = ""
         } else {
-            eventNotes = tableViewList[cellClickedIndex].eventNotes
+            eventNotes = currentEvent.eventNotes
         }
         
         myLocationButton.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
@@ -88,7 +95,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         
         view.addSubview(activityIndicator)
         view.bringSubviewToFront(activityIndicator)
-        var event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
+        var event = EventManager.getInstance().getEventwithID(eventID: "\(currentEvent.eventID)")
         if event.eventID == "-1" {
             print("getEventwithID returned noEvent")
             return
@@ -378,7 +385,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         //        let latitude = 48.151256
         //        let longitude = 11.623152
         //        let testDestination: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let event = EventManager.getInstance().getEventwithID(eventID: "\(tableViewList[cellClickedIndex].eventID)")
+        let event = EventManager.getInstance().getEventwithID(eventID: "\(currentEvent.eventID)")
         let addressEvent = getAddress(from: event)
         print("AddressEvent: \(addressEvent)")
         
@@ -546,7 +553,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         if segue.identifier == "segueSettings" {
             print("performs segue to settings")
             settingsSelected = true
-            eventInSettings = tableViewList[cellClickedIndex]
+            currentEvent = tableViewList[cellClickedIndex]
         }
     }
 }

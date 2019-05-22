@@ -723,7 +723,7 @@
                         <outlet property="walkingtimeLabel" destination="Ilq-0T-lnk" id="kpw-cH-EBE"/>
                         <outlet property="weekdayStackView" destination="tYz-bY-wGW" id="r6c-pk-TEW"/>
                         <segue destination="T6v-ab-WMQ" kind="show" identifier="exitToEvent" id="biw-ZC-yrp"/>
-                        <segue destination="T6v-ab-WMQ" kind="show" identifier="saveSettings" id="3Zu-lv-Hpd"/>
+                        <segue destination="T6v-ab-WMQ" kind="showDetail" identifier="saveSettings" id="3Zu-lv-Hpd"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="exit" id="scd-9f-SyV"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="saveEvent" id="QaS-ms-p1s"/>
                     </connections>
@@ -1249,7 +1249,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3Zu-lv-Hpd"/>
+        <segue reference="vw4-1X-Ecx"/>
         <segue reference="xgJ-Hz-oo8"/>
         <segue reference="QaS-ms-p1s"/>
     </inferredMetricsTieBreakers>

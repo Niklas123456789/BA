@@ -161,9 +161,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(settingsSelected == true) {
+//            settingsSelected = false
+            performSegue(withIdentifier: "segue2", sender: self)
+        }
         // Do any additional setup after loading the view, typically from a nib.
         var allEventsArray = [Event]()
-        //self.tableView.rowHeight = 95
+        
         EventManager.getInstance().updateJSONEvents()
         
         allEventsArray = JSONDataManager.loadAll(Event.self)
