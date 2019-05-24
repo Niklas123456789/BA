@@ -199,7 +199,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         super.viewDidLoad()
         
         /* only if new event is made currentEvent = tableViewList[cellClickedIndex] */
-        if (settingsSelected == false) {
+        if (settingsSelected == false && tableViewList.isEmpty == false) {
             currentEvent = tableViewList[cellClickedIndex]
         }
         
@@ -712,7 +712,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
 
         //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
-        var newEvent = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0)
+        var newEvent = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
         
 //        var new2Event = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0)
         
@@ -751,8 +751,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 newEvent.saveEventInJSON()
                 currentEvent = newEvent
                 EventManager.getInstance().updateJSONEvents()
-//                settingsSelected = false
-                self.performSegue(withIdentifier: "saveSettings", sender: nil)
+                //settingsSelected = false
+                self.performSegue(withIdentifier: "saveEvent", sender: nil)
             }
         }
         

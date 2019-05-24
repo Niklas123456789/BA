@@ -25,6 +25,7 @@ struct Event : Codable {
     var parkingTime: Int
     var walkingTime: Int
     var bufferTime: Int
+    var mute: Bool
     
     var eventDate: Date
 //    var eventTotalSeconds: Int = 0
@@ -37,7 +38,7 @@ struct Event : Codable {
     var timeTillGo: Int
     var driveTime: Int
     
-    init(eventID: String, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, driveTime: Int, timeTillGo: Int) {
+    init(eventID: String, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, driveTime: Int, timeTillGo: Int, mute: Bool) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
@@ -56,6 +57,7 @@ struct Event : Codable {
 //        self.timeTillNextCheck = timeTillNextCheck
         self.timeTillGo = timeTillGo
         self.driveTime = driveTime
+        self.mute = mute
     }
 
     func setEventTotalSecounds(newEventTotalSeconds: Int){

@@ -26,7 +26,87 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    /* delete Event */
+    
+    /* Swipe right for cells */
+    /*func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, sourceView, completionHandler) in
+            print("row of delete: \(indexPath.row)")
+            // handle delete (by removing the data from your array and updating the tableview)
+            var allEventsArray = [Event]()
+            
+            EventManager.getInstance().updateJSONEvents()
+            
+            allEventsArray = JSONDataManager.loadAll(Event.self)
+            
+            JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
+            
+            tableViewList.remove(at: indexPath.row)
+            
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+            tableView.endUpdates()
+            completionHandler(true)
+        }
+        
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, sourceView, completionHandler) in
+            print("row of edit: \(indexPath.row)")
+            completionHandler(true)
+        }
+//        edit.backgroundColor = UIColor(patternImage: UIImage(named: "Settings_white")!)
+//        let image = imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 60, height: 60))
+//        edit.backgroundColor = UIColor(patternImage: image)
+        let mute = UIContextualAction(style: UIContextualAction.Style.normal, title: "mute") { (action, sourceView, completionHandler) in
+            print("row of mute: \(indexPath.row)")
+            completionHandler(true)
+        }
+        mute.backgroundColor = UIColor.lightText
+        let swipeActionConfig = UISwipeActionsConfiguration(actions: [delete])
+        swipeActionConfig.performsFirstActionWithFullSwipe = false
+        return swipeActionConfig
+    }*/
+    
+    /* Swipe left for cells */
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, sourceView, completionHandler) in
+            print("row of edit: \(indexPath.row)")
+            settingsSelected = true
+            currentEvent = tableViewList[indexPath.row]
+            self.performSegue(withIdentifier: "toSettings", sender: nil)
+            completionHandler(true)
+        }
+        //        edit.backgroundColor = UIColor(patternImage: UIImage(named: "Settings_white")!)
+        //        let image = imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 60, height: 60))
+        //        edit.backgroundColor = UIColor(patternImage: image)
+        let mute = UIContextualAction(style: .normal, title: "mute") { (action, sourceView, completionHandler) in
+            print("row of mute: \(indexPath.row)")
+            if (tableViewList[indexPath.row].mute == true) {
+                tableViewList[indexPath.row].mute = false
+                //TODO Image
+                
+            } else {
+                tableViewList[indexPath.row].mute = false
+                //TODO Image
+            }
+            tableViewList[indexPath.row].saveEventInJSON()
+            completionHandler(true)
+        }
+        mute.backgroundColor = UIColor.blue
+        //edit.backgroundColor = UIColor(patternImage: imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 90, height: 90)))
+        let swipeActionConfig = UISwipeActionsConfiguration(actions: [edit, mute])
+        swipeActionConfig.performsFirstActionWithFullSwipe = false
+        return swipeActionConfig
+    }
+    
+    /* scales UIImages */
+    func imageWithImage(image:UIImage, scaledToSize newSize:CGSize) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext() ?? image
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    /* delete Event swipe right side */
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             // handle delete (by removing the data from your array and updating the tableview)
@@ -44,9 +124,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
             tableView.endUpdates()
-        }
-        if (editingStyle == .insert) {
-            print("insert")
         }
     }
     

@@ -64,7 +64,7 @@ class EventManager {
         
         var difHours: Int
         var difMin: Int
-        var todaysDate = Date()
+        let todaysDate = Date()
         print("TodaysDate: \(todaysDate)")
 
         let secondsNow = Calendar.current.component(.second, from: todaysDate)
@@ -399,7 +399,7 @@ class EventManager {
     func getEventwithID(eventID: String) -> Event {
         var allEventsArray = [Event]()
         updateJSONEvents()
-        var noEvent = Event(eventID: "-1", eventName: "noEvent", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false,false,false,false,false,false,false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0)
+        var noEvent = Event(eventID: "-1", eventName: "noEvent", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false,false,false,false,false,false,false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false)
         
         allEventsArray = JSONDataManager.loadAll(Event.self)
         //seach for event with the same UUID

@@ -116,7 +116,7 @@
                                             <color key="titleShadowColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <segue destination="zTR-Mp-B5E" kind="presentation" id="jxY-Kk-S9Q"/>
+                                            <segue destination="zTR-Mp-B5E" kind="show" id="jxY-Kk-S9Q"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -153,7 +153,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="3TT-dN-hbv">
                     <connections>
-                        <segue destination="zTR-Mp-B5E" kind="show" id="rVY-NE-BpK"/>
+                        <segue destination="zTR-Mp-B5E" kind="show" identifier="toSettings" id="rVY-NE-BpK"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -1250,7 +1250,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vw4-1X-Ecx"/>
-        <segue reference="xgJ-Hz-oo8"/>
+        <segue reference="rVY-NE-BpK"/>
         <segue reference="QaS-ms-p1s"/>
     </inferredMetricsTieBreakers>
 </document>

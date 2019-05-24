@@ -15,7 +15,7 @@ import Contacts
 var expectedTravelTime: Int = -1
 var expectedTravelTimeUpdated: Bool = false
 var settingsSelected: Bool = false
-var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0)
+var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false, false, false, false, false, false, false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false)
 class EventViewController2: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var buttonsStack: UIStackView!
