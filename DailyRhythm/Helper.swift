@@ -33,6 +33,7 @@ class Helper {
 //            setValidAddress(location: location)
             print("LOCATION: \(location)")
             completion()
+            
         }
     }
 }

@@ -749,8 +749,25 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
                     EventManager.getInstance().repeatTimeCheck(event: &newEvent)
                 }
-            })
+                
             
+            })
+            if (settingsSelected == false) {
+                if (self.validAddess == false) {
+                    return
+                }
+                newEvent.saveEventInJSON()
+                self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                EventManager.getInstance().updateJSONEvents()
+                
+            } else {
+                currentEvent.deleteEventInJSON()
+                newEvent.saveEventInJSON()
+                currentEvent = newEvent
+                EventManager.getInstance().updateJSONEvents()
+                //settingsSelected = false
+                self.performSegue(withIdentifier: "saveEvent", sender: nil)
+            }
             
             
         }
@@ -938,6 +955,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         return 22
     }
+    
     /* textFields max length */
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
