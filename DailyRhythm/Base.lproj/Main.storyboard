@@ -1135,7 +1135,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                         </constraints>
                                         <state key="normal" image="Back_white"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="presentation" id="Veq-mI-925"/>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="backFromEvent" id="Veq-mI-925"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4z-W5-meR" userLabel="Info_Button">
@@ -1249,8 +1249,8 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vw4-1X-Ecx"/>
-        <segue reference="rVY-NE-BpK"/>
-        <segue reference="QaS-ms-p1s"/>
+        <segue reference="biw-ZC-yrp"/>
+        <segue reference="xgJ-Hz-oo8"/>
+        <segue reference="scd-9f-SyV"/>
     </inferredMetricsTieBreakers>
 </document>

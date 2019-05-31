@@ -12,6 +12,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CardViewController" customModule="DailyRhythm" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicatorETT" destination="lBG-bI-DxC" id="cYc-S6-UKd"/>
+                <outlet property="activityIndicatorTTT" destination="Oq6-38-g7p" id="1ME-I1-uI2"/>
                 <outlet property="bufferLabel" destination="x1d-zb-jyE" id="lRF-qs-Vyn"/>
                 <outlet property="cityLabel" destination="B9B-UM-6W5" id="vUc-fi-4ro"/>
                 <outlet property="expectedTravelTimeLabelHours" destination="tQD-eB-gbW" id="QR3-4u-lBt"/>
@@ -212,6 +214,14 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="lBG-bI-DxC">
+                            <rect key="frame" x="250" y="27" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Oq6-38-g7p">
+                            <rect key="frame" x="250" y="119" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -228,7 +238,7 @@
                         <constraint firstItem="B9B-UM-6W5" firstAttribute="top" secondItem="8oH-r8-crp" secondAttribute="bottom" id="s7F-h6-IKa"/>
                     </constraints>
                 </view>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6F-YW-eeF">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6F-YW-eeF">
                     <rect key="frame" x="0.0" y="-20" width="375" height="385"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zJO-XV-NL4">

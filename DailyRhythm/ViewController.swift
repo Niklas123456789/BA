@@ -26,6 +26,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "saveEvent" {
+            expectedTravelTime = -1
+        }
+        if segue.identifier == "exit" {
+            expectedTravelTime = -1
+        }
+        if segue.identifier == "saveSettings" {
+            expectedTravelTime = -1
+        }
+        if segue.identifier == "exitToEvent" {
+            expectedTravelTime = -1
+        }
+    }
     
     /* Swipe right for cells */
     /*func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

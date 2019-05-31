@@ -11,6 +11,8 @@ import UIKit
 
 class CardViewController: UIViewController {
     
+    @IBOutlet weak var activityIndicatorETT: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorTTT: UIActivityIndicatorView!
     @IBOutlet weak var nameLabel: UILabel?
     @IBOutlet weak var streetLabel: UILabel?
     @IBOutlet weak var cityLabel: UILabel?
@@ -35,6 +37,8 @@ class CardViewController: UIViewController {
         return instance
     }
     override func viewDidLoad() {
+        currentEvent = tableViewList[cellClickedIndex]
+        
         setCardLabels(
             name: tableViewList[cellClickedIndex].eventName,
             street: tableViewList[cellClickedIndex].streetName,
@@ -68,10 +72,11 @@ class CardViewController: UIViewController {
     
     func setExpectedTravelTime() {
         var timer: Timer?
-        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (timer) in
-            if ((expectedTravelTime == -1) || (expectedTravelTimeUpdated == false)) {
+        setLabelsWithNoETT()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
+            if (expectedTravelTime == -1) {
                 print("no expectedTavelTime")
-                self.handleArea.isUserInteractionEnabled = false
+                //self.handleArea.isUserInteractionEnabled = false
             } else {
                 if (expectedTravelTime > 60) {
                     var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)
@@ -84,7 +89,6 @@ class CardViewController: UIViewController {
                     
                     
                 }
-                //TODO: calc insgasammte Zeit
                 self.setTotalTravelTime()
                 timer.invalidate()
             }
@@ -101,7 +105,31 @@ class CardViewController: UIViewController {
             self.totalMinLabel.text = "\(totalTravelTime + 1)"
         }
         self.handleArea.isUserInteractionEnabled = true
+        activityIndicatorTTT.stopAnimating()
+        activityIndicatorETT.stopAnimating()
         print("setTotalTravelTime \(totalTravelTime)")
+    }
+    
+    func setLabelsWithNoETT() {
+        self.expectedTravelTimeLabelMin!.text = ""
+        self.totalMinLabel!.text = ""
+        //activityIndicatorETT
+        activityIndicatorETT.center = self.expectedTravelTimeLabelMin!.center
+        activityIndicatorETT.hidesWhenStopped = true
+        activityIndicatorETT.color = UIColor.black
+        activityIndicatorETT.style = UIActivityIndicatorView.Style.gray
+        activityIndicatorETT.startAnimating()
+        
+        //activityIndicatorTTT
+        activityIndicatorTTT.startAnimating()
+        activityIndicatorTTT.center = CGPoint(x: 241 + self.totalMinLabel.frame.width/2, y: 119 + self.totalMinLabel.frame.height/2)
+        activityIndicatorTTT.hidesWhenStopped = true
+        activityIndicatorTTT.color = UIColor.black
+        activityIndicatorTTT.style = UIActivityIndicatorView.Style.gray
+        activityIndicatorTTT.startAnimating()
+        
+        
+        
     }
     
 }

@@ -13,6 +13,7 @@ import CoreLocation
 import AudioToolbox
 
 var ID: Int = 0
+var boxView = UIView()
 
 class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate{
 
@@ -30,6 +31,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             mo = false
             MOButton.setBackgroundImage(UIImage(named: "LeftWhite"), for: .normal)
             MOButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             mo = true
             MOButton.setBackgroundImage(UIImage(named: "LeftBlack"), for: .normal)
@@ -51,6 +53,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             di = false
             DIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
             DIButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             di = true
             DIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
@@ -65,6 +68,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             mi = false
             MIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
             MIButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             mi = true
             MIButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
@@ -80,6 +84,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             dO = false
             DOButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
             DOButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             dO = true
             DOButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
@@ -95,6 +100,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             fr = false
             FRButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
             FRButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             fr = true
             FRButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
@@ -110,6 +116,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             sa = false
             SAButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
             SAButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             sa = true
             SAButton.setBackgroundImage(UIImage(named: "Black"), for: .normal)
@@ -125,6 +132,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             so = false
             SOButton.setBackgroundImage(UIImage(named: "RightWhite"), for: .normal)
             SOButton.setTitleColor(UIColor.black, for: .normal)
+            disableOKButtonCheck()
         }else{
             so = true
             SOButton.setBackgroundImage(UIImage(named: "RightBlack"), for: .normal)
@@ -339,6 +347,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
     }
     
+    func disableOKButtonCheck() {
+        let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
+        if eventWeekdays.contains(true) {}
+        else {
+            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+        }
+    }
+    
     // Capture the picker view selection
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         // This method is triggered whenever the user makes a change to the picker selection.
@@ -468,10 +484,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     
     func startCheckingValityOfFields() {
         if (readyToCheckAddress() == true) {
-            
-                //do stuff cause address found
-                self.enableOkCheck()
-            
+            self.enableOkCheck()
         }
     }
     
@@ -593,6 +606,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButtonAction(_ sender: UIButton) {
         print("--------------OK BUTTON---------------")
+        loadingWaitCheckingLocationAnimation()
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         var weekdaysAreAllFalse = true
         for element in eventWeekdays {
@@ -738,22 +752,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             })
             
             
-            if (settingsSelected == false) {
-                if (self.validAddess == false) {
-                    return
-                }
-                newEvent.saveEventInJSON()
-                self.performSegue(withIdentifier: "saveEvent", sender: nil)
-                EventManager.getInstance().updateJSONEvents()
-                
-            } else {
-                currentEvent.deleteEventInJSON()
-                newEvent.saveEventInJSON()
-                currentEvent = newEvent
-                EventManager.getInstance().updateJSONEvents()
-                //settingsSelected = false
-                self.performSegue(withIdentifier: "saveEvent", sender: nil)
-            }
+            
         }
         
 
@@ -763,6 +762,28 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //TODO: push notification function
         
 
+    }
+    
+    func loadingWaitCheckingLocationAnimation() {
+        // You only need to adjust this frame to move it anywhere you want
+        boxView = UIView(frame: CGRect(x: view.frame.midX - 90, y: view.frame.midY - 25, width: 180, height: 50))
+        boxView.backgroundColor = UIColor.white
+        boxView.alpha = 0.8
+        boxView.layer.cornerRadius = 10
+        
+        //Here the spinnier is initialized
+        var activityView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        activityView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        activityView.startAnimating()
+        
+        var textLabel = UILabel(frame: CGRect(x: 60, y: 0, width: 200, height: 50))
+        textLabel.textColor = UIColor.gray
+        textLabel.text = "Checking Location"
+        
+        boxView.addSubview(activityView)
+        boxView.addSubview(textLabel)
+        
+        view.addSubview(boxView)
     }
     
 //    func updateEventTimes(event: Event) -> (Int, Int, Int){

@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+var validAddress = false
 class Helper {
     
     static func checkAddressIsValid(city: String, street: String, number: String, time: TimeInterval, completion: @escaping () -> Void) {
@@ -29,6 +30,8 @@ class Helper {
                 print("ERROR no location found \(error.debugDescription)")
                 return
             }
+//            setValidAddress(location: location)
+            print("LOCATION: \(location)")
             completion()
         }
     }

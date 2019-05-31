@@ -219,11 +219,16 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                 switch state {
                 case .expanded:
                     self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight - 40
-                    self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 225, right: 50), animated: true)
+                    if (expectedTravelTime != -1) {
+                        self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 225, right: 50), animated: true)
+                    }
+                    
                 case .collapsed:
                     self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleAreaHeight - 135
+                    if(expectedTravelTime != -1) {
+                        self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 120, right: 50), animated: true)
+                    }
                     
-                    self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 40, left: 50, bottom: 120, right: 50), animated: true)
                 }
             }
             
@@ -554,6 +559,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print("performs segue to settings")
             settingsSelected = true
             currentEvent = tableViewList[cellClickedIndex]
+        }
+        if segue.identifier == "backFromEvent" {
+            expectedTravelTime = -1
         }
     }
 }
