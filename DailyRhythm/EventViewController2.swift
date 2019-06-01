@@ -304,7 +304,19 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     }
     func getDirections() {
         guard let location = locationManager.location?.coordinate else {
-            //TODO: Inform user that there is no current location
+            // Inform user that there is no current location
+            presentAlertWithTitle(title: "Keinen Standort gefungen", message: "Die App konnte deinen Standort nicht finden", options: "OK", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    print("option one")
+                    break
+                
+                default:
+                    break
+                }
+            })
             return
         }
         
@@ -409,8 +421,20 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                 let placemarks = placemarks,
                 let location = placemarks.first?.location
                 else {
-                    // TODO handle no location found
+                    // handle no location found
                     print("ERROR no location found")
+                    self.presentAlertWithTitle(title: "Dein Ziel konnte nicht gefunden werden", message: "Bitte überprüfe deine Internetverbindung und deine Ortungsdienste", options: "OK", completion: {
+                        (option) in
+                        print("option: \(option)")
+                        switch(option) {
+                        case 0:
+                            print("option one")
+                            break
+                        
+                        default:
+                            break
+                        }
+                    })
                     return
             }
             self.lat = location.coordinate.latitude
@@ -454,7 +478,20 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     
     func displayDirectionsOverlay(for directions: MKDirections) {
         directions.calculate { [unowned self] (response, error) in
-            guard let response = response else { return } //TODO: Alarm because no route found
+            guard let response = response else {
+                self.presentAlertWithTitle(title: "Keine Route gefunden", message: "Bitte überprüfe deine Internetverbindung", options: "OK", completion: {
+                    (option) in
+                    print("option: \(option)")
+                    switch(option) {
+                    case 0:
+                        print("option one")
+                        break
+                    
+                    default:
+                        break
+                    }
+                })
+                return }
             
             print("found \(response.routes.count) routes")
 //            var routes2 = response.routes
@@ -530,15 +567,81 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
-            //TODO: Show popup alert
+            // Show popup alert
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen! Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
             break
         case .denied:
-            //TODO: Show popup alert
+            // Show popup alert
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen! Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
             break
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()
         case .restricted:
-            //TODO: Show popup alert
+            // Show popup alert
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen! Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
             break
         case .authorizedAlways:
             mapView.showsUserLocation = true

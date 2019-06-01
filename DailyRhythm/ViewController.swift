@@ -9,7 +9,10 @@
 import UIKit
 import UserNotifications
 import AudioToolbox
+import MapKit
+import CoreLocation
 
+let locationManager = CLLocationManager()
 var cellClickedIndex = 0
 var tableViewList = [Event]()
 
@@ -249,9 +252,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return 0
     }
 
-    
+    override func viewWillAppear(_ animated: Bool) {
+        checkLocationAuthorization()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        checkLocationAuthorization()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         if(settingsSelected == true) {
 //            settingsSelected = false
@@ -415,5 +424,106 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         print("Count to event in Days Return: \(countDays)")
         return countDays
+    }
+    
+    func checkLocationAuthorization() {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse:
+            
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen. Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
+            break
+        case .denied:
+            
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen. Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
+            break
+        case .notDetermined:
+            locationManager.requestAlwaysAuthorization()
+        case .restricted:
+            
+            presentAlertWithTitle(title: "Erlaube \"Daily Rhythm\" auf deinen Standort zuzugreifen", message: "Um jedes Ereignis zeitlich optimal vorrauszuplanen benötigt die App dauerhaft Zugriff auf deinen Standort. Es werden keine Daten gespeichert oder an Dritte weitergegenen. Klicke auf Einstellungen und setze den Standortzugriff auf \"immer\".", options: "Verlassen", "Einstellungen", completion: {
+                (option) in
+                print("option: \(option)")
+                switch(option) {
+                case 0:
+                    UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                                           to: UIApplication.shared, for: nil)
+                    break
+                case 1:
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                default:
+                    break
+                }
+            })
+            break
+        case .authorizedAlways:
+            break
+        }
+    }
+    @IBAction func settingsButtonAction(_ sender: Any) {
+        /*presentAlertWithTitle(title: "Titel", message: "Das ist die nachricht", options: "OK", "OK1", completion: {
+            (option) in
+            print("option: \(option)")
+            switch(option) {
+            case 0:
+                print("option one")
+                break
+            case 1:
+                print("option two")
+            default:
+                break
+            }
+        })*/
+        
+        
     }
 }

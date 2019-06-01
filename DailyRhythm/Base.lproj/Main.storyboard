@@ -94,6 +94,9 @@
                                             <constraint firstAttribute="width" secondItem="xg7-0s-bYs" secondAttribute="height" multiplier="70:70" id="EaJ-lZ-HZJ"/>
                                         </constraints>
                                         <state key="normal" image="Settings_white"/>
+                                        <connections>
+                                            <action selector="settingsButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fg7-zz-Gvs"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="klf-Py-Eus" userLabel="Info_Button">
                                         <rect key="frame" x="153.5" y="0.0" width="71" height="70.5"/>
@@ -104,7 +107,7 @@
                                             <color key="titleShadowColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <segue destination="XUh-q8-ydr" kind="show" id="bae-O7-hmY"/>
+                                            <segue destination="XUh-q8-ydr" kind="show" identifier="infoSegue" id="bae-O7-hmY"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pBk-Zb-vAR" userLabel="Plus_Button">
@@ -1249,8 +1252,8 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="biw-ZC-yrp"/>
-        <segue reference="xgJ-Hz-oo8"/>
+        <segue reference="vw4-1X-Ecx"/>
+        <segue reference="jxY-Kk-S9Q"/>
         <segue reference="scd-9f-SyV"/>
     </inferredMetricsTieBreakers>
 </document>
