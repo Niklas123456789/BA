@@ -78,7 +78,7 @@ public class JSONDataManager{
             
             for fileName in files {
                 modelObjects.append(loadJSON(fileName, with: type))
-                //delete(fileName)
+//                delete(fileName)
             }
             
             return modelObjects

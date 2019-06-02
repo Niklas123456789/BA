@@ -50,7 +50,8 @@ class ViewContollerTableViewCell: UITableViewCell {
     func startTimer(timeInSeconds: Int, event: Event){
         
         var secondsLeft: Int = timeInSeconds
-        if(time <= 86400){
+        //TODO  86400
+        if(time <= Int.max){
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
             
@@ -63,18 +64,20 @@ class ViewContollerTableViewCell: UITableViewCell {
                 //benachrichtigung muss raus
                 //EventManager.getInstance().createNotification(for: event)
             }
-            if secondsLeft == -1 {
+                //Todo farbe dynamisch verändern
+            if secondsLeft < event.bufferTime {
                     //schoener machen
                     self.backgroundColor = UIColor.red
                 
-                //muss noch an event angepasst werden
-            }else if(secondsLeft == -10){
+                //TODO muss noch an event angepasst werden
+            }else if(secondsLeft < 0){
+                self.cellTime.text = "Zeit los zu gehen"
                 self.timer.invalidate()
             }
         }
         )}else{
             //was tun wenn zeit noch über 24h?
-            self.cellTime.text = "+24h"
+//            self.cellTime.text = "+24h"
         }
     }
     func ausgeben(h: Int, m: Int, s: Int){
@@ -113,7 +116,7 @@ class ViewContollerTableViewCell: UITableViewCell {
         }
         //print(("\(h):\(m):\(s)"))
     }
-    func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
+    func secondsToHoursMinutesSeconds(seconds : Int) -> (Int, Int, Int) {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
 }

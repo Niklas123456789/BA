@@ -568,37 +568,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         return false
     }
-    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
-        
-        //current day
-        let todaysDate = Date()
-        var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
-        
-        print("Todays Day Nr: \(todaysWeekday)")
-        
-        //compair to repeatAtWeekdays and get next eventDay
-
-        var countDays = 0
-        var count = 0
-        if (arr[todaysWeekday - 1] == true){
-            return 0
-        }else{
-            while (count <= 7){
-                
-                if(todaysWeekday == 8){
-                    todaysWeekday = 1
-                }else if(arr[todaysWeekday - 1] != true){
-                    countDays += 1
-                    todaysWeekday += 1
-                }else if(arr[todaysWeekday - 1] == true){
-                    break
-                }
-                count = count + 1
-            }
-        }
-        print("Count to event in Days Return: \(countDays)")
-        return countDays
-    }
+    
     
 
 
@@ -686,12 +656,24 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //TODO: ERROR when no day is selected
         
-        
-        print(countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays))
-        
-        
+        var weeksTillNextEvent: Int = 0
+        if repeatDuration == 0 {
+            weeksTillNextEvent = 0
+        }else if repeatDuration == 1 {
+            weeksTillNextEvent = 0
+        }else if repeatDuration == 2 {
+            weeksTillNextEvent = 1
+        }else if repeatDuration == 3 {
+            weeksTillNextEvent = 2
+            //monatlich
+        }else if repeatDuration == 4 {
+            weeksTillNextEvent = 3
+        }
 
-        var distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60 - subSec
+        //TODO DriveTime?
+        let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: Date.init(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
+
+        var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 + difHour * 3600 + difMin * 60 - subSec
         
         
         //print("DifHour: \(difHour) DifMin: \(difMin)")
@@ -702,26 +684,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         //sets eventDate only seconds to 0
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
         eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
-        
+        print("EventDate after creating1: \(eventDate)")
         eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
-        eventDate = Calendar.current.date(byAdding: .day, value: countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays), to: eventDate)!
-        //print("EventDate afer creating: \(eventDate)")
+        eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDate)!
+        print("EventDate after creating2: \(eventDate)")
         
         
         
-        var weeksTillNextEvent: Int = 0
-        if repeatDuration == 0 {
-            weeksTillNextEvent = 0
-        }else if repeatDuration == 1 {
-            weeksTillNextEvent = 0
-        }else if repeatDuration == 2 {
-            weeksTillNextEvent = 1
-        }else if repeatDuration == 3 {
-            weeksTillNextEvent = 2
-        //monatlich
-        }else if repeatDuration == 4 {
-            weeksTillNextEvent = 3
-        }
+        
         
         //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
 
@@ -752,6 +722,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 
             
             })
+            EventManager.getInstance().removeDuplicateEvents(from: newEvent)
+            
             if (settingsSelected == false) {
                 if (self.validAddess == false) {
                     return
@@ -832,94 +804,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        EventManager.getInstance().updateEventTimes(event: &event)
 //    }
     
-    func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: Int) -> Int {
-
-        let date = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: date)
-
-        let hour: Int! = components.hour
-        let minute: Int! = components.minute
-
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HHmm"
-        strPickerDate = dateFormatter.string(from: eventDate)
-        let temp:Int! = Int(strPickerDate)
-        let eventMin = temp % 100
-        let eventHour = Int(temp/100)
-        print("Time datePicker: \(strPickerDate)")
-
-
-        let(difHour, difMin, subSec) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
-
-
-        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60 - subSec
-        print(distanceToEventInSecounds)
-
-        return distanceToEventInSecounds
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
-//
-//        var difHours: Int
-//        var difMin: Int
-//
-//        //works
-//        if (currentHours < eventHours && currentMin < eventMin){
-//            difHours = eventHours - currentHours
-//            difMin = eventMin - currentMin
-//
-//            //works
-//        } else if (currentHours < eventHours && currentMin > eventMin){
-//            difHours = eventHours - currentHours - 1
-//            difMin = 60 - (currentMin - eventMin)
-//
-//            //works
-//        } else if (currentHours > eventHours && currentMin < eventMin){
-//            difHours = (-24) + (currentHours - eventHours)
-//            difMin = eventMin - currentMin
-//
-//            //works
-//        }else if (currentHours == eventHours && currentMin > eventMin){
-//            difHours = -23
-//            difMin = 60 - (currentMin - eventMin)
-//
-//            //works
-//        }else if (currentHours == eventHours && currentMin < eventMin){
-//            difHours = 0
-//            difMin = eventMin - currentMin
-//
-//            //works
-//        }else if (currentHours < eventHours && currentMin == eventMin){
-//            difHours = eventHours - currentHours
-//            difMin = 0
-//
-//            //works
-//        }else if (currentHours > eventHours && currentMin == eventMin){
-//            difHours = (-24) + (currentHours - eventHours)
-//            difMin = 0
-//
-//            //works
-//        }else if (currentHours > eventHours && currentMin > eventMin){
-//            difHours = (-24) + (currentHours - eventHours) + 1
-//            difMin = 60 - (currentMin - eventMin)
-//
-//            //(currentHours == eventHours && currentMin == eventMin)
-//        } else {
-//            difHours = 0
-//            difMin = 0
-//        }
-//        return (difHours, difMin)
-//    }
     
     @IBAction func exitButtonAction(_ sender: Any) {
         if (settingsSelected == false) {

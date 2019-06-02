@@ -71,34 +71,8 @@ struct Event : Codable {
     func deleteEventInJSON(){
         JSONDataManager.delete("\(eventID)")
     }
-    //TODO: duration not included in calc
-    mutating func calcDiffInSecOfNowAndEventDate(eventDate: Date, eventWeekdays: [Bool], duration: Int) -> Int {
-        
-        let date = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: date)
-        
-        let hour: Int! = components.hour
-        let minute: Int! = components.minute
-        
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HHmm"
-        strPickerDate = dateFormatter.string(from: eventDate)
-        let temp:Int! = Int(strPickerDate)
-        let eventMin = temp % 100
-        let eventHour = Int(temp/100)
-        print("Time datePicker: \(strPickerDate)")
-        
-        
-        let(difHour, difMin) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
-        
-        
-        let distanceToEventInSecounds = countDaysTillNextEventDay(repeatAtWeekdays: eventWeekdays) * 86400 + difHour * 3600 + difMin * 60
-        print(distanceToEventInSecounds)
-        
-        return distanceToEventInSecounds
-    }
+
+    
     
     func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
         
@@ -153,38 +127,6 @@ struct Event : Codable {
         return (difHours, difMin)
     }
     
-    
-    func countDaysTillNextEventDay(repeatAtWeekdays arr: [Bool]) -> Int{
-        
-        //current day
-        let todaysDate = Date()
-        var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
-        
-        print("Todays Day Nr: \(todaysWeekday)")
-        
-        //compair to repeatAtWeekdays and get next eventDay
-        
-        var countDays = 0
-        var count = 0
-        if (arr[todaysWeekday - 1] == true){
-            return 0
-        }else{
-            while (count <= 7){
-                
-                if(todaysWeekday == 8){
-                    todaysWeekday = 1
-                }else if(arr[todaysWeekday - 1] != true){
-                    countDays += 1
-                    todaysWeekday += 1
-                }else if(arr[todaysWeekday - 1] == true){
-                    break
-                }
-                count = count + 1
-            }
-        }
-        print("Count to event in Days Return: \(countDays)")
-        return countDays
-    }
     
     
     //TODO
