@@ -405,7 +405,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         let event = EventManager.getInstance().getEventwithID(eventID: "\(currentEvent.eventID)")
         let addressEvent = getAddress(from: event)
         print("AddressEvent: \(addressEvent)")
-        
+        print("{EVENTVIEWCONTROLLER2} CHECKING ADRESS: \(addressEvent)")
         group.enter()
         /* starts loading animation */
         activityIndicator.center = self.mapView.center
@@ -436,6 +436,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                         }
                     })
                     return
+            }
+            for placemark in placemarks {
+            print("{EVENTVIEWCONTROLLER2} PLACEMARK NAME: \(placemark.name)")
             }
             self.lat = location.coordinate.latitude
             print(self.lat)

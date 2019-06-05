@@ -131,6 +131,7 @@ class EventManager {
             difMin = 0
             print("currentHours == eventHours && currentMin == eventMin")
         }
+        print("CALC DIF HOUR \(difHours) MIN \(difMin)")
         return (difHours, difMin, secondsNow)
     }
     func countDaysBetweenNowAndEvent(event: Event) {

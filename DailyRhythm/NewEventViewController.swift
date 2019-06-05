@@ -433,9 +433,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false ) {
             self.okButton.setImage(UIImage(named: "OK"), for: .normal)
             //okButton.isUserInteractionEnabled = true
-            Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 60) {
-                self.validAddess = true
-            }
+            
         }else{
             self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
             //okButton.isUserInteractionEnabled = false
@@ -483,7 +481,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     func startCheckingValityOfFields() {
-        if (readyToCheckAddress() == true) {
+        if (readyToCheckAddress()) {
             self.enableOkCheck()
         }
     }
@@ -609,7 +607,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             generator.impactOccurred()
             return
         }
-        if(validAddess == false) {return}
+        //if(validAddess == false) {return}
         //validAddess = false
         
         datePickerAction(sender: timePicker)
@@ -709,7 +707,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             print("Return because timeTillNextCheck returned negativ")
             return
         }
-        Helper.checkAddressIsValid(city: "\(self.cityTextField.text)", street: "\(self.streetTextField.text)", number: "\(self.houseNumberTextField.text)", time: 60) {
+        
+        Helper.getInstance().checkAddressIsValid(city: "\(self.cityTextField.text!)", street: "\(self.streetTextField.text!)", number: "\(self.houseNumberTextField.text!)", time: 60, completion: {
+            /* valid address */
+            print("Adress valid")
             self.validAddess = true
         
             //timer that triggers the reapeat of timeTillNextCheck
@@ -719,8 +720,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
                     EventManager.getInstance().repeatTimeCheck(event: &newEvent)
                 }
-                
-            
             })
             EventManager.getInstance().removeDuplicateEvents(from: newEvent)
             
@@ -741,8 +740,14 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 self.performSegue(withIdentifier: "saveEvent", sender: nil)
             }
             
-            
-        }
+        }, completionWithError:  {
+            /* handle invalid address */
+            print("{NEWEVENTVIEWCONTROLLER} invalid address")
+            boxView.removeFromSuperview()
+            NewEventViewController.shake(view: self.cityTextField)
+            NewEventViewController.shake(view: self.houseNumberTextField)
+            NewEventViewController.shake(view: self.streetTextField)
+        })
         
 
         //self.present(ViewController.getInstance(), animated: true, completion: nil)

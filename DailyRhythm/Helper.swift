@@ -11,16 +11,22 @@ import MapKit
 var validAddress = false
 class Helper {
     
-    static func checkAddressIsValid(city: String, street: String, number: String, time: TimeInterval, completion: @escaping () -> Void) {
-        let geoCoder = CLGeocoder()
-        let group = DispatchGroup()
-        var address = "Germany, \(city), \(street) \(number)"
+    static let instance = Helper()
         
-        let timer = Timer.scheduledTimer(withTimeInterval: time, repeats: false, block: { (timer) in
+    static func getInstance() -> Helper {
+        return instance
+    }
+    
+    func checkAddressIsValid(city: String, street: String, number: String, time: TimeInterval, completion: @escaping () -> Void, completionWithError: @escaping () -> Void) {
+        let geoCoder = CLGeocoder()
+        //let group = DispatchGroup()
+        let address = "Germany, \(city), \(street) \(number)"
+        
+        var timer = Timer.scheduledTimer(withTimeInterval: time, repeats: false, block: { (timer) in
             geoCoder.cancelGeocode()
         })
-        group.enter()
-        
+        //group.enter()
+        print("{HELPER} CHECKING ADRESS: \(address)")
         geoCoder.geocodeAddressString(address) { (placemarks, error) in
             guard
                 let placemarks = placemarks,
@@ -28,10 +34,15 @@ class Helper {
             else {
                 // TODO handle no location found
                 print("ERROR no location found \(error.debugDescription)")
+                timer.invalidate()
+                completionWithError()
                 return
             }
 //            setValidAddress(location: location)
-            print("LOCATION: \(location)")
+            print("{HELPER} LOCATION: \(location) adress: \(placemarks.first?.name)")
+            for placemark in placemarks {
+                print("{HELPER} name \(placemark.name)")
+            }
             completion()
             
         }
