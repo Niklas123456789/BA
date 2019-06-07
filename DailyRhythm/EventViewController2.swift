@@ -112,6 +112,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     }
     
     func setupCard() {
+        
         //visualEffectView = UIVisualEffectView()
         //visualEffectView.frame = self.view.frame
         //self.view.addSubview(visualEffectView)
@@ -244,9 +245,9 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
                 switch state {
                 case .expanded:
-                    self.cardViewController.view.layer.cornerRadius = 20
+                    self.cardViewController.view.layer.cornerRadius = 25
                 case .collapsed:
-                    self.cardViewController.view.layer.cornerRadius = 0
+                    self.cardViewController.view.layer.cornerRadius = 15
                 }
             }
             

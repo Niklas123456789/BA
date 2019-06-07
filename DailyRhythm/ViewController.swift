@@ -260,6 +260,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundHell")!)
+        //sets line between cells
+        tableView.separatorInset = .zero
+//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         
         
         if(settingsSelected == true) {
@@ -285,7 +289,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //loads Events into allEventArray
             
         //    allEventsArray.append(loadedEvents[indexEventCount])
-            //calc the time till the you have to go timer should trigger
+            //calc the time till the you have to go should trigger
             //TODO: actual wegzeit einberechnen
             //let timeTillGo = allEventsArray[indexEventCount].calcDiffInSecOfNowAndEventDate(eventDate: allEventsArray[indexEventCount].eventDate, eventWeekdays: allEventsArray[indexEventCount].repeatAtWeekdays, duration: allEventsArray[indexEventCount].repeatDuration) - ((allEventsArray[indexEventCount].bufferTime + allEventsArray[indexEventCount].walkingTime + allEventsArray[indexEventCount].parkingTime) * 60)
             

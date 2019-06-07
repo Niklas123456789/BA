@@ -11,6 +11,7 @@ import UIKit
 
 class CardViewController: UIViewController {
     
+    @IBOutlet weak var hold: UIView!
     @IBOutlet weak var activityIndicatorETT: UIActivityIndicatorView!
     @IBOutlet weak var activityIndicatorTTT: UIActivityIndicatorView!
     @IBOutlet weak var nameLabel: UILabel?
@@ -39,6 +40,8 @@ class CardViewController: UIViewController {
     override func viewDidLoad() {
         currentEvent = tableViewList[cellClickedIndex]
         
+        hold.backgroundColor = UIColor(patternImage: UIImage(named: "hold")!)
+        
         setCardLabels(
             name: tableViewList[cellClickedIndex].eventName,
             street: tableViewList[cellClickedIndex].streetName,
@@ -51,6 +54,22 @@ class CardViewController: UIViewController {
             parkingTime: tableViewList[cellClickedIndex].parkingTime)
         
         setExpectedTravelTime()
+        
+        //farbverlauf
+        setGradientBackground()
+    }
+    
+    func setGradientBackground() {
+        let colorTop =  UIColor.lightGray.withAlphaComponent(0.4).cgColor
+//            UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0/255.0, alpha: 1.0).cgColor
+        let colorBottom = UIColor.white.cgColor
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: 5)
+        
+        self.handleArea.layer.insertSublayer(gradientLayer, at:0)
     }
     
     func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, eventTime: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){

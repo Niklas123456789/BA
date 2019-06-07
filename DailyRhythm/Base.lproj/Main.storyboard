@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fB7-Bo-kRI">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,6 +11,44 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Launch Screen Controller-->
+        <scene sceneID="hsU-4M-pM7">
+            <objects>
+                <viewController id="fB7-Bo-kRI" customClass="LaunchScreenController" customModule="DailyRhythm" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kJO-Vk-AqF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wnv-62-zqd">
+                                <rect key="frame" x="87" y="333" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="qoe-S7-Qz4"/>
+                                    <constraint firstAttribute="width" constant="240" id="wd7-ks-vkD"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lll-Kt-TZ5">
+                                <rect key="frame" x="20" y="832" width="374" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="afterLaunch" id="bhj-aV-JXF"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="wnv-62-zqd" firstAttribute="centerY" secondItem="ncI-HZ-l5y" secondAttribute="centerY" id="Lzs-9V-JNC"/>
+                            <constraint firstItem="wnv-62-zqd" firstAttribute="centerX" secondItem="ncI-HZ-l5y" secondAttribute="centerX" id="k6X-4g-jKE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ncI-HZ-l5y"/>
+                    </view>
+                    <connections>
+                        <outlet property="gifView" destination="wnv-62-zqd" id="LMA-0h-3zW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W62-OJ-kaM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1678.2608695652175" y="183.48214285714286"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -22,6 +60,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="95" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UUK-N0-oEu">
                                 <rect key="frame" x="0.0" y="145" width="414" height="613.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="100" id="zit-ax-yLL" customClass="ViewContollerTableViewCell" customModule="DailyRhythm" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
@@ -53,6 +92,7 @@
                                                 <constraint firstItem="DZA-lS-UQF" firstAttribute="centerX" secondItem="uFN-6h-LhE" secondAttribute="centerX" id="tCU-y1-ahi"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="cellLabel" destination="xt0-yl-j3k" id="sSd-aq-gea"/>
                                             <outlet property="cellTime" destination="DZA-lS-UQF" id="Avy-fm-AwC"/>
@@ -1248,12 +1288,13 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="Plus_white" width="250" height="250"/>
         <image name="RightWhite" width="204" height="171"/>
         <image name="Settings_white" width="250" height="250"/>
-        <image name="Track" width="265" height="262.5"/>
+        <image name="Track" width="35" height="35"/>
         <image name="White" width="204" height="171"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="C4D-GM-P1r"/>
         <segue reference="vw4-1X-Ecx"/>
         <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="scd-9f-SyV"/>
+        <segue reference="Wji-eA-c2v"/>
     </inferredMetricsTieBreakers>
 </document>
