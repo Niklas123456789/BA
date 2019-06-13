@@ -77,7 +77,7 @@ class EventManager {
         var difHours: Int
         var difMin: Int
         let todaysDate = Date()
-        print("TodaysDate: \(todaysDate)")
+        print("{EventManager} TodaysDate: \(todaysDate)")
 
         let secondsNow = Calendar.current.component(.second, from: todaysDate)
         print("currentHours: \(currentHours) min: \(currentMin) ")

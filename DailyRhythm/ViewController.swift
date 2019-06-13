@@ -260,6 +260,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Das heutige Datum ist: \(Date())")
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundHell")!)
         //sets line between cells
         tableView.separatorInset = .zero
@@ -319,7 +320,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var difHours: Int
         var difMin: Int
         var todaysDate = Date()
-        print("TodaysDate: \(todaysDate)")
+        print("TodaysDate?: \(todaysDate)")
+        print("TodaysHour: \(Calendar.current.component(.hour, from: Date()))")
         
         let secondsNow = Calendar.current.component(.second, from: todaysDate)
         

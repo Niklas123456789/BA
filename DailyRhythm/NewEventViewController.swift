@@ -673,11 +673,19 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
         var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 + difHour * 3600 + difMin * 60 - subSec
         
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HHmm"
+        strPickerDate = dateFormatter.string(from: timePicker.date)
+        var temp:Int! = Int(strPickerDate)
+        pickerMin = temp % 100
+        pickerHour = Int(temp/100)
+        
+        
         
         //print("DifHour: \(difHour) DifMin: \(difMin)")
         var todaysDate = Date()
-        //print("TodaysDate: \(todaysDate)")
-        var eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: todaysDate), minute: Calendar.current.component(.minute, from: todaysDate), second: 0, of: Date())!
+        print("TodaysDate!: \(todaysDate)")
+        var eventDate = Calendar.current.date(bySettingHour: pickerHour, minute: pickerMin, second: 0, of: Date())!
         
         //sets eventDate only seconds to 0
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
