@@ -633,10 +633,12 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
         
-        //yyy.mm.dd hh:mm
-        let date = Date()
+        //yyyy.mm.dd hh:mm
+
+        var todaysRealDate = EventManager.getInstance().getDate()
+        
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: todaysRealDate)
         
         let year =  components.year
         let month = components.month
@@ -644,7 +646,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let hour: Int! = components.hour
         let minute: Int! = components.minute
         
-        
+//        let componentsReal = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: todaysRealDate)
         
         print("DATE: \(year):"+"\(month):"+"\(day)   "+"\(hour):\(minute)")
 
@@ -689,7 +691,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //sets eventDate only seconds to 0
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
-        eventDate = date.addingTimeInterval(Double(distanceToEventInSecounds))
+        eventDate = todaysRealDate.addingTimeInterval(Double(distanceToEventInSecounds))
         print("EventDate after creating1: \(eventDate)")
         eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
         eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDate)!

@@ -260,7 +260,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Das heutige Datum ist: \(Date())")
+        
+        print("getDate():\(EventManager.getInstance().getDate()) ")
+//        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()
+//        print("Das heutige Datum ist: \(todaysDate)")
+     
+        
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundHell")!)
         //sets line between cells
         tableView.separatorInset = .zero

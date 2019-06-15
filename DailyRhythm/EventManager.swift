@@ -56,6 +56,7 @@ class EventManager {
         
         /* sets distanceToEventInSecounds */
         let todaysDate = Date()
+        
         let eventSecondsThisDay = event.pickerHour * 3600 + event.pickerMin * 60
         var distanceToEventInSecounds = 0
         /* eventTime before now */
@@ -450,5 +451,64 @@ class EventManager {
             }
         }
         return noEvent
+    }
+    
+    func convertDateToTimeZoneDate(dateToConvert: String) -> String {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let convertedDate = format.date(from: dateToConvert)
+        format.timeZone = TimeZone.current
+        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let temp = format.string(from: convertedDate!)
+        print("convertDateToTimeZoneDate Return\(temp)")
+        return temp
+    }
+//    func getTodaysDateWithTimeZone() -> Date {
+//        let date = Date()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        let defaultTimeZoneStr = formatter.string(from: date)
+//        let todaysTimeWithTimeZone = self.convertDateToTimeZoneDate(dateToConvert: defaultTimeZoneStr)
+////        let calendar = Calendar.current
+////        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: todaysTimeWithTimeZone)
+//        print("timeZone: \(TimeZone.current)")
+//
+//        let tempDate = Date()
+//        let calendar = Calendar.current
+//        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: tempDate)
+//
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZ"
+//        guard let todaysDate = dateFormatter.date(from: todaysTimeWithTimeZone) else { return calendar.date(from: components)! }
+//        print("{EventHelper} not in getTodaysDateWithTimeZone Guard")
+//        return todaysDate
+//    }
+//
+//    func getTodaysDate() -> Date {
+//        let date1 = Date()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+//        let defaultTimeZoneStr = formatter.string(from: date1)
+//        let todaysTimeWithTimeZone = self.convertDateToTimeZoneDate(dateToConvert: defaultTimeZoneStr)
+////        let isoDate = "2016-04-14T10:44:00+0000"
+//
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+////        dateFormatter.locale = Locale.autoupdatingCurrent// set locale to reliable US_POSIX
+//        let date = dateFormatter.date(from:todaysTimeWithTimeZone)!
+//        let calendar = Calendar.current
+//        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date)
+//        let finalDate = calendar.date(from:components)
+//        print("FinalDate \(finalDate)")
+//        return finalDate!
+//    }
+    
+    func getDate() -> Date {
+        var date = Date()
+        var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+        print("\(secondsFromGMT)")
+        var finalDate = date.addingTimeInterval(TimeInterval(secondsFromGMT))
+        print("getDate return: \(finalDate)")
+        return finalDate
     }
 }

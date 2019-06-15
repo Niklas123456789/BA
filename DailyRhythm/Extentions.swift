@@ -63,5 +63,17 @@ extension Date {
         let date2Seconds = date.secondsFromBeginningOfTheDay()
         return date2Seconds - date1Seconds
     }
+    
+    func toString(withFormat format: String = "EEEE ، d MMMM yyyy") -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "fa-IR")
+        //dateFormatter.timeZone = TimeZone(identifier: "Asia/Tehran")
+        dateFormatter.calendar = Calendar(identifier: .persian)
+        dateFormatter.dateFormat = format
+        let strMonth = dateFormatter.string(from: self)
+        
+        return strMonth
+    }
 }
 
