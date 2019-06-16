@@ -55,7 +55,7 @@ class EventManager {
         let(difHour, difMin, subSec) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
         
         /* sets distanceToEventInSecounds */
-        let todaysDate = Date()
+        let todaysDate = getDate()
         
         let eventSecondsThisDay = event.pickerHour * 3600 + event.pickerMin * 60
         var distanceToEventInSecounds = 0
@@ -77,12 +77,11 @@ class EventManager {
         
         var difHours: Int
         var difMin: Int
-        let todaysDate = Date()
-        print("{EventManager} TodaysDate: \(todaysDate)")
+        let todaysDate = self.getDate()
 
         let secondsNow = Calendar.current.component(.second, from: todaysDate)
-        print("currentHours: \(currentHours) min: \(currentMin) ")
-        print("EventHours: \(eventHours) min: \(eventMin) ")
+        print("current Hours: \(currentHours) min: \(currentMin) ")
+        print("Event Hours: \(eventHours) min: \(eventMin) ")
         //works
         if (currentHours < eventHours && currentMin < eventMin){
             difHours = eventHours - currentHours
@@ -135,14 +134,23 @@ class EventManager {
         print("CALC DIF HOUR \(difHours) MIN \(difMin)")
         return (difHours, difMin, secondsNow)
     }
+    
     func countDaysBetweenNowAndEvent(event: Event) {
         
     }
+    
     func countDaysTillNextEventDay(event: Event) -> Int{
         
         //current day
-        let todaysDate = Date()
+        let todaysDate = EventManager.getInstance().getDate()
         var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
+        var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+        
+        let calendar = Calendar.current
+        let eventHours = calendar.component(.hour, from: event.eventDate) + (secondsFromGMT/3600)
+        let eventMin = calendar.component(.minute, from: event.eventDate)
+        
+        print("{EventManager} countDaysTillNextEventDay: Hours:\(eventHours) Min \(eventMin)")
         
         print("Todays Day Nr: \(todaysWeekday)")
         
@@ -168,8 +176,9 @@ class EventManager {
         }
         print("CountDays: \(countDays)")
         if countDays == 0 {
-            let eventSecondsThisDay = event.pickerHour * 3600 + event.pickerMin * 60 - (event.bufferTime + event.parkingTime + event.walkingTime) * 60
-            if (Int(todaysDate.secondsFromBeginningOfTheDay()) >= eventSecondsThisDay) {
+            let eventSecondsThisDay = eventHours * 3600 + eventMin * 60 - (event.bufferTime + event.parkingTime + event.walkingTime) * 60
+            if ((Int(todaysDate.secondsFromBeginningOfTheDay()) - secondsFromGMT) >= eventSecondsThisDay) {
+                print("todaysDate.secondsFromBeginningOfTheDay() \(todaysDate.secondsFromBeginningOfTheDay())")
                 return 7
             }
         }
@@ -320,41 +329,41 @@ class EventManager {
 
     }
     
-    func getTimeTillNextCheck(from event: Event) -> Int {
-        
-        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(event: event)
-        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-        
-        if timeTillNextCheck / 2 <= 86400 {
-            
-            if timeTillGo <= 60 {
-//                    print("Push event notification")
-//                    self.createNotification(for: event)
-                return -1
-                // 3 min check every 30 sec
-            } else if timeTillGo <= 180 {
-                timeTillNextCheck = 30
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                // 10 min check every 3 min
-            } else if timeTillGo <= 600 {
-                timeTillNextCheck = 180
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                // 25 min check every 5 min
-            } else if timeTillGo <= 1500 {
-                timeTillNextCheck = 300
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                //60 min check every 10 min
-            } else if timeTillGo <= 3600 {
-                timeTillNextCheck = 600
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-            }
-        } else {
-            timeTillNextCheck = timeTillNextCheck / 2
-        }
-        return timeTillNextCheck
-        
-    }
+//    func getTimeTillNextCheck(from event: Event) -> Int {
+//
+//        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(event: event)
+//        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+//        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+//
+//        if timeTillNextCheck / 2 <= 86400 {
+//
+//            if timeTillGo <= 60 {
+////                    print("Push event notification")
+////                    self.createNotification(for: event)
+//                return -1
+//                // 3 min check every 30 sec
+//            } else if timeTillGo <= 180 {
+//                timeTillNextCheck = 30
+//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+//                // 10 min check every 3 min
+//            } else if timeTillGo <= 600 {
+//                timeTillNextCheck = 180
+//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+//                // 25 min check every 5 min
+//            } else if timeTillGo <= 1500 {
+//                timeTillNextCheck = 300
+//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+//                //60 min check every 10 min
+//            } else if timeTillGo <= 3600 {
+//                timeTillNextCheck = 600
+//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+//            }
+//        } else {
+//            timeTillNextCheck = timeTillNextCheck / 2
+//        }
+//        return timeTillNextCheck
+//
+//    }
     
     func getTimeTillNextCheckAction(from event: Event) -> Int {
         let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(event: event)
@@ -399,6 +408,7 @@ class EventManager {
         }
         return timeTillNextCheck
     }
+    
     //repeats event after notification
     func checkIfEventShouldRepeat(for event: Event) {
         var weeksTillNextEvent: Double = 0
@@ -455,10 +465,10 @@ class EventManager {
     
     func convertDateToTimeZoneDate(dateToConvert: String) -> String {
         let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        format.dateFormat = "HH:mm  dd-MM-yyyy"
         let convertedDate = format.date(from: dateToConvert)
         format.timeZone = TimeZone.current
-        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        format.dateFormat = "HH:mm  dd-MM-yyyy"
         let temp = format.string(from: convertedDate!)
         print("convertDateToTimeZoneDate Return\(temp)")
         return temp
@@ -506,8 +516,8 @@ class EventManager {
     func getDate() -> Date {
         var date = Date()
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
-        print("\(secondsFromGMT)")
-        var finalDate = date.addingTimeInterval(TimeInterval(secondsFromGMT))
+        print("SecondsFromGTM: \(secondsFromGMT)")
+        let finalDate = date.addingTimeInterval(TimeInterval(secondsFromGMT))
         print("getDate return: \(finalDate)")
         return finalDate
     }

@@ -157,17 +157,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
 
     }
     
-    func setCardLabels(name: String, street: String, houseNr: String, city: String, notes: String, bufferTime: Int, walkingTime: Int, parkingTime: Int){
-        
-        CardViewController.getInstance().nameLabel?.text = name
-        //cardViewController.nameLabel?.text? = name
-        /*cardViewController.streetLabel?.text? = "\(street) + \(houseNr)"
-        cardViewController.cityLabel?.text? = city
-        cardViewController.notesLabel?.text? = notes
-        cardViewController.bufferTime?.text? = "\(bufferTime)"
-        cardViewController.walkingTime?.text? = "\(walkingTime)"
-        cardViewController.parkingTime?.text? = "\(parkingTime)"*/
-    }
+
     
     @objc
     func handleCardTap(recognzier:UITapGestureRecognizer) {

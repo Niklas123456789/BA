@@ -38,8 +38,8 @@ class ViewContollerTableViewCell: UITableViewCell {
         
         //self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
-        
-        if(time <= 86400){
+        //TODO  86400
+        if(time <= Int.max){
             
             startTimer(timeInSeconds: time, event: event)
         } else {

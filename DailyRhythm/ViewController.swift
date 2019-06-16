@@ -260,6 +260,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("{ViewController}")
         
         print("getDate():\(EventManager.getInstance().getDate()) ")
 //        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()
@@ -320,63 +321,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     
-    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int, Int){
-        
-        var difHours: Int
-        var difMin: Int
-        var todaysDate = Date()
-        print("TodaysDate?: \(todaysDate)")
-        print("TodaysHour: \(Calendar.current.component(.hour, from: Date()))")
-        
-        let secondsNow = Calendar.current.component(.second, from: todaysDate)
-        
-        //works
-        if (currentHours < eventHours && currentMin < eventMin){
-            difHours = eventHours - currentHours
-            difMin = eventMin - currentMin
-            
-            //works
-        } else if (currentHours < eventHours && currentMin > eventMin){
-            difHours = eventHours - currentHours - 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        } else if (currentHours > eventHours && currentMin < eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours == eventHours && currentMin > eventMin){
-            difHours = -23
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        }else if (currentHours == eventHours && currentMin < eventMin){
-            difHours = 0
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours < eventHours && currentMin == eventMin){
-            difHours = eventHours - currentHours
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin == eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin > eventMin){
-            difHours = (-24) + (currentHours - eventHours) + 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //(currentHours == eventHours && currentMin == eventMin)
-        } else {
-            difHours = 0
-            difMin = 0
-        }
-        return (difHours, difMin, secondsNow)
-    }
+    
     
     
     

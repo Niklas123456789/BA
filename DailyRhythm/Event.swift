@@ -73,62 +73,6 @@ struct Event : Codable {
     }
 
     
-    
-    func differenceTwoHourAndMin(currentHours: Int, currentMin:Int, eventHours: Int, eventMin: Int) -> (Int, Int){
-        
-        var difHours: Int
-        var difMin: Int
-        
-        //works
-        if (currentHours < eventHours && currentMin < eventMin){
-            difHours = eventHours - currentHours
-            difMin = eventMin - currentMin
-            
-            //works
-        } else if (currentHours < eventHours && currentMin > eventMin){
-            difHours = eventHours - currentHours - 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        } else if (currentHours > eventHours && currentMin < eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours == eventHours && currentMin > eventMin){
-            difHours = -23
-            difMin = 60 - (currentMin - eventMin)
-            
-            //works
-        }else if (currentHours == eventHours && currentMin < eventMin){
-            difHours = 0
-            difMin = eventMin - currentMin
-            
-            //works
-        }else if (currentHours < eventHours && currentMin == eventMin){
-            difHours = eventHours - currentHours
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin == eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = 0
-            
-            //works
-        }else if (currentHours > eventHours && currentMin > eventMin){
-            difHours = (-24) + (currentHours - eventHours) + 1
-            difMin = 60 - (currentMin - eventMin)
-            
-            //(currentHours == eventHours && currentMin == eventMin)
-        } else {
-            difHours = 0
-            difMin = 0
-        }
-        return (difHours, difMin)
-    }
-    
-    
-    
     //TODO
     func calcDriveTime(event:Event) -> Int {
         return 0

@@ -341,6 +341,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         pickerMin = temp % 100
         pickerHour = Int(temp/100)
         print("Time datePicker: \(strPickerDate)")
+        print("TimePicker Hour: \(pickerHour) TimePickerMin: \(pickerMin)")
         view.endEditing(true)
 
         startCheckingValityOfFields()
@@ -643,15 +644,19 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let year =  components.year
         let month = components.month
         let day = components.day
-        let hour: Int! = components.hour
+        var hour: Int! = components.hour
         let minute: Int! = components.minute
+        
+        var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+        hour = hour - Int(secondsFromGMT / 3600)
         
 //        let componentsReal = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: todaysRealDate)
         
         print("DATE: \(year):"+"\(month):"+"\(day)   "+"\(hour):\(minute)")
 
         // HOURS and Minutes between event time and now
-
+        
+        print("hour: \(hour)")
         let(difHour, difMin, subSec) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
         
         //TODO: ERROR when no day is selected
@@ -671,33 +676,41 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
 
         //TODO DriveTime?
-        let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: Date.init(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
+        let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: EventManager.getInstance().getDate(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
+        
+        
+//        print(onlyTimeEvent)
 
         var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 + difHour * 3600 + difMin * 60 - subSec
         
         var dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
-        strPickerDate = dateFormatter.string(from: timePicker.date)
-        var temp:Int! = Int(strPickerDate)
-        pickerMin = temp % 100
-        pickerHour = Int(temp/100)
+//        strPickerDate = dateFormatter.string(from: timePicker.date)
+//        var temp:Int! = Int(strPickerDate)
+//        pickerMin = temp % 100
+//        pickerHour = Int(temp/100)
+        
+        
+        let eventHours = calendar.component(.hour, from: timePicker.date) + (secondsFromGMT/3600)
+        let eventMin = calendar.component(.minute, from: timePicker.date)
         
         
         
-        //print("DifHour: \(difHour) DifMin: \(difMin)")
-        var todaysDate = Date()
+//        print("{NewEventViewController} eventHours: \(eventHours) eventMin: \(eventMin)")
+        var todaysDate = EventManager.getInstance().getDate()
         print("TodaysDate!: \(todaysDate)")
-        var eventDate = Calendar.current.date(bySettingHour: pickerHour, minute: pickerMin, second: 0, of: Date())!
+        var eventDate = Calendar.current.date(bySettingHour: eventHours, minute: eventMin, second: 0, of: todaysDate)!
         
+//      eventDate = eventDate.addingTimeInterval(TimeInterval(secondsFromGMT))
+        print("Eventdate: \(eventDate)")
         //sets eventDate only seconds to 0
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
         eventDate = todaysRealDate.addingTimeInterval(Double(distanceToEventInSecounds))
         print("EventDate after creating1: \(eventDate)")
-        eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
-        eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDate)!
+//        eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
+        eventDate = Calendar.current.date(bySetting: .second, value: 0, of: eventDate)!
+//        eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDate)!
         print("EventDate after creating2: \(eventDate)")
-        
-        
         
         
         
