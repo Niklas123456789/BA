@@ -799,7 +799,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                     newEvent.saveEventInJSON()
                     currentEvent = newEvent
                     EventManager.getInstance().updateJSONEvents()
-                    //settingsSelected = false
+                    settingsSelected = false
                     self.performSegue(withIdentifier: "saveEvent", sender: nil)
                 }
                 

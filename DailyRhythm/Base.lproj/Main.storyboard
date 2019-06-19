@@ -1211,7 +1211,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                     <constraint firstAttribute="height" constant="65" id="Vwl-cu-ysY"/>
                                 </constraints>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="00:01:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xbZ-CR-00c">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xbZ-CR-00c">
                                 <rect key="frame" x="0.0" y="723" width="414" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="rqU-gG-khV"/>
@@ -1293,7 +1293,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vw4-1X-Ecx"/>
-        <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="bhj-aV-JXF"/>
+        <segue reference="xgJ-Hz-oo8"/>
+        <segue reference="Veq-mI-925"/>
     </inferredMetricsTieBreakers>
 </document>

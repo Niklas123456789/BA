@@ -94,22 +94,26 @@ class CardViewController: UIViewController {
     }
     
     func setExpectedTravelTime() {
-        var timer: Timer?
+        let timer: Timer?
         setLabelsWithNoETT()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
             if (expectedTravelTime == -1) {
                 //print("no expectedTavelTime")
                 //self.handleArea.isUserInteractionEnabled = false
             } else {
-                if (expectedTravelTime > 60) {
-                    var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)
-                    self.expectedTravelTimeLabelMin?.text! = "\(m + 1)"
+                if (expectedTravelTime/60 > 60) {
+                    var (h, m, s) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)
+                    self.expectedTravelTimeLabelMin?.text! = "\(m)"
                     self.hoursLabel1.text = "\(h)"
                     self.stundenLabel1.isHidden = false
                     
                 } else {
-                    self.expectedTravelTimeLabelMin?.text! = "\(expectedTravelTime + 1)"
-                    
+                    var tempTime = Int(expectedTravelTime / 60)
+                    self.expectedTravelTimeLabelMin?.text! = "\(tempTime + 1)"
+                    self.stundenLabel1.isHidden = true
+                    self.stundenLabel2.isHidden = true
+                    self.totalHoursLabel.text = ""
+                    self.hoursLabel1.text = ""
                     
                 }
                 self.setTotalTravelTime()
@@ -117,15 +121,26 @@ class CardViewController: UIViewController {
             }
         })
     }
+    override func viewDidDisappear(_ animated: Bool) {
+        self.stundenLabel1.isHidden = true
+        self.stundenLabel2.isHidden = true
+        self.totalHoursLabel.text = ""
+        self.hoursLabel1.text = ""
+    }
     func setTotalTravelTime() {
-        var totalTravelTime = Int(bufferLabel!.text!)! + Int(walkingLabel!.text!)! + Int(parkingLabel!.text!)! + expectedTravelTime
-        if (totalTravelTime > 60) {
-            var (t, h, m) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: totalTravelTime)
-            self.totalMinLabel.text = "\(m + 1)"
+        var totalTravelTime = (Int(bufferLabel!.text!)! + Int(walkingLabel!.text!)! + Int(parkingLabel!.text!)!) * 60 + expectedTravelTime
+        print("\(totalTravelTime)")
+        if (totalTravelTime/60 > 60) {
+            var (h, m, s) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: totalTravelTime)
+            self.totalMinLabel.text = "\(m)"
             self.totalHoursLabel.text = "\(h)"
             self.stundenLabel2.isHidden = false
         } else {
-            self.totalMinLabel.text = "\(totalTravelTime + 1)"
+            self.totalMinLabel.text = "\(totalTravelTime/60 + 1)"
+            self.stundenLabel1.isHidden = true
+            self.stundenLabel2.isHidden = true
+            self.totalHoursLabel.text = ""
+            self.hoursLabel1.text = ""
         }
         self.handleArea.isUserInteractionEnabled = true
         activityIndicatorTTT.stopAnimating()

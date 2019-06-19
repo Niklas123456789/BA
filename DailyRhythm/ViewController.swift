@@ -256,7 +256,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: index)
             
-            allEventsArray[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 /* - 1 */
+//            allEventsArray[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 /* - 1 */
             print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
             index = index + 1
         }
@@ -304,7 +304,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         
                         print("ETARequest \(interval)")
                         
-                        self.updateTableWithETA(travelTime: Int(interval), event: event)
+                        self.updateTableWithETA(travelTime: Int(interval), event: event, index: index)
                         
                         //                        self.durationArray.insert(self.formatTimeInterval(interval), atIndex: 0)
                         
@@ -327,17 +327,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
-    func updateTableWithETA(travelTime: Int, event: Event) {
+    func updateTableWithETA(travelTime: Int, event: Event, index: Int) {
         print("ETA Tracel time: \(travelTime) of Event: \(event.eventName)")
         var allEventsArray = [Event]()
         EventManager.getInstance().updateJSONEvents()
         allEventsArray = JSONDataManager.loadAll(Event.self)
         
         group6.enter()
-        var index = 0
         for tempEvent in allEventsArray {
             if (event.eventID == tempEvent.eventID) {
-                 print(allEventsArray[index].timeTillGo)
                 tableViewList[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - (Int(travelTime/60) * 60)
                 
 //                var cell = tableView.cellForRow(at: IndexPath(row: index, section: 0))
@@ -346,7 +344,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
             print("TimeTillGo in ViewController: \(tableViewList[index].timeTillGo)")
-            index = index + 1
+            
         }
         group6.leave()
 //        print(allEventsArray)
@@ -355,7 +353,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         group6.notify(queue: DispatchQueue.main) {
             allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
             print("tableViewList1: \(tableViewList)")
-
+//            tableViewList.sort(by: {$0.timeTillGo < $1.timeTillGo})
             
             self.tableView.reloadData()
         }

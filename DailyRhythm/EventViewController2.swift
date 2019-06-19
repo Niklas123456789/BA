@@ -100,31 +100,12 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print("getEventwithID returned noEvent")
             return
         }
-//        var timeTillGo = EventManager.getInstance().getTimeTillGo(event: event)
-//
-//        var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
-//        ausgeben(h: t, m: m, s: s)
-//        startTimer(timeInSeconds: timeTillGo, event: event)
-        
-        //cardViewController.nameLabel.text = "Hallo"
-        //setCardLabels(name: event.eventName, street: event.streetName, houseNr: event.houseNr, city: event.cityName, notes: event.eventNotes, bufferTime: event.bufferTime, walkingTime: event.walkingTime, parkingTime: event.parkingTime)
         
         setupCard()
     }
     
     func setupCard() {
         
-        //visualEffectView = UIVisualEffectView()
-        //visualEffectView.frame = self.view.frame
-        //self.view.addSubview(visualEffectView)
-//        self.view.translatesAutoresizingMaskIntoConstraints = false
-//        let verticalConstraint = NSLayoutConstraint(item: self.myLocationButton.frame, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: cardViewController.handleArea.topAnchor, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 100)
-//        view.addConstraint(verticalConstraint)
-        
-//        myLocationButton.translatesAutoresizingMaskIntoConstraints = true
-//        var temp = cardViewController.view
-//        myLocationButton.center = CGPoint(x: 0, y: temp?.bounds.maxY ?? 300 - 100)
-//        myLocationButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         
         
         
@@ -461,18 +442,27 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                 //return request
                 self.displayDirectionsOverlay(for: MKDirections(request: request))
                 
-                /* sets time till go tith travel time */
-                let timeTillGo = EventManager.getInstance().getTimeTillGo(event: event) - expectedTravelTime
-                
-                var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
-                self.ausgeben(h: t, m: m, s: s)
-                self.startTimer(timeInSeconds: timeTillGo, event: event)
+               
+               
+                var timer = Timer()
+                timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
+                    if (expectedTravelTime == -1) {
+                        //print("no expectedTavelTime")
+                        
+                    } else {
+                        /* sets time till go tith travel time */
+                        let timeTillGo = EventManager.getInstance().getTimeTillGo(event: event) - self.getTravelTime()
+                        print("getTravelTime: \(self.getTravelTime())")
+                        self.startTimer(timeInSeconds: timeTillGo, event: event)
+                        timer.invalidate()
+                    }
+                })
             })
         }
         
     }
     private func setTravelTime(travelTime: Int) {
-        expectedTravelTime = travelTime/60
+        expectedTravelTime = travelTime
         expectedTravelTimeUpdated = true
         print("in setTravelTime \(expectedTravelTime)")
     }
