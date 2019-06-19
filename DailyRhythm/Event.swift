@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct Event : Codable {
     
@@ -26,6 +27,8 @@ struct Event : Codable {
     var walkingTime: Int
     var bufferTime: Int
     var mute: Bool
+    var latitude: Double
+    var longitude: Double
     
     var eventDate: Date
 //    var eventTotalSeconds: Int = 0
@@ -38,7 +41,7 @@ struct Event : Codable {
     var timeTillGo: Int
     var driveTime: Int
     
-    init(eventID: String, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, driveTime: Int, timeTillGo: Int, mute: Bool) {
+    init(eventID: String, eventName: String, streetName: String, houseNr: String, houseNrEdited: Bool, cityName: String, eventNotes: String, parkingTime: Int, walkingTime: Int, bufferTime: Int, eventDate: Date, repeatDuration: Int, repeatAtWeekdays: [Bool], weeksTillNextEvent: Int, driveTime: Int, timeTillGo: Int, mute: Bool, latitude: Double, longitude: Double) {
         self.eventID = eventID
         self.eventName = eventName
         self.streetName = streetName
@@ -58,6 +61,8 @@ struct Event : Codable {
         self.timeTillGo = timeTillGo
         self.driveTime = driveTime
         self.mute = mute
+        self.latitude = latitude
+        self.longitude = longitude
     }
 
     func setEventTotalSecounds(newEventTotalSeconds: Int){

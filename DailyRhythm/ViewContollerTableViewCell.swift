@@ -7,15 +7,17 @@
 //
 
 import UIKit
+import MapKit
 
 class ViewContollerTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cellLabel: UILabel!
     @IBOutlet weak var cellTime: UILabel!
-    var timer: Timer!
+    weak var timer: Timer!
     var time: Int = 0
     var timerDate = NSDate(timeIntervalSinceNow: 0)
     var dateString: String = ""
+    var group4 = DispatchGroup()
     
     
     override func awakeFromNib() {
@@ -38,6 +40,9 @@ class ViewContollerTableViewCell: UITableViewCell {
         
         //self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
+        
+//        self.group4.enter()
+//        ViewController.getInstance().getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: 0)
         //TODO  86400
         if(time <= Int.max){
             
@@ -48,6 +53,7 @@ class ViewContollerTableViewCell: UITableViewCell {
         }
     } 
     func startTimer(timeInSeconds: Int, event: Event){
+        if (timer != nil) {timer.invalidate()}
         
         var secondsLeft: Int = timeInSeconds
         //TODO  86400
@@ -91,7 +97,7 @@ class ViewContollerTableViewCell: UITableViewCell {
             }else{
                 self.cellTime.text = "\(m):\(s)"
                 if(m==0){
-                    //-9 muss noch entschieden werden wie lange weiterlaeuft
+                    //TODO -9 muss noch entschieden werden wie lange weiterlaeuft
                     if(abs(s) <= 9 && s >= -9 && s != 0){
                     
                         self.cellTime.text = "\(s)"

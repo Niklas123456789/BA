@@ -78,8 +78,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZA-lS-UQF">
-                                                    <rect key="frame" x="152.5" y="48" width="109" height="46.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZA-lS-UQF">
+                                                    <rect key="frame" x="187" y="48" width="40.5" height="46.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="55"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>

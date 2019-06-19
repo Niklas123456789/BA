@@ -88,13 +88,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582399833.050101"
+            timestampString = "582650718.071695"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "701"
-            endingLineNumber = "701"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "705"
+            endingLineNumber = "705"
+            landmarkName = "okButtonAction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -120,13 +120,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582399833.050698"
+            timestampString = "582650718.0718369"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "728"
-            endingLineNumber = "728"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "767"
+            endingLineNumber = "767"
+            landmarkName = "okButtonAction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -152,11 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.051172"
+            timestampString = "582650718.071909"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -168,11 +168,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.05127"
+            timestampString = "582650718.071954"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -184,11 +184,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.051352"
+            timestampString = "582650718.0719939"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -200,13 +200,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582399833.051435"
+            timestampString = "582650718.072036"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "700"
-            endingLineNumber = "700"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "702"
+            endingLineNumber = "702"
+            landmarkName = "okButtonAction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -216,11 +216,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.051868"
+            timestampString = "582650718.072082"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -232,11 +232,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.051939"
+            timestampString = "582650718.072122"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -248,12 +248,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventManager.swift"
-            timestampString = "582399833.052001"
+            timestampString = "582650718.072163"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "countDaysTillNextEventDay(event:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DailyRhythm/ViewContollerTableViewCell.swift"
+            timestampString = "582650718.072204"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "checkTwoDays(time:event:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

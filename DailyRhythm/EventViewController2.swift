@@ -15,7 +15,7 @@ import Contacts
 var expectedTravelTime: Int = -1
 var expectedTravelTimeUpdated: Bool = false
 var settingsSelected: Bool = false
-var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false, false, false, false, false, false, false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false)
+var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false, false, false, false, false, false, false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false, latitude: 0.0, longitude: 0.0)
 class EventViewController2: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var buttonsStack: UIStackView!
@@ -100,11 +100,12 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             print("getEventwithID returned noEvent")
             return
         }
-        var timeTillGo = EventManager.getInstance().getTimeTillGo(event: event)
+//        var timeTillGo = EventManager.getInstance().getTimeTillGo(event: event)
+//
+//        var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
+//        ausgeben(h: t, m: m, s: s)
+//        startTimer(timeInSeconds: timeTillGo, event: event)
         
-        var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
-        ausgeben(h: t, m: m, s: s)
-        startTimer(timeInSeconds: timeTillGo, event: event)
         //cardViewController.nameLabel.text = "Hallo"
         //setCardLabels(name: event.eventName, street: event.streetName, houseNr: event.houseNr, city: event.cityName, notes: event.eventNotes, bufferTime: event.bufferTime, walkingTime: event.walkingTime, parkingTime: event.parkingTime)
         
@@ -437,6 +438,8 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             self.group.leave()
             self.activityIndicator.stopAnimating()
             
+
+            
             // show artwork on map
             let mapMarker = MapMarker(title: "\(event.eventName.capitalizingFirstLetter())",
                 locationName: "\(event.streetName.capitalizingFirstLetter()) \(event.houseNr)",
@@ -457,6 +460,13 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                 request.requestsAlternateRoutes = true
                 //return request
                 self.displayDirectionsOverlay(for: MKDirections(request: request))
+                
+                /* sets time till go tith travel time */
+                let timeTillGo = EventManager.getInstance().getTimeTillGo(event: event) - expectedTravelTime
+                
+                var(t, m, s) = self.secondsToHoursMinutesSeconds(seconds: timeTillGo)
+                self.ausgeben(h: t, m: m, s: s)
+                self.startTimer(timeInSeconds: timeTillGo, event: event)
             })
         }
         
@@ -514,29 +524,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             self.mapView.setVisibleMapRect(self.boundingRectOfFirstRoute, edgePadding: UIEdgeInsets(top: 60, left: 60, bottom: 80, right: 60), animated: true)
             self.group.leave()
             self.group.notify(queue: DispatchQueue.main, execute: {
-                /* expectedTravelTimeLabel */
-                //let timeMarker = MapMarker(title: "\(h) Std. \(m) Min.", locationName: "test", discipline: "Time", coordinate: CLLocationCoordinate2D(latitude: (self.lat + (self.locationManager.location?.coordinate.latitude)!) / 2, longitude: (self.long + (self.locationManager.location?.coordinate.longitude)!) / 2))
                 
-                //self.mapView.addAnnotation(timeMarker)
-                //let timeMarker2 = TimeMarker(title: "\(h) Std. \(m) Min.", image: UIImage(named: "Clock")!, coordinate: CLLocationCoordinate2D(latitude: (self.lat + (self.locationManager.location?.coordinate.latitude)!) / 2, longitude: (self.long + (self.locationManager.location?.coordinate.longitude)!) / 2), discipline: "")
-                
-                //self.mapView.addAnnotation(timeMarker2)
-                
-                
-                
-                
-                //print("\(response.routes.first!.polyline.boundingMapRect.midX)")
-//                expectedTravelTimeLabel.center = response.routes.first!.polyline.coordinate)
-//                expectedTravelTimeLabel.textAlignment = .center
-//                expectedTravelTimeLabel.text = "I'm a test label"
-//                self.view.addSubview(expectedTravelTimeLabel)
-                
-//                let position2 = CLLocationCoordinate2D(latitude: (self.lat + (self.locationManager.location?.coordinate.latitude)!) / 2, longitude: (self.long + (self.locationManager.location?.coordinate.longitude)!) / 2)
-//                let position = CLLocationCoordinate2D(latitude: 10, longitude: 10)
-//
-//                let marker = MapMarker(title: "Title", locationName: "Name", discipline: "Discipline", coordinate: position2)
-//
-//                self.mapView.addAnnotation(marker)
             })
         }
     }

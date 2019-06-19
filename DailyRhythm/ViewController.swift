@@ -15,6 +15,7 @@ import CoreLocation
 let locationManager = CLLocationManager()
 var cellClickedIndex = 0
 var tableViewList = [Event]()
+var group6 = DispatchGroup()
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -161,8 +162,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName.capitalizingFirstLetter()
-        cell.checkTwoDays(time: EventManager.getInstance().getTimeTillGo(event: tableViewList[indexPath.row]), event: tableViewList[indexPath.row])
-        
+        cell.checkTwoDays(time: tableViewList[indexPath.row].timeTillGo, event: tableViewList[indexPath.row])
+//        cell.cellTime.text = "..."
         return(cell)
     }
     
@@ -192,66 +193,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     
+    //TODO
+    func calcDriveTime(event:Event) {
+        Helper.getInstance().checkAddressIsValid(city: event.cityName, street: event.streetName, number: event.houseNr, time: 15, completion: {
+            print("calcDriveTime no Error")
+        }) {
+             print("calcDriveTime ERROR")
+        }
+        
+    }
     
-/*
-    //NOTIFICATIONS
-    func pushNotifivation(allEventsArray: [Event]){
+    func setETT(event: Event, travelTime: Int){
+        
+        var allEventsArray = [Event]()
+        
+        EventManager.getInstance().updateJSONEvents()
+        allEventsArray = JSONDataManager.loadAll(Event.self)
+        
         var index = 0
-        let numberOfNotifications = allEventsArray.count
-        //removes all existing pending notifications before creating new ones
-        let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-
-        //empty allEventArray
-        if((allEventsArray.count == 1 && allEventsArray[0].eventID == -1)){
-            print("ViewController allEventArray is empty")
-        }else if(allEventsArray.count == 0){
-            print("AllEventArray is empty")
-        }else{
-        //creates one notification for each event
-            while(true){
-
-                let content = UNMutableNotificationContent()
-                content.title = "\(allEventsArray[index].eventName)"
-
-                //sets the content of the notification
-                if(allEventsArray[index].eventNotes.isEmpty){
-                    content.body = "Mit deinem Puffer von \(allEventsArray[index].bufferTime) Minuten musst du jetzt los!"
-                }else{
-                    content.body = "Mit deinem Puffer von \(allEventsArray[index].bufferTime) Minuten musst du jetzt los! \nNotiz: \(allEventsArray[index].eventNotes)"
-                }
-                //adds vibration
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                //sets the notification sound
-                content.sound = UNNotificationSound.default
-
-                //creates trigger with the right time
-                //TODO: wegzeit miteinberechnen
-                let totalTravelTime = allEventsArray[index].eventTotalSeconds - (allEventsArray[index].bufferTime * 60) - (allEventsArray[index].parkingTime * 60) -
-                    (allEventsArray[index].walkingTime * 60) + 1
-                
-                if(totalTravelTime > 0){
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTravelTime), repeats: false)
-
-                    let request = UNNotificationRequest(identifier: "\(allEventsArray[index].eventID)", content: content, trigger: trigger)
-
-                    center.add(request, withCompletionHandler: nil)
-                }
-                //breaks while(true)-loop when every notification is set
-                index = index + 1
-                if(index == numberOfNotifications){
-                    break
-                }
-            }
+        for event in allEventsArray {
+            allEventsArray[index].timeTillGo =
+        EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - travelTime
+            
+            index += 1
         }
     }
-*/
     
-    //TODO
-    func calcDriveTime(event:Event) -> Int {
-        return 0
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         checkLocationAuthorization()
     }
@@ -262,7 +229,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         print("{ViewController}")
         
-        print("getDate():\(EventManager.getInstance().getDate()) ")
+//        print("getDate():\(EventManager.getInstance().getDate()) ")
 //        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()
 //        print("Das heutige Datum ist: \(todaysDate)")
      
@@ -286,7 +253,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         var index = 0
         for event in allEventsArray {
-            allEventsArray[index].timeTillGo = EventManager.getInstance().calcDiffInSecOfNowAndEventDate(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - calcDriveTime(event: event) /* - 1 */
+            
+            getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: index)
+            
+            allEventsArray[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 /* - 1 */
             print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
             index = index + 1
         }
@@ -295,33 +265,101 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         for indexEventCount in 0..<allEventsArray.count {
             //loads Events into allEventArray
             
-        //    allEventsArray.append(loadedEvents[indexEventCount])
-            //calc the time till the you have to go should trigger
-            //TODO: actual wegzeit einberechnen
-            //let timeTillGo = allEventsArray[indexEventCount].calcDiffInSecOfNowAndEventDate(eventDate: allEventsArray[indexEventCount].eventDate, eventWeekdays: allEventsArray[indexEventCount].repeatAtWeekdays, duration: allEventsArray[indexEventCount].repeatDuration) - ((allEventsArray[indexEventCount].bufferTime + allEventsArray[indexEventCount].walkingTime + allEventsArray[indexEventCount].parkingTime) * 60)
-            
-            //allEventsArray[indexEventCount].timeTillGo = timeTillGo
-        }
-        //        allEventsArray.append(emptyEvent)
- //       allEventsArray.append(testEvent0)
-//        allEventsArray.append(testEvent1)
-//        allEventsArray.append(testEvent2)
-//        allEventsArray.append(testEvent3)
-//        allEventsArray.append(testEvent4)
+
 //
-       allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
+            allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
 //
 //        //adds to each notification an alarm
    //    pushNotifivation(allEventsArray: allEventsArray)
 //
 //        //deletes all Events and then adds all Events to the Table View
-       tableViewList.removeAll()
-       tableViewList.append(contentsOf: allEventsArray)
+            tableViewList.removeAll()
+            tableViewList.append(contentsOf: allEventsArray)
+        
+            for tempEvent in tableViewList {
+                
+            }
+        }
     }
     
-    
-    
-    
+    func getETARequest(destination:CLLocationCoordinate2D, event: Event, index: Int) {
+        
+        let request = MKDirections.Request()
+        
+        if let currentLocation = locationManager.location?.coordinate {
+            
+            request.source =  MKMapItem(placemark: MKPlacemark(coordinate: currentLocation, addressDictionary: nil))
+            
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination, addressDictionary: nil))
+            
+            request.transportType = .automobile
+            
+            let directions = MKDirections(request: request)
+            
+            directions.calculateETA(completionHandler: { ( response, error) in
+                
+                if error == nil {
+                    
+                    if let interval = response?.expectedTravelTime  {
+                        
+                        print("ETARequest \(interval)")
+                        
+                        self.updateTableWithETA(travelTime: Int(interval), event: event)
+                        
+                        //                        self.durationArray.insert(self.formatTimeInterval(interval), atIndex: 0)
+                        
+                        //                        if self.durationArray.count == self.allUsers.count {
+                        //
+                        //
+                        //                            self.tableView.reloadData()
+                        //
+                        //                        }
+                        
+                    }
+                    
+                } else {
+                    
+                    print("Error Occurred")
+                }
+                
+            })
+            
+        }
+    }
+
+    func updateTableWithETA(travelTime: Int, event: Event) {
+        print("ETA Tracel time: \(travelTime) of Event: \(event.eventName)")
+        var allEventsArray = [Event]()
+        EventManager.getInstance().updateJSONEvents()
+        allEventsArray = JSONDataManager.loadAll(Event.self)
+        
+        group6.enter()
+        var index = 0
+        for tempEvent in allEventsArray {
+            if (event.eventID == tempEvent.eventID) {
+                 print(allEventsArray[index].timeTillGo)
+                tableViewList[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - (Int(travelTime/60) * 60)
+                
+//                var cell = tableView.cellForRow(at: IndexPath(row: index, section: 0))
+//                cell?.textLabel?.textColor = .lightGray
+                print(allEventsArray[index].timeTillGo)
+            }
+            
+            print("TimeTillGo in ViewController: \(tableViewList[index].timeTillGo)")
+            index = index + 1
+        }
+        group6.leave()
+//        print(allEventsArray)
+        
+        //add Events to table
+        group6.notify(queue: DispatchQueue.main) {
+            allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
+            print("tableViewList1: \(tableViewList)")
+
+            
+            self.tableView.reloadData()
+        }
+    }
     
     
     

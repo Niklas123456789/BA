@@ -42,16 +42,17 @@ class CardViewController: UIViewController {
         
         hold.backgroundColor = UIColor(patternImage: UIImage(named: "hold")!)
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
-        let dateWithNoHours = tableViewList[cellClickedIndex].eventDate.toString(dateFormat: "mm  dd-MM-yyyy")
-        let dateHours = Int(tableViewList[cellClickedIndex].eventDate.toString(dateFormat: "HH"))! - (secondsFromGMT/3600)
-        let stringDate = "\(dateHours):\(dateWithNoHours)"
+        
+        let eventDateString = currentEvent.eventDate.addingTimeInterval(TimeInterval(-secondsFromGMT)).toString(dateFormat: "HH:mm  dd-MM-yyyy")
+        
+        
         setCardLabels(
             name: tableViewList[cellClickedIndex].eventName,
             street: tableViewList[cellClickedIndex].streetName,
             houseNr: tableViewList[cellClickedIndex].houseNr,
             city: tableViewList[cellClickedIndex].cityName,
             notes: tableViewList[cellClickedIndex].eventNotes,
-            eventTime: stringDate,
+            eventTime: eventDateString,
             bufferTime: tableViewList[cellClickedIndex].bufferTime,
             walkingTime: tableViewList[cellClickedIndex].walkingTime,
             parkingTime: tableViewList[cellClickedIndex].parkingTime)

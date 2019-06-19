@@ -9,13 +9,15 @@
 import Foundation
 import MapKit
 var validAddress = false
-class Helper {
+class Helper: UIViewController {
     
     static let instance = Helper()
+    let group = DispatchGroup()
         
     static func getInstance() -> Helper {
         return instance
     }
+    var ETT = 0
     
     func checkAddressIsValid(city: String, street: String, number: String, time: TimeInterval, completion: @escaping () -> Void, completionWithError: @escaping () -> Void) {
         let geoCoder = CLGeocoder()
@@ -46,10 +48,5 @@ class Helper {
             completion()
             
         }
-    }
-}
-extension Date {
-    func localString(dateStyle: DateFormatter.Style = .medium, timeStyle: DateFormatter.Style = .medium) -> String {
-        return DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle)
     }
 }

@@ -30,44 +30,55 @@ class EventManager {
     func calcDriveTime(event: Event) -> Int {
         return 0
     }
+    func calcDifNowAndEvent(event: Event) -> Int {
+        let date = EventManager.getInstance().getDate()
+        let difference = event.eventDate.timeIntervalSince(date)
+        print("Diffrenence between Dates in secondes :\(difference)")
+        return Int(difference)
+    }
     
     func calcDiffInSecOfNowAndEventDate(event: Event) -> Int {
-        
+        calcDifNowAndEvent(event: event)
         let date = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute, .second], from: date)
+        let eventComponents = calendar.dateComponents([.hour, .minute], from: event.eventDate)
         
         let hour: Int! = components.hour
         let minute: Int! = components.minute
         let seconds: Int! = components.second
         
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HHmm"
-        let strPickerDate = dateFormatter.string(from: event.eventDate)
-        print("StrPickerDate: \(strPickerDate)")
-        let temp:Int! = Int(strPickerDate)
-        let eventMin = temp % 100
-        let eventHour = Int(temp/100)
-        print("Time datePicker: \(strPickerDate)")
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "HHmm"
+//        let strPickerDate = dateFormatter.string(from: event.eventDate)
+//        print("StrPickerDate: \(strPickerDate)")
+//        let temp:Int! = Int(strPickerDate)
+//        let eventMin = temp % 100
+//        let eventHour = Int(temp/100)
+//        print("Time datePicker: \(strPickerDate)")
+        var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+        let eventHour = eventComponents.hour!
         
+        var(difHour, difMin, subSec) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventComponents.minute!)
+        var realDifHour = difHour  - (secondsFromGMT/3600)
         
-        let(difHour, difMin, subSec) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventMin)
+//        print("eventComponents.hour!, eventMin: eventComponents.minute! \(eventHour) \(eventComponents.minute)")
         
         /* sets distanceToEventInSecounds */
         let todaysDate = getDate()
         
-        let eventSecondsThisDay = event.pickerHour * 3600 + event.pickerMin * 60
+        let eventSecondsThisDay = eventHour * 3600 + eventComponents.minute! * 60
         var distanceToEventInSecounds = 0
+        print("Int(todaysDate.secondsFromBeginningOfTheDay()) \(Int(date.secondsFromBeginningOfTheDay())) eventSecondsThisDay \(eventSecondsThisDay)")
         /* eventTime before now */
-        if (Int(todaysDate.secondsFromBeginningOfTheDay()) >= eventSecondsThisDay) {
-            distanceToEventInSecounds = countDaysTillNextEventDay(event: event) * 86400 - (difHour * 3600) - (difMin * 60) - subSec
-            print("'''''''eventTime before now */ \(difHour) \(difMin)")
+        if (Int(date.secondsFromBeginningOfTheDay()) >= eventSecondsThisDay) {
+            print("'''''''eventTime BEFORE now */ \(realDifHour) \(difMin)")
         /* eventTime after now */
         } else {
-            distanceToEventInSecounds = countDaysTillNextEventDay(event: event) * 86400 + (difHour * 3600) + (difMin * 60) - subSec
+            print("'''''''eventTime AFTER now */ \(realDifHour) \(difMin)")
         }
-        
+        distanceToEventInSecounds = countDaysTillNextEventDay(event: event) * 86400 + (realDifHour * 3600) + (difMin * 60) - subSec
         print("++++++++++++++++++++++DistanceToEventInSec: \(distanceToEventInSecounds)")
         
         return distanceToEventInSecounds
@@ -77,53 +88,53 @@ class EventManager {
         
         var difHours: Int
         var difMin: Int
-        let todaysDate = self.getDate()
-
-        let secondsNow = Calendar.current.component(.second, from: todaysDate)
+            let todaysDate = self.getDate()
+        
+            let secondsNow = Calendar.current.component(.second, from: todaysDate)
         print("current Hours: \(currentHours) min: \(currentMin) ")
         print("Event Hours: \(eventHours) min: \(eventMin) ")
-        //works
+        //works!
         if (currentHours < eventHours && currentMin < eventMin){
             difHours = eventHours - currentHours
             difMin = eventMin - currentMin
             print("currentHours < eventHours && currentMin < eventMin")
             
-            //works
+            //works!
         } else if (currentHours < eventHours && currentMin > eventMin){
             difHours = eventHours - currentHours - 1
             difMin = 60 - (currentMin - eventMin)
             print("currentHours < eventHours && currentMin > eventMin")
             
-            //works
+            //works!
         } else if (currentHours > eventHours && currentMin < eventMin){
-            difHours = (-24) + (currentHours - eventHours)
-            difMin = eventMin - currentMin
+            difHours = ((currentHours - eventHours) - 1) * -1
+            difMin = (eventMin + currentMin) * -1
             print("currentHours > eventHours && currentMin < eventMin")
             
-            //works
+            //works!
         }else if (currentHours == eventHours && currentMin > eventMin){
-            difHours = -23
-            difMin = 60 - (currentMin - eventMin)
+            difHours = 0
+            difMin = (currentMin - eventMin) * -1
             print("currentHours == eventHours && currentMin > eventMin")
-            //works
+            //works!
         }else if (currentHours == eventHours && currentMin < eventMin){
             difHours = 0
             difMin = eventMin - currentMin
             print("currentHours == eventHours && currentMin < eventMin")
-            //works
+            //works!
         }else if (currentHours < eventHours && currentMin == eventMin){
             difHours = eventHours - currentHours
             difMin = 0
             print("currentHours < eventHours && currentMin == eventMin")
-            //works
+            //works!
         }else if (currentHours > eventHours && currentMin == eventMin){
-            difHours = (-24) + (currentHours - eventHours)
+            difHours = (eventHours - currentHours)
             difMin = 0
             print("currentHours > eventHours && currentMin == eventMin")
-            //works
+            //works!
         }else if (currentHours > eventHours && currentMin > eventMin){
-            difHours = (-24) + (currentHours - eventHours) + 1
-            difMin = 60 - (currentMin - eventMin)
+            difHours = (currentHours - eventHours) * -1
+            difMin = (currentMin - eventMin) * -1
             print("currentHours > eventHours && currentMin > eventMin")
             //(currentHours == eventHours && currentMin == eventMin)
         } else {
@@ -142,12 +153,13 @@ class EventManager {
     func countDaysTillNextEventDay(event: Event) -> Int{
         
         //current day
-        let todaysDate = EventManager.getInstance().getDate()
-        var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+        let todaysDate = EventManager.getInstance().getDate().addingTimeInterval(TimeInterval(-secondsFromGMT))
+        var todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
+        
         
         let calendar = Calendar.current
-        let eventHours = calendar.component(.hour, from: event.eventDate) + (secondsFromGMT/3600)
+        let eventHours = calendar.component(.hour, from: event.eventDate)
         let eventMin = calendar.component(.minute, from: event.eventDate)
         
         print("{EventManager} countDaysTillNextEventDay: Hours:\(eventHours) Min \(eventMin)")
@@ -240,14 +252,12 @@ class EventManager {
     }
     
     func updateJSONEvents() {
-        var loadedEvents = JSONDataManager.loadAll(Event.self)
+        let loadedEvents = JSONDataManager.loadAll(Event.self)
         /*  */
         
         let todaysDate = Date()
         
         for event in loadedEvents {
-            
-            var tempEvent = event
             
             if(todaysDate <= event.eventDate) {
                 //update? what?
@@ -263,6 +273,7 @@ class EventManager {
         }
     }
     var testValue = 0
+    
     func createNotification(for event: Event){
 
         //removes all existing pending notifications before creating new ones
@@ -366,7 +377,7 @@ class EventManager {
 //    }
     
     func getTimeTillNextCheckAction(from event: Event) -> Int {
-        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(event: event)
+        let eventTotalSeconds = calcDifNowAndEvent(event: event)
         var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
         let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
         
@@ -439,7 +450,7 @@ class EventManager {
     }
     
     func getTimeTillGo(event: Event) -> Int {
-        var temp = calcDiffInSecOfNowAndEventDate(event: event)
+        var temp = calcDifNowAndEvent(event: event)
         temp = (temp - (event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)
         if temp <= 0 {
             return 0
@@ -450,7 +461,7 @@ class EventManager {
     func getEventwithID(eventID: String) -> Event {
         var allEventsArray = [Event]()
         updateJSONEvents()
-        var noEvent = Event(eventID: "-1", eventName: "noEvent", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false,false,false,false,false,false,false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false)
+        let noEvent = Event(eventID: "-1", eventName: "noEvent", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false,false,false,false,false,false,false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false, latitude: 0.0, longitude: 0.0)
         
         allEventsArray = JSONDataManager.loadAll(Event.self)
         //seach for event with the same UUID
@@ -516,9 +527,9 @@ class EventManager {
     func getDate() -> Date {
         var date = Date()
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
-        print("SecondsFromGTM: \(secondsFromGMT)")
+//        print("SecondsFromGTM: \(secondsFromGMT)")
         let finalDate = date.addingTimeInterval(TimeInterval(secondsFromGMT))
-        print("getDate return: \(finalDate)")
+//        print("getDate return: \(finalDate)")
         return finalDate
     }
 }

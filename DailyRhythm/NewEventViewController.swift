@@ -177,6 +177,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     var timePickerData: [Int] = [Int]()
     @IBOutlet weak var okButton: UIButton!
     let group2 = DispatchGroup()
+    let group3 = DispatchGroup()
     var validAddess = false
     
 //    var duration: Int = 0
@@ -676,12 +677,13 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
 
         //TODO DriveTime?
-        let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: EventManager.getInstance().getDate(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
+        let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: EventManager.getInstance().getDate(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false, latitude: 0.0, longitude: 0.0)
         
         
-//        print(onlyTimeEvent)
+        print(onlyTimeEvent)
 
-        var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 + difHour * 3600 + difMin * 60 - subSec
+        var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 /*+ difHour * 3600 + difMin * 60 - subSec */
+//        var distanceToEventInSecounds = EventManager.getInstance().calcDiffInSecOfNowAndEventDate(event: onlyTimeEvent)
         
         var dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
@@ -691,21 +693,25 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //        pickerHour = Int(temp/100)
         
         
-        let eventHours = calendar.component(.hour, from: timePicker.date) + (secondsFromGMT/3600)
+        let eventHours = calendar.component(.hour, from: timePicker.date)
         let eventMin = calendar.component(.minute, from: timePicker.date)
         
         
         
 //        print("{NewEventViewController} eventHours: \(eventHours) eventMin: \(eventMin)")
         var todaysDate = EventManager.getInstance().getDate()
+        var distanceDays = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent)
+        
         print("TodaysDate!: \(todaysDate)")
-        var eventDate = Calendar.current.date(bySettingHour: eventHours, minute: eventMin, second: 0, of: todaysDate)!
+        var eventDateNoDaysAdded = Calendar.current.date(bySettingHour: eventHours, minute: eventMin, second: 0, of: todaysDate)!
+        var eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDateNoDaysAdded)!
+        eventDate = eventDate.addingTimeInterval(TimeInterval(secondsFromGMT))
         
 //      eventDate = eventDate.addingTimeInterval(TimeInterval(secondsFromGMT))
         print("Eventdate: \(eventDate)")
         //sets eventDate only seconds to 0
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
-        eventDate = todaysRealDate.addingTimeInterval(Double(distanceToEventInSecounds))
+//        eventDate = todaysRealDate.addingTimeInterval(Double(distanceToEventInSecounds))
         print("EventDate after creating1: \(eventDate)")
 //        eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
         eventDate = Calendar.current.date(bySetting: .second, value: 0, of: eventDate)!
@@ -716,69 +722,97 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
 
-        //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
-        var newEvent = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false)
         
-//        var new2Event = Event(eventID: eventID, eventName: nameTextField.text!, streetName: streetTextField.text!, houseNr: houseNumberTextField.text!, houseNrEdited: houseNrEdited, cityName: cityTextField.text!, eventNotes: notesTextField.text!, parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: eventDate, repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0)
-        
-        
-        //newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
-        //print("After NewEvent called updateEventTimes: \(newEvent)")
-        let timeTillNextCheck = EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent)
-        
-        if timeTillNextCheck <= -1 {
-            print("Return because timeTillNextCheck returned negativ")
-            return
-        }
-        
-        Helper.getInstance().checkAddressIsValid(city: "\(self.cityTextField.text!)", street: "\(self.streetTextField.text!)", number: "\(self.houseNumberTextField.text!)", time: 60, completion: {
-            /* valid address */
-            print("Adress valid")
-            self.validAddess = true
-        
-            //timer that triggers the reapeat of timeTillNextCheck
-            print("before repeatTimeCheck")
-            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-                print("In timer repeatTimecheck")
-                if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
-                    EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-                }
-            })
-            EventManager.getInstance().removeDuplicateEvents(from: newEvent)
-            
-            if (settingsSelected == false) {
-                if (self.validAddess == false) {
+        /* gets lat and long */
+        let geoCoder = CLGeocoder()
+        var localLat: Double = 0.0
+        var localLong: Double = 0.0
+        let addressEvent = "Germany, \(cityTextField.text!), \(streetTextField.text!) \(houseNumberTextField.text!)"
+        self.group3.enter()
+        geoCoder.geocodeAddressString(addressEvent) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location
+                else {
+                    // handle no location found
+                    print("ERROR no location found")
+                    self.presentAlertWithTitle(title: "Dein Ziel konnte nicht gefunden werden", message: "Bitte überprüfe deine Eingabe und Internetverbindung", options: "OK", completion: {
+                        (option) in
+                        print("option: \(option)")
+                        switch(option) {
+                        case 0:
+                            print("option one")
+                            break
+                            
+                        default:
+                            break
+                        }
+                    })
                     return
-                }
-                newEvent.saveEventInJSON()
-                self.performSegue(withIdentifier: "saveEvent", sender: nil)
-                EventManager.getInstance().updateJSONEvents()
-                
-            } else {
-                currentEvent.deleteEventInJSON()
-                newEvent.saveEventInJSON()
-                currentEvent = newEvent
-                EventManager.getInstance().updateJSONEvents()
-                //settingsSelected = false
-                self.performSegue(withIdentifier: "saveEvent", sender: nil)
+            }
+            localLat = location.coordinate.latitude
+            localLong = location.coordinate.longitude
+            self.group3.leave()
+        }
+        self.group3.notify(queue: DispatchQueue.main) {
+            
+            //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
+            var newEvent = Event(eventID: eventID, eventName: self.nameTextField.text!, streetName: self.streetTextField.text!, houseNr: self.houseNumberTextField.text!, houseNrEdited: self.houseNrEdited, cityName: self.cityTextField.text!, eventNotes: self.notesTextField.text!, parkingTime: self.parkingTime, walkingTime: self.walkingTime, bufferTime: self.bufferTime, eventDate: eventDate, repeatDuration: self.repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false, latitude: localLat, longitude: localLong)
+            
+            print("group3 notify() newEvent: \(newEvent)")
+            
+            //newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
+            print("After NewEvent called updateEventTimes: \(newEvent)")
+            let timeTillNextCheck = EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent)
+            
+            if timeTillNextCheck <= -1 {
+                print("Return because timeTillNextCheck returned negativ")
+                return
             }
             
-        }, completionWithError:  {
-            /* handle invalid address */
-            print("{NEWEVENTVIEWCONTROLLER} invalid address")
-            boxView.removeFromSuperview()
-            NewEventViewController.shake(view: self.cityTextField)
-            NewEventViewController.shake(view: self.houseNumberTextField)
-            NewEventViewController.shake(view: self.streetTextField)
-        })
-        
-
-        //self.present(ViewController.getInstance(), animated: true, completion: nil)
-        //self.navigationController?.pushViewController(viewController, animated: true)
-        //self.present(viewController, animated: true, completion: nil)
-        //TODO: push notification function
-        
-
+            Helper.getInstance().checkAddressIsValid(city: "\(self.cityTextField.text!)", street: "\(self.streetTextField.text!)", number: "\(self.houseNumberTextField.text!)", time: 60, completion: {
+                /* valid address */
+                print("Adress valid")
+                self.validAddess = true
+            
+                //timer that triggers the reapeat of timeTillNextCheck
+                print("before repeatTimeCheck")
+                let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                    print("In timer repeatTimecheck")
+                    if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
+                        EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+                    }
+                })
+                EventManager.getInstance().removeDuplicateEvents(from: newEvent)
+                
+                
+                if (settingsSelected == false) {
+                    if (self.validAddess == false) {
+                        return
+                    }
+                    newEvent.saveEventInJSON()
+                    self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                    EventManager.getInstance().updateJSONEvents()
+                    
+                } else {
+                    currentEvent.deleteEventInJSON()
+                    newEvent.saveEventInJSON()
+                    currentEvent = newEvent
+                    EventManager.getInstance().updateJSONEvents()
+                    //settingsSelected = false
+                    self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                }
+                
+                
+            }, completionWithError:  {
+                /* handle invalid address */
+                print("{NEWEVENTVIEWCONTROLLER} invalid address")
+                boxView.removeFromSuperview()
+                NewEventViewController.shake(view: self.cityTextField)
+                NewEventViewController.shake(view: self.houseNumberTextField)
+                NewEventViewController.shake(view: self.streetTextField)
+            })
+        }
     }
     
     func loadingWaitCheckingLocationAnimation() {
