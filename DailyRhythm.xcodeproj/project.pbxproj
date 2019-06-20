@@ -20,6 +20,7 @@
 		D75EA98A223419AF00A258C7 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75EA989223419AF00A258C7 /* EventManager.swift */; };
 		D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02621EB952B00AA2617 /* EventViewController.swift */; };
 		D763E02921EDF19500AA2617 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02821EDF19500AA2617 /* Extentions.swift */; };
+		D775F43022BBE8240006D9EC /* gif-dark-blue.gif in Resources */ = {isa = PBXBuildFile; fileRef = D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */; };
 		D779839A2198DD2000764577 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983992198DD2000764577 /* Constants.swift */; };
 		D77983B221A4B6B600764577 /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983B121A4B6B600764577 /* NewEventViewController.swift */; };
 		D7CAC2A022916A4F00E648C0 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAC29F22916A4F00E648C0 /* Helper.swift */; };
@@ -60,6 +61,7 @@
 		D75EA989223419AF00A258C7 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		D763E02621EB952B00AA2617 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		D763E02821EDF19500AA2617 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "gif-dark-blue.gif"; sourceTree = "<group>"; };
 		D77983992198DD2000764577 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D77983B121A4B6B600764577 /* NewEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
 		D7CAC29F22916A4F00E648C0 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				D7CAC29F22916A4F00E648C0 /* Helper.swift */,
 				D737AF1A22AA8293008BA068 /* Gif.swift */,
 				D737AF2022AA8C2E008BA068 /* nobackground720.gif */,
+				D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */,
 			);
 			path = DailyRhythm;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				D7CBCA81219324E3001F786B /* Assets.xcassets in Resources */,
 				D7413BB422870E32007A4229 /* CardViewController.xib in Resources */,
 				D7CBCA7F219324E1001F786B /* Main.storyboard in Resources */,
+				D775F43022BBE8240006D9EC /* gif-dark-blue.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

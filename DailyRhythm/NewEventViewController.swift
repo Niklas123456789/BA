@@ -207,6 +207,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let img = UIImage(named: "mamor")!.alpha(1.0)
+        self.view.backgroundColor = UIColor(patternImage: img)
+        
         /* only if new event is made currentEvent = tableViewList[cellClickedIndex] */
         if (settingsSelected == false && tableViewList.isEmpty == false) {
             currentEvent = tableViewList[cellClickedIndex]

@@ -88,13 +88,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582656752.887306"
+            timestampString = "582751169.662249"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "705"
-            endingLineNumber = "705"
-            landmarkName = "okButtonAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "708"
+            endingLineNumber = "708"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -104,7 +104,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/EventViewController.swift"
-            timestampString = "582656752.8873661"
+            timestampString = "582743044.0727479"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "325"
@@ -120,13 +120,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582656752.88741"
+            timestampString = "582751169.662874"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "767"
-            endingLineNumber = "767"
-            landmarkName = "okButtonAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "770"
+            endingLineNumber = "770"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -200,13 +200,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DailyRhythm/NewEventViewController.swift"
-            timestampString = "582656752.887501"
+            timestampString = "582751169.6632611"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "702"
-            endingLineNumber = "702"
-            landmarkName = "okButtonAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "705"
+            endingLineNumber = "705"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

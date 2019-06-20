@@ -16,15 +16,47 @@ let locationManager = CLLocationManager()
 var cellClickedIndex = 0
 var tableViewList = [Event]()
 var group6 = DispatchGroup()
+var refreshControl: UIRefreshControl?
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var gifLogo: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     
     private static let instance = ViewController()
     
+    
     static func getInstance() -> ViewController {
         return instance
+    }
+    func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.tintColor = UIColor.gray
+        refreshControl?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        tableView.addSubview(refreshControl!)
+    }
+    @objc func refreshList() {
+        
+        var allEventsArray = [Event]()
+        
+        EventManager.getInstance().updateJSONEvents()
+        
+        allEventsArray = JSONDataManager.loadAll(Event.self)
+        
+        var index = 0
+        for event in allEventsArray {
+            
+            getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: index)
+
+            print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
+            index = index + 1
+        }
+        var timer = Timer()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { (timer) in
+                refreshControl?.endRefreshing()
+        })
+
+        
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -163,6 +195,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName.capitalizingFirstLetter()
         cell.checkTwoDays(time: tableViewList[indexPath.row].timeTillGo, event: tableViewList[indexPath.row])
+        cell.layer.backgroundColor = UIColor.clear.cgColor
 //        cell.cellTime.text = "..."
         return(cell)
     }
@@ -191,17 +224,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return(95)
     }
-
-    
-    //TODO
-    func calcDriveTime(event:Event) {
-        Helper.getInstance().checkAddressIsValid(city: event.cityName, street: event.streetName, number: event.houseNr, time: 15, completion: {
-            print("calcDriveTime no Error")
-        }) {
-             print("calcDriveTime ERROR")
-        }
-        
-    }
     
     func setETT(event: Event, travelTime: Int){
         
@@ -221,6 +243,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewWillAppear(_ animated: Bool) {
         checkLocationAuthorization()
+        refreshList()
     }
     override func viewDidAppear(_ animated: Bool) {
         checkLocationAuthorization()
@@ -228,6 +251,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         print("{ViewController}")
+        addRefreshControl()
+//        view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundBlau")!)
+//        gifLogo.loadGif(name: "gif-dark-blue")
+
+        let img = UIImage(named: "mamor")!.alpha(1.0)
+        tableView.backgroundColor = UIColor(patternImage: img)
         
 //        print("getDate():\(EventManager.getInstance().getDate()) ")
 //        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()
@@ -281,6 +310,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
+    
+
+    
     
     func getETARequest(destination:CLLocationCoordinate2D, event: Event, index: Int) {
         
