@@ -975,12 +975,6 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                     </button>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bis zur Erinnerung" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jwY-xN-3nz">
-                                <rect key="frame" x="166.5" y="743" width="81.5" height="13"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="11"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="acg-KJ-vWu">
                                 <rect key="frame" x="0.0" y="-6" width="414" height="759"/>
                                 <subviews>
@@ -1079,16 +1073,22 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                     <constraint firstAttribute="height" constant="1" id="4Np-0X-d9H"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bis zur Erinnerung" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCe-76-ekl">
+                                <rect key="frame" x="137.5" y="739" width="139" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="4hb-9Y-efe" firstAttribute="top" secondItem="acg-KJ-vWu" secondAttribute="bottom" constant="20" id="21K-f8-d32"/>
+                            <constraint firstItem="OCe-76-ekl" firstAttribute="top" secondItem="ZKd-Tt-qJj" secondAttribute="bottom" constant="-14" id="8CZ-KZ-7Ji"/>
                             <constraint firstItem="h1P-l1-20q" firstAttribute="trailing" secondItem="x7m-C5-9fK" secondAttribute="trailing" id="8Y5-4k-1Ks"/>
                             <constraint firstItem="h1P-l1-20q" firstAttribute="bottom" secondItem="4hb-9Y-efe" secondAttribute="bottom" constant="16" id="8kK-4v-UNi"/>
-                            <constraint firstItem="jwY-xN-3nz" firstAttribute="centerX" secondItem="h1P-l1-20q" secondAttribute="centerX" id="FDH-bu-nUa"/>
                             <constraint firstItem="nna-Pj-5ge" firstAttribute="leading" secondItem="h1P-l1-20q" secondAttribute="leading" constant="16" id="FuN-l6-CMS"/>
                             <constraint firstItem="4hb-9Y-efe" firstAttribute="leading" secondItem="h1P-l1-20q" secondAttribute="leading" constant="16" id="Qpt-Ne-VsG"/>
-                            <constraint firstItem="jwY-xN-3nz" firstAttribute="top" secondItem="ZKd-Tt-qJj" secondAttribute="bottom" constant="-10" id="Ucz-AL-0JW"/>
+                            <constraint firstItem="OCe-76-ekl" firstAttribute="centerX" secondItem="ZKd-Tt-qJj" secondAttribute="centerX" id="SrF-Nb-TP1"/>
                             <constraint firstItem="GFh-lL-K1s" firstAttribute="bottom" secondItem="x7m-C5-9fK" secondAttribute="bottom" constant="17" id="Wgg-Bk-LEH"/>
                             <constraint firstItem="h1P-l1-20q" firstAttribute="trailing" secondItem="4hb-9Y-efe" secondAttribute="trailing" constant="16" id="f1m-V7-Mv8"/>
                             <constraint firstItem="3bZ-nj-E36" firstAttribute="leading" secondItem="h1P-l1-20q" secondAttribute="leading" constant="18" id="fUS-5x-2yv"/>
@@ -1105,6 +1105,9 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                             <constraint firstItem="nna-Pj-5ge" firstAttribute="top" secondItem="x7m-C5-9fK" secondAttribute="bottom" id="zBa-Aa-qlC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="h1P-l1-20q"/>
+                        <connections>
+                            <outlet property="timeLabelSubtitle" destination="OCe-76-ekl" id="dP2-oQ-ZJg"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="infoStack" destination="eif-G9-JqR" id="rF4-zb-zza"/>
@@ -1120,7 +1123,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YnD-IS-KtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-462" y="-713"/>
+            <point key="canvasLocation" x="-462.31884057971018" y="-713.16964285714278"/>
         </scene>
         <!--Event View Controller2-->
         <scene sceneID="daJ-oO-az7">
@@ -1268,6 +1271,6 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
     <inferredMetricsTieBreakers>
         <segue reference="vw4-1X-Ecx"/>
         <segue reference="jxY-Kk-S9Q"/>
-        <segue reference="scd-9f-SyV"/>
+        <segue reference="Wji-eA-c2v"/>
     </inferredMetricsTieBreakers>
 </document>

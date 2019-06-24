@@ -44,8 +44,11 @@ class ViewContollerTableViewCell: UITableViewCell {
 //        self.group4.enter()
 //        ViewController.getInstance().getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: 0)
         //TODO  86400
-        if(time <= Int.max){
+        if(time < 0){
+            self.cellTime.text = "Fahr bitte los"
+            self.backgroundColor = UIColor.red
             
+        }else if(time <= Int.max) {
             startTimer(timeInSeconds: time, event: event)
         } else {
             //was tun wenn Zeit noch über 24h?
@@ -71,13 +74,17 @@ class ViewContollerTableViewCell: UITableViewCell {
                 //EventManager.getInstance().createNotification(for: event)
             }
                 //Todo farbe dynamisch verändern
-            if secondsLeft < event.bufferTime {
+            if secondsLeft < event.bufferTime * 60 {
                     //schoener machen
-                    self.backgroundColor = UIColor.red
-                
+                var colorIncrediant: CGFloat = (CGFloat(secondsLeft) / CGFloat(event.bufferTime * 60))
+                if colorIncrediant >= 0 {
+                    self.backgroundColor = UIColor.red.withAlphaComponent((CGFloat(1 - colorIncrediant))/2)
+                }
+                print("color \(colorIncrediant)")
                 //TODO muss noch an event angepasst werden
-            }else if(secondsLeft < 0){
-                self.cellTime.text = "Zeit los zu gehen"
+            }
+            if(secondsLeft < 0){
+                self.cellTime.text = "Fahr bitte los"
                 self.timer.invalidate()
             }
         }

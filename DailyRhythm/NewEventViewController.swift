@@ -234,7 +234,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         //creating picker data
         durationPickerData = ["einmalig", "jede Woche", "alle 2 Wochen", "alle 3 Wochen", "monatlich"]
-        timePickerData = Array(0...99)
+        timePickerData = Array(0...60)
         
         //changing label fonts
         newEventLabel.font = UIFont(name: Font.helveticaLight, size: 24)
@@ -758,7 +758,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             self.group3.leave()
         }
         self.group3.notify(queue: DispatchQueue.main) {
-            
+        
             //TODO: timeTillNextCheck, driveTime und timeTillGo anpassen!
             var newEvent = Event(eventID: eventID, eventName: self.nameTextField.text!, streetName: self.streetTextField.text!, houseNr: self.houseNumberTextField.text!, houseNrEdited: self.houseNrEdited, cityName: self.cityTextField.text!, eventNotes: self.notesTextField.text!, parkingTime: self.parkingTime, walkingTime: self.walkingTime, bufferTime: self.bufferTime, eventDate: eventDate, repeatDuration: self.repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false, latitude: localLat, longitude: localLong)
             
@@ -766,55 +766,66 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             
             //newEvent = EventManager.getInstance().updateEventTimes(event: &newEvent)
             print("After NewEvent called updateEventTimes: \(newEvent)")
-            let timeTillNextCheck = EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent)
+        
+            var timeTillNextCheck: Int = 0
             
-            if timeTillNextCheck <= -1 {
-                print("Return because timeTillNextCheck returned negativ")
-                return
+            EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) { (tempTimeTillNextCheck: Int) in
+                timeTillNextCheck = tempTimeTillNextCheck
             }
-            
-            Helper.getInstance().checkAddressIsValid(city: "\(self.cityTextField.text!)", street: "\(self.streetTextField.text!)", number: "\(self.houseNumberTextField.text!)", time: 60, completion: {
-                /* valid address */
-                print("Adress valid")
-                self.validAddess = true
-            
-                //timer that triggers the reapeat of timeTillNextCheck
-                print("before repeatTimeCheck")
-                let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-                    print("In timer repeatTimecheck")
-                    if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
-                        EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-                    }
-                })
-                EventManager.getInstance().removeDuplicateEvents(from: newEvent)
-                
-                
-                if (settingsSelected == false) {
-                    if (self.validAddess == false) {
+                DispatchQueue.main.async {
+                    
+                    if timeTillNextCheck <= -1 {
+                        print("Return because timeTillNextCheck returned negativ")
                         return
                     }
-                    newEvent.saveEventInJSON()
-                    self.performSegue(withIdentifier: "saveEvent", sender: nil)
-                    EventManager.getInstance().updateJSONEvents()
                     
-                } else {
-                    currentEvent.deleteEventInJSON()
-                    newEvent.saveEventInJSON()
-                    currentEvent = newEvent
-                    EventManager.getInstance().updateJSONEvents()
-                    settingsSelected = false
-                    self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                    Helper.getInstance().checkAddressIsValid(city: "\(self.cityTextField.text!)", street: "\(self.streetTextField.text!)", number: "\(self.houseNumberTextField.text!)", time: 60, completion: {
+                        /* valid address */
+                        print("Adress valid")
+                        self.validAddess = true
+                        
+                        //timer that triggers the reapeat of timeTillNextCheck
+                        print("before repeatTimeCheck")
+                        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                            print("In timer repeatTimecheck")
+                            if (timeTillNextCheck >= 0) {
+                                EventManager.getInstance().repeatTimeCheck(event: newEvent)
+                            }
+                        })
+                        EventManager.getInstance().removeDuplicateEvents(from: newEvent)
+                        
+                        
+                        if (settingsSelected == false) {
+                            if (self.validAddess == false) {
+                                return
+                            }
+                            newEvent.saveEventInJSON()
+                            self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                            EventManager.getInstance().updateJSONEvents()
+                            
+                        } else {
+                            currentEvent.deleteEventInJSON()
+                            newEvent.saveEventInJSON()
+                            currentEvent = newEvent
+                            EventManager.getInstance().updateJSONEvents()
+                            settingsSelected = false
+                            self.performSegue(withIdentifier: "saveEvent", sender: nil)
+                        }
+                        boxView.removeFromSuperview()
+                        
+                        
+                    }, completionWithError:  {
+                        /* handle invalid address */
+                        print("{NEWEVENTVIEWCONTROLLER} invalid address")
+                        boxView.removeFromSuperview()
+                        NewEventViewController.shake(view: self.cityTextField)
+                        NewEventViewController.shake(view: self.houseNumberTextField)
+                        NewEventViewController.shake(view: self.streetTextField)
+                    })
                 }
-                
-                
-            }, completionWithError:  {
-                /* handle invalid address */
-                print("{NEWEVENTVIEWCONTROLLER} invalid address")
-                boxView.removeFromSuperview()
-                NewEventViewController.shake(view: self.cityTextField)
-                NewEventViewController.shake(view: self.houseNumberTextField)
-                NewEventViewController.shake(view: self.streetTextField)
-            })
+//            }
+            
+            
         }
     }
     

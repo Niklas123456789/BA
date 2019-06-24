@@ -18,12 +18,16 @@ var settingsSelected: Bool = false
 var currentEvent = Event(eventID: "-1", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: 0, walkingTime: 0, bufferTime: 0, eventDate: Date.init(), repeatDuration: 0, repeatAtWeekdays: [false, false, false, false, false, false, false], weeksTillNextEvent: 0, driveTime: 0, timeTillGo: 0, mute: false, latitude: 0.0, longitude: 0.0)
 class EventViewController2: UIViewController, MKMapViewDelegate {
     
+
+
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var coverView: UIView!
     @IBOutlet weak var myLocationButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var expectedTimeLabel: UILabel!
+//    @IBOutlet weak var timeLabelSubtitle: UILabel!
+    let timeLabelSubtitle = UILabel()
     
     
     let locationManager = CLLocationManager()
@@ -69,7 +73,15 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         } else {
             currentEvent = tableViewList[cellClickedIndex]
         }
-        
+//        self.view.bringSubviewToFront(timeLabelSubtitle)
+
+        timeLabelSubtitle.text = "bis zur Erinnerung"
+        timeLabelSubtitle.font = UIFont(name: "HelveticaNeue-Light", size: 10)
+        timeLabelSubtitle.textColor = UIColor.darkGray
+        timeLabelSubtitle.textAlignment = .center
+        timeLabelSubtitle.numberOfLines = 1
+        timeLabelSubtitle.frame = CGRect(x: 0, y: 0, width: 140, height: 21)
+        self.view.addSubview(timeLabelSubtitle)
         
         
         mapView.delegate = self
@@ -105,10 +117,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     }
     
     func setupCard() {
-        
-        
-        
-        
+
         cardViewController = CardViewController(nibName:"CardViewController", bundle:nil)
         //TODO: setCardLabels()
         
@@ -133,9 +142,14 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         self.view.bringSubviewToFront(coverView)
         
         self.view.bringSubviewToFront(timeLabel)
-        self.view.bringSubviewToFront(buttonsStack)
-        self.view.bringSubviewToFront(activityIndicator)
         
+        self.view.bringSubviewToFront(buttonsStack)
+        self.view.bringSubviewToFront(timeLabelSubtitle)
+        self.view.bringSubviewToFront(activityIndicator)
+
+        timeLabelSubtitle.translatesAutoresizingMaskIntoConstraints = false
+        timeLabelSubtitle.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: -10).isActive = true
+        timeLabelSubtitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
 
     }
     
@@ -355,17 +369,29 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
                 
-                var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
-                
-                self.ausgeben(h: h, m: m, s: s)
-                secondsLeft = secondsLeft - 1
-                
+                if (secondsLeft > 0) {
+                    var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
+                    self.ausgeben(h: h, m: m, s: s)
+                    secondsLeft = secondsLeft - 1
+                } else {
+                    var timeToEvent = EventManager.getInstance().calcDifNowAndEvent(event: event)
+                    self.timer.invalidate()
+                    if (self.timeLabelSubtitle.text == "bis zur Erinnerung") {
+                        self.timeLabelSubtitle.text = "bis zum Ereignis"
+                        self.startTimer(timeInSeconds: timeToEvent, event: event)
+//                        TODO Timer der eventuell neues Event erstellt
+                    }
+                    return
+//                    self.timeLabel.text = ""
+                    
+                }
                 //TODO:muss noch an event angepasst werden
                 if(secondsLeft == -300){
                     self.timer.invalidate()
                 }
-            }
-            )}else{
+            })
+            
+        }else{
             //was tun wenn zeit noch über 24h?
             self.timeLabel.text = "+24h"
         }

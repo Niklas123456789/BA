@@ -48,7 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: index)
 
-            print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
+            print("TimeTillGo1 in ViewController: \(allEventsArray[index].timeTillGo)")
             index = index + 1
         }
         var timer = Timer()
@@ -165,8 +165,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             EventManager.getInstance().updateJSONEvents()
             
             allEventsArray = JSONDataManager.loadAll(Event.self)
+            if !(allEventsArray.isEmpty) {
+                JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
+            }
             
-            JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
+            
             
             tableViewList.remove(at: indexPath.row)
             
@@ -252,7 +255,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         print("{ViewController}")
         addRefreshControl()
-//        view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundBlau")!)
+//        view.backgroundColor = UIColor(patternImage: UIImage(named: "silk1")!)
 //        gifLogo.loadGif(name: "gif-dark-blue")
 
         let img = UIImage(named: "mamor")!.alpha(1.0)
@@ -286,7 +289,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: index)
             
 //            allEventsArray[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 /* - 1 */
-            print("TimeTillGo in ViewController: \(allEventsArray[index].timeTillGo)")
+            print("TimeTillGo2 in ViewController: \(allEventsArray[index].timeTillGo)")
             index = index + 1
         }
         print(allEventsArray)
@@ -338,20 +341,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         
                         self.updateTableWithETA(travelTime: Int(interval), event: event, index: index)
                         
-                        //                        self.durationArray.insert(self.formatTimeInterval(interval), atIndex: 0)
-                        
-                        //                        if self.durationArray.count == self.allUsers.count {
-                        //
-                        //
-                        //                            self.tableView.reloadData()
-                        //
-                        //                        }
-                        
                     }
                     
                 } else {
                     
-                    print("Error Occurred")
+                    print("Error Occurred1")
                 }
                 
             })
@@ -368,14 +362,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         group6.enter()
         for tempEvent in allEventsArray {
             if (event.eventID == tempEvent.eventID) {
-                tableViewList[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - (Int(travelTime/60) * 60)
+                tableViewList[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - (Int(travelTime))
                 
 //                var cell = tableView.cellForRow(at: IndexPath(row: index, section: 0))
 //                cell?.textLabel?.textColor = .lightGray
                 print(allEventsArray[index].timeTillGo)
             }
             
-            print("TimeTillGo in ViewController: \(tableViewList[index].timeTillGo)")
+            print("TimeTillGo3 in ViewController: \(tableViewList[index].timeTillGo)")
             
         }
         group6.leave()

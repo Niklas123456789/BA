@@ -10,8 +10,11 @@ import Foundation
 import UIKit
 import UserNotifications
 import AudioToolbox
+import MapKit
 
 class EventManager {
+    
+    var group7 = DispatchGroup()
     
     private static let instance = EventManager()
     
@@ -220,25 +223,34 @@ class EventManager {
 //    }
     
     //<24h
-    func repeatTimeCheck(event: inout Event) {
-        
+    func repeatTimeCheck(event: Event) {
+        print("In repeatTimeCheck")
         EventManager.getInstance().updateJSONEvents()
         
-//        event.eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
-//        event.timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
-//        event.timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
+        var timeTillNextCheck: Int = 0
         
-        //let loadedEvents = JSONDataManager.loadAll(Event.self)
-        
-        let timeTillNextCheck = getTimeTillNextCheckAction(from: event)
-        
-        //ViewController().updateTableViewList(event: event)
-        var newEvent = event
-        if timeTillNextCheck > 0 {
-            let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
-            })
+        self.getTimeTillNextCheckAction(from: event) { (tempResult: Int) in
+            timeTillNextCheck = tempResult
+            DispatchQueue.main.async {
+                let newEvent = event
+                if timeTillNextCheck > 0 {
+                    let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                        EventManager.getInstance().repeatTimeCheck(event: newEvent)
+                    })
+                }
+            }
         }
+    }
+    
+    func callTimeTillNextCheckAction(in timeTillNextCheck: Int, event: Event) {
+        print("In repeatTimeCheck")
+        EventManager.getInstance().updateJSONEvents()
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+            self.getTimeTillNextCheckAction(from: event, completion: { (tempResult: Int) in
+                
+            })
+        })
     }
     
     func removeDuplicateEvents(from event: Event) {
@@ -255,7 +267,7 @@ class EventManager {
         let loadedEvents = JSONDataManager.loadAll(Event.self)
         /*  */
         
-        let todaysDate = Date()
+        let todaysDate = getDate()
         
         for event in loadedEvents {
             
@@ -303,41 +315,33 @@ class EventManager {
                 print("created notification with id: \(event.eventID) and notes: \(event.eventNotes)")
             }
         }
+    }
+    
+    func createNotification(time: Int, for event: Event, travelTime: Int){
         
-        /*
+        //removes all existing pending notifications before creating new ones
+        
         let center = UNUserNotificationCenter.current()
-        //center.removeAllPendingNotificationRequests()
-
         let content = UNMutableNotificationContent()
-        content.title = "\(event.eventName)"
-
-        //sets the content of the notification
-//        if(event.eventNotes.isEmpty){
-//            content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los!"
-//        }else{
+        content.title = event.eventName
+        if (event.eventNotes.isEmpty) {
+            content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los!"
+        } else {
             content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los! \nNotiz: \(event.eventNotes)"
-       // }
-        //adds vibration
-        //sets the notification sound
+        }
+//        content.subtitle = "Aktuelle Fahrzeit: \(Int(travelTime/60)) min"
         content.sound = UNNotificationSound.default
-        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
 
-        //creates trigger with the right time
-        //TODO: wegzeit miteinberechnen
-        //let totalTravelTime = event.eventTotalSeconds - (event.bufferTime * 60) - (event.parkingTime * 60) - (event.walkingTime * 60) + 1
-
-        //TODO: FIX that triggers instant
-        let todaysDate = Date()
-        var secondsNow = Calendar.current.component(.second, from: todaysDate)
         
-        print("TimeTillGo: \(getTimeTillGo(event: event))")
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(getTimeTillGo(event: event)), repeats: false)
-
-        let request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
-
-        center.add(request, withCompletionHandler: nil)
-        */
-
+        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(time + 1)), repeats: false)
+        var request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
+        center.add(request) { (error) in
+            if (error != nil) {
+                print("error creating notification for id: \(event.eventID): \(error!.localizedDescription)")
+            } else {
+                print("created notification with id: \(event.eventID) and notes: \(event.eventNotes)")
+            }
+        }
     }
     
 //    func getTimeTillNextCheck(from event: Event) -> Int {
@@ -376,48 +380,74 @@ class EventManager {
 //
 //    }
     
-    func getTimeTillNextCheckAction(from event: Event) -> Int {
-        let eventTotalSeconds = calcDifNowAndEvent(event: event)
-        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-        
-        if timeTillNextCheck / 2 <= 86400 {
-            
-            if timeTillGo < 0 {
-                print("Event \(event.eventName) has passed already")
-                self.checkIfEventShouldRepeat(for: event)
-                return -1
-            } else if timeTillGo <= 60 {
-                print("Push event notification")
-                self.createNotification(for: event)
-                //TODO: anpassen TimeInterval
-                //repeats if needed event 5 min after notification went of
-                let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(300.0), repeats: false, block: { (timer) in
-                    self.checkIfEventShouldRepeat(for: event)
-                })
+    func getTimeTillNextCheckAction(from event: Event, completion: @escaping (Int) -> ()) {
+        var travelTime: Int = 0
+        var result: Int = 0
+
+        self.getETTOnly(event: event) { (tempResult: Int) in
+            travelTime = tempResult
+            DispatchQueue.main.async {
                 
-                return 0
-                // 3 min check every 30 sec
-            }else if timeTillGo <= 180 {
-                timeTillNextCheck = 30
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                // 10 min check every 3 min
-            } else if timeTillGo <= 600 {
-                timeTillNextCheck = 180
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                // 25 min check every 5 min
-            } else if timeTillGo <= 1500 {
-                timeTillNextCheck = 300
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                //60 min check every 10 min
-            } else if timeTillGo <= 3600 {
-                timeTillNextCheck = 600
-                print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                let eventTotalSeconds = self.calcDifNowAndEvent(event: event)
+                var timeTillNextCheck = ((eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60)) - travelTime)
+                
+                let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60)) - travelTime
+                
+                
+                if timeTillNextCheck / 2 <= 86400 {
+                    
+                    if timeTillGo < 0 {
+                        print("Event \(event.eventName) has passed already")
+                        
+                        //TODO
+                        self.checkIfEventShouldRepeat(for: event)
+                        result = -1
+                    } else if timeTillGo <= 60 {
+                        print("Push event notification")
+//                        self.createNotification(for: event)
+                        self.createNotification(time: timeTillGo, for: event, travelTime: travelTime)
+                        //TODO: anpassen TimeInterval
+                        //repeats if needed event 5 min after notification went of
+                        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(300.0), repeats: false, block: { (timer) in
+                            self.checkIfEventShouldRepeat(for: event)
+                        })
+                        
+                        result = 0
+                        // 3 min check every 15 sec
+                    }else if timeTillGo <= 180 {
+                        timeTillNextCheck = 15
+                        self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                        print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                        // 6 min check every 1 min
+                    } else if timeTillGo <= 360 {
+                        timeTillNextCheck = 60
+                        self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                        print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                        // 10 min check every 3 min
+                    } else if timeTillGo <= 600 {
+                        timeTillNextCheck = 180
+                        self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                        print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                        // 30 min check every 5 min
+                    } else if timeTillGo <= 1800 {
+                        timeTillNextCheck = 300
+                        self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                        print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                        //60 min check every 10 min
+                    } else if timeTillGo <= 3600 {
+                        timeTillNextCheck = 600
+                        self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                        print("Set timeTillNextCheck: \(timeTillNextCheck)")
+                    }
+                } else {
+                    self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
+                    timeTillNextCheck = timeTillNextCheck / 2
+                }
+                result = timeTillNextCheck
+                print("Inside Dispatchqueue with travelTime:\(travelTime) eventTotalSeconds: \(eventTotalSeconds) timeTillNextCheck: \(timeTillNextCheck) timeTillGo: \(timeTillGo)")
+
             }
-        } else {
-            timeTillNextCheck = timeTillNextCheck / 2
         }
-        return timeTillNextCheck
     }
     
     //repeats event after notification
@@ -438,13 +468,19 @@ class EventManager {
             }
         }
         var newEvent = event
+        var timeTillNextCheck: Int = 0
         newEvent.eventDate = newEvent.eventDate.addingTimeInterval(TimeInterval(weeksTillNextEvent * 604800))
         newEvent.saveEventInJSON()
         //calls repeatTimeCheck after all weeks minus 1 day
         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(weeksTillNextEvent * 604800.0 - 86400.0), repeats: false, block: { (timer) in
             print("\(event.eventName) In timer repeatTimecheck")
-            if (EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) >= 0){
-                EventManager.getInstance().repeatTimeCheck(event: &newEvent)
+            self.getTimeTillNextCheckAction(from: event) { (tempResult: Int) in
+                timeTillNextCheck = tempResult
+                
+            }
+            
+            if (timeTillNextCheck >= 0){
+                EventManager.getInstance().repeatTimeCheck(event: newEvent)
             }
         })
     }
@@ -531,5 +567,48 @@ class EventManager {
         let finalDate = date.addingTimeInterval(TimeInterval(secondsFromGMT))
 //        print("getDate return: \(finalDate)")
         return finalDate
+    }
+    
+    func getETTOnly(event: Event, completion: @escaping (Int) -> ()) {
+        
+        var result: Int = 0
+        
+        let destination = CLLocationCoordinate2DMake(event.latitude, event.longitude)
+        
+        let request = MKDirections.Request()
+        group7.enter()
+        
+        if let currentLocation = locationManager.location?.coordinate {
+            
+            request.source =  MKMapItem(placemark: MKPlacemark(coordinate: currentLocation, addressDictionary: nil))
+            
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination, addressDictionary: nil))
+            
+            request.transportType = .automobile
+            
+            let directions = MKDirections(request: request)
+            
+            directions.calculateETA(completionHandler: { ( response, error) in
+                
+                if error == nil {
+                    
+                    if let interval = response?.expectedTravelTime  {
+                        
+                        print("ETARequest \(interval)")
+                        
+//                        self.updateTableWithETA(travelTime: Int(interval), event: event, index: index)
+//                        result = Int(interval)
+                        completion(Int(interval))
+                    }
+                    
+                } else {
+                    
+                    print("Error Occurred2")
+                }
+                
+            })
+            
+        group7.leave()
+        }
     }
 }
