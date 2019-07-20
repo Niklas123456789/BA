@@ -232,6 +232,9 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         checkLocationServices()
         getDirections()
 
+
+        
+        
         // Do any additional setup after loading the view.
         //myLocationButton.layer.zPosition = -1
         //nameLabel.text = ViewController.tableViewList

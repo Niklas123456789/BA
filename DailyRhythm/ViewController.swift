@@ -255,11 +255,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         print("{ViewController}")
         addRefreshControl()
-//        view.backgroundColor = UIColor(patternImage: UIImage(named: "silk1")!)
+//        view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundBlau")!)
+        view.backgroundColor = UIColor(rgb: 0x08acf9)
 //        gifLogo.loadGif(name: "gif-dark-blue")
 
-        let img = UIImage(named: "mamor")!.alpha(1.0)
-        tableView.backgroundColor = UIColor(patternImage: img)
+//        let img = UIImage(named: "mamor")!.alpha(1.0)
+//        tableView.backgroundColor = UIColor(patternImage: img)
+        tableView.backgroundColor = UIColor.white
         
 //        print("getDate():\(EventManager.getInstance().getDate()) ")
 //        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()

@@ -38,8 +38,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         }
         
+        /* Timeinterval in which the background check is done */
         
+        UIApplication.shared.setMinimumBackgroundFetchInterval(30)
         return true
+    }
+
+    
+    func application(_ application: UIApplication,
+                     performFetchWithCompletionHandler completionHandler:
+        @escaping (UIBackgroundFetchResult) -> Void) {
+        // Check for new data.
+//        if let newData = fetchUpdates() {
+//            addDataToFeed(newData: newData)
+//
+//            if (!(JSONDataManager.loadAll(Event.self).isEmpty)) {
+//
+//            }
+//            completionHandler(.newData)
+//        }
+//        completionHandler(.noData)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -50,6 +68,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+//        print("Enter background")
+//        EventManager.getInstance().updateJSONEvents()
+//        var allEventArray = JSONDataManager.loadAll(Event.self)
+//        var allRestTimes: [Int]
+//        var index = 0
+//        for tempEvent in allEventArray {
+//            EventManager.getInstance().getTimeTillNextCheckAction(from: tempEvent, completion: { (tempResult: Int) in
+//                allRestTimes[index] = tempResult
+//            })
+//            index = index + 1
+//        }
+//        DispatchQueue.main.async {
+//            allRestTimes.sort()
+//
+//        }
+        
+//        UIApplication.shared.setMinimumBackgroundFetchInterval(3600)
+        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

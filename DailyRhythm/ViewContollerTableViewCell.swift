@@ -45,7 +45,7 @@ class ViewContollerTableViewCell: UITableViewCell {
 //        ViewController.getInstance().getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: 0)
         //TODO  86400
         if(time < 0){
-            self.cellTime.text = "Fahr bitte los"
+//            self.cellTime.text = "Fahr bitte los"
             self.backgroundColor = UIColor.red
             
         }else if(time <= Int.max) {
@@ -66,7 +66,14 @@ class ViewContollerTableViewCell: UITableViewCell {
             
             var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
             
-            self.ausgeben(h: h, m: m, s: s)
+//            self.ausgeben(h: h, m: m, s: s)
+                EventManager.getInstance().hmsFrom(seconds: secondsLeft, completion: { (hours, minutes, seconds) in
+                    let hours = EventManager.getInstance().getStringFrom(seconds: hours)
+                    let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
+                    let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
+                    
+                    self.cellTime.text = "\(hours):\(minutes):\(seconds)"
+                })
             secondsLeft = secondsLeft - 1
             
             if secondsLeft == 1 {

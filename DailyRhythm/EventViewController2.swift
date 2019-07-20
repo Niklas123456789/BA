@@ -362,6 +362,7 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
         }
         //print(("\(h):\(m):\(s)"))
     }
+    
     func startTimer(timeInSeconds: Int, event: Event){
         
         var secondsLeft: Int = timeInSeconds
@@ -371,7 +372,14 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
                 
                 if (secondsLeft > 0) {
                     var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
-                    self.ausgeben(h: h, m: m, s: s)
+//                    self.ausgeben(h: h, m: m, s: s)
+                    EventManager.getInstance().hmsFrom(seconds: secondsLeft, completion: { (hours, minutes, seconds) in
+                        let hours = EventManager.getInstance().getStringFrom(seconds: hours)
+                        let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
+                        let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
+                        
+                        self.timeLabel.text = "\(hours):\(minutes):\(seconds)"
+                    })
                     secondsLeft = secondsLeft - 1
                 } else {
                     var timeToEvent = EventManager.getInstance().calcDifNowAndEvent(event: event)

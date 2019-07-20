@@ -428,14 +428,14 @@ class EventManager {
                         timeTillNextCheck = 180
                         self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
                         print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                        // 30 min check every 5 min
+                        // 30 min check every 8 min
                     } else if timeTillGo <= 1800 {
-                        timeTillNextCheck = 300
+                        timeTillNextCheck = 480
                         self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
                         print("Set timeTillNextCheck: \(timeTillNextCheck)")
-                        //60 min check every 10 min
+                        //60 min check every 12 min
                     } else if timeTillGo <= 3600 {
-                        timeTillNextCheck = 600
+                        timeTillNextCheck = 720
                         self.callTimeTillNextCheckAction(in: timeTillNextCheck, event: event)
                         print("Set timeTillNextCheck: \(timeTillNextCheck)")
                     }
@@ -610,5 +610,15 @@ class EventManager {
             
         group7.leave()
         }
+    }
+    func hmsFrom(seconds: Int, completion: @escaping (_ hours: Int, _ minutes: Int, _ seconds: Int)->()) {
+        
+        completion(seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        
+    }
+    
+    func getStringFrom(seconds: Int) -> String {
+        
+        return seconds < 10 ? "0\(seconds)" : "\(seconds)"
     }
 }

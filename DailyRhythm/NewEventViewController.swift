@@ -15,6 +15,7 @@ import AudioToolbox
 var ID: Int = 0
 var boxView = UIView()
 
+
 class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate{
 
 
@@ -30,7 +31,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(mo==true){
             mo = false
             MOButton.setBackgroundImage(UIImage(named: "LeftWhite"), for: .normal)
-            MOButton.setTitleColor(UIColor.black, for: .normal)
+            MOButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             mo = true
@@ -52,7 +53,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(di==true){
             di = false
             DIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
-            DIButton.setTitleColor(UIColor.black, for: .normal)
+            DIButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             di = true
@@ -67,7 +68,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(mi==true){
             mi = false
             MIButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
-            MIButton.setTitleColor(UIColor.black, for: .normal)
+            MIButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             mi = true
@@ -83,7 +84,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(dO==true){
             dO = false
             DOButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
-            DOButton.setTitleColor(UIColor.black, for: .normal)
+            DOButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             dO = true
@@ -99,7 +100,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(fr==true){
             fr = false
             FRButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
-            FRButton.setTitleColor(UIColor.black, for: .normal)
+            FRButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             fr = true
@@ -115,7 +116,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(sa==true){
             sa = false
             SAButton.setBackgroundImage(UIImage(named: "White"), for: .normal)
-            SAButton.setTitleColor(UIColor.black, for: .normal)
+            SAButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             sa = true
@@ -131,7 +132,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if(so==true){
             so = false
             SOButton.setBackgroundImage(UIImage(named: "RightWhite"), for: .normal)
-            SOButton.setTitleColor(UIColor.black, for: .normal)
+            SOButton.setTitleColor(UIColor(rgb: 0x929292), for: .normal)
             disableOKButtonCheck()
         }else{
             so = true
@@ -153,6 +154,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 //    @IBOutlet weak var firstContainer: UIView!
 //    @IBOutlet weak var secondContainer: UIView!
 //    @IBOutlet weak var thirdContainer: UIView!
+    var okButtonIsFullyEnabled: Bool!
+    
     @IBOutlet weak var parkingLabel: UILabel!
     @IBOutlet weak var newEventLabel: UILabel!
     @IBOutlet weak var bufferLabel: UILabel!
@@ -206,9 +209,10 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        okButtonIsFullyEnabled = false
         
-        let img = UIImage(named: "mamor")!.alpha(1.0)
-        self.view.backgroundColor = UIColor(patternImage: img)
+//        let img = UIImage(named: "mamor")!.alpha(1.0)
+        self.view.backgroundColor = UIColor(rgb: 0x08ACF6)
         
         /* only if new event is made currentEvent = tableViewList[cellClickedIndex] */
         if (settingsSelected == false && tableViewList.isEmpty == false) {
@@ -356,7 +360,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         if eventWeekdays.contains(true) {}
         else {
-            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+//            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+            okButtonIsFullyEnabled = false
         }
     }
     
@@ -436,11 +441,13 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         //TODO: Add alle anderen pflichtfelder
         if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false ) {
-            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+//            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
+            okButtonIsFullyEnabled = true
             //okButton.isUserInteractionEnabled = true
             
         }else{
-            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+//            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
+            okButtonIsFullyEnabled = false
             //okButton.isUserInteractionEnabled = false
         }
         
@@ -579,7 +586,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     //Function that trigger wenn OK-Button is pressed
     @IBAction func okButtonAction(_ sender: UIButton) {
         print("--------------OK BUTTON---------------")
-        loadingWaitCheckingLocationAnimation()
+        
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         var weekdaysAreAllFalse = true
         for element in eventWeekdays {
@@ -588,7 +595,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 break
             }
         }
-        if (okButton.currentImage == UIImage(named: "OK_white_grey")){
+        if (okButtonIsFullyEnabled == false){
             /* shake */
             if weekdaysAreAllFalse == true {
                 NewEventViewController.shake(view: MOButton)
@@ -614,7 +621,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         //if(validAddess == false) {return}
         //validAddess = false
-        
+        loadingWaitCheckingLocationAnimation()
         datePickerAction(sender: timePicker)
         
         
@@ -739,6 +746,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 else {
                     // handle no location found
                     print("ERROR no location found")
+                    boxView.removeFromSuperview()
                     self.presentAlertWithTitle(title: "Dein Ziel konnte nicht gefunden werden", message: "Bitte überprüfe deine Eingabe und Internetverbindung", options: "OK", completion: {
                         (option) in
                         print("option: \(option)")
@@ -893,7 +901,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if(identifier == "saveNewEvent" || identifier == "saveEvent") {
-            if (self.okButton.currentImage == UIImage(named: "OK")) {
+            if (okButtonIsFullyEnabled == true) {
                 return true
             } else {
                 //TODO: Rückmeldung via vibration

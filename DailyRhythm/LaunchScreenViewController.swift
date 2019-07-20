@@ -14,11 +14,11 @@ class LaunchScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundBlau")!)
+        view.backgroundColor = UIColor(rgb: 0x08ACF6)
         
-        gifView.loadGif(name: "nobackground720")
+        gifView.loadGif(name: "CAR3")
         var timer = Timer()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { (timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { (timer) in
             self.performSegue(withIdentifier: "afterLaunch", sender: nil)
         })
     }
