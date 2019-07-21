@@ -469,19 +469,19 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Puffer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9d-b2-of2">
                                                                 <rect key="frame" x="0.0" y="0.0" width="52" height="14"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                                <nil key="textColor"/>
+                                                                <color key="textColor" red="0.031372549020000001" green="0.67450980390000004" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fußweg" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ilq-0T-lnk">
                                                                 <rect key="frame" x="60" y="0.0" width="60.5" height="14"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                                <nil key="textColor"/>
+                                                                <color key="textColor" red="0.031372549020000001" green="0.67450980390000004" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Parken" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X0w-Fa-8tK">
                                                                 <rect key="frame" x="128.5" y="0.0" width="51.5" height="14"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                                <nil key="textColor"/>
+                                                                <color key="textColor" red="0.031372549020000001" green="0.67450980390000004" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
@@ -837,7 +837,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FXM-Pb-gME" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="5fM-df-mEE"/>
             </objects>
-            <point key="canvasLocation" x="-114" y="1209"/>
+            <point key="canvasLocation" x="-133" y="1224"/>
         </scene>
         <!--Info View Controller-->
         <scene sceneID="6OD-Sl-3tT">
@@ -888,33 +888,39 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hintergrundBlau" translatesAutoresizingMaskIntoConstraints="NO" id="heF-Io-h64">
-                                <rect key="frame" x="20" y="154" width="374" height="591"/>
-                                <color key="backgroundColor" red="0.57414853570000002" green="0.57416242360000003" blue="0.57415497299999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IL7-a3-J0S">
+                                <rect key="frame" x="0.0" y="78" width="414" height="667"/>
+                            </scrollView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="UPe-1r-Hvc">
+                                <rect key="frame" x="336" y="418" width="80" height="63"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="PKF-os-iTz" firstAttribute="trailing" secondItem="IL7-a3-J0S" secondAttribute="trailing" id="1LV-UI-kdc"/>
                             <constraint firstItem="B7l-mk-BFy" firstAttribute="centerX" secondItem="PKF-os-iTz" secondAttribute="centerX" id="1y7-g4-eoH"/>
                             <constraint firstItem="0eW-yb-eV4" firstAttribute="leading" secondItem="PKF-os-iTz" secondAttribute="leading" constant="20" id="7oP-yA-wE7"/>
-                            <constraint firstItem="heF-Io-h64" firstAttribute="leading" secondItem="0eW-yb-eV4" secondAttribute="leading" id="Cmy-JG-Mk1"/>
+                            <constraint firstItem="UPe-1r-Hvc" firstAttribute="leading" secondItem="PKF-os-iTz" secondAttribute="trailing" constant="-78" id="8p1-9j-Jd2"/>
+                            <constraint firstItem="B7l-mk-BFy" firstAttribute="top" secondItem="IL7-a3-J0S" secondAttribute="bottom" constant="31.5" id="94B-TN-2RH"/>
+                            <constraint firstItem="IL7-a3-J0S" firstAttribute="top" secondItem="PKF-os-iTz" secondAttribute="top" constant="34" id="DpN-ZP-xia"/>
                             <constraint firstItem="PKF-os-iTz" firstAttribute="bottom" secondItem="B7l-mk-BFy" secondAttribute="bottom" constant="15" id="GiP-DN-c2o"/>
                             <constraint firstItem="0eW-yb-eV4" firstAttribute="top" secondItem="PKF-os-iTz" secondAttribute="top" constant="110" id="Jc8-fU-7LF"/>
                             <constraint firstItem="B7l-mk-BFy" firstAttribute="top" secondItem="0eW-yb-eV4" secondAttribute="bottom" constant="31.5" id="Jtw-gS-ZWy"/>
-                            <constraint firstItem="heF-Io-h64" firstAttribute="bottom" secondItem="0eW-yb-eV4" secondAttribute="bottom" id="Lez-Wy-kZw"/>
                             <constraint firstItem="B7l-mk-BFy" firstAttribute="width" secondItem="PKF-os-iTz" secondAttribute="width" constant="-36" id="Onb-RO-ago"/>
                             <constraint firstItem="PKF-os-iTz" firstAttribute="trailing" secondItem="0eW-yb-eV4" secondAttribute="trailing" constant="20" id="eIu-SL-6Pd"/>
-                            <constraint firstItem="heF-Io-h64" firstAttribute="trailing" secondItem="0eW-yb-eV4" secondAttribute="trailing" id="w7w-SZ-RCJ"/>
-                            <constraint firstItem="heF-Io-h64" firstAttribute="top" secondItem="0eW-yb-eV4" secondAttribute="top" id="zT0-YF-6sx"/>
+                            <constraint firstItem="UPe-1r-Hvc" firstAttribute="centerY" secondItem="IL7-a3-J0S" secondAttribute="centerY" constant="38" id="id1-7u-wUY"/>
+                            <constraint firstItem="IL7-a3-J0S" firstAttribute="leading" secondItem="PKF-os-iTz" secondAttribute="leading" id="kDh-DP-EnV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PKF-os-iTz"/>
                     </view>
                     <connections>
-                        <outlet property="imagesView" destination="heF-Io-h64" id="pj9-JF-9Dr"/>
+                        <outlet property="mainScrollView" destination="IL7-a3-J0S" id="FJc-NF-8EI"/>
+                        <outlet property="swipeRightArrow" destination="UPe-1r-Hvc" id="WLa-wG-cce"/>
                         <outlet property="textView" destination="0eW-yb-eV4" id="Af5-EQ-Uny"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bvQ-zq-Gp3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="1Sd-jU-lwR"/>
             </objects>
             <point key="canvasLocation" x="-957.97101449275374" y="1209.375"/>
         </scene>
@@ -1277,10 +1283,10 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="destination" width="512" height="512"/>
         <image name="destination-higher" width="70" height="100"/>
         <image name="exit_weiss" width="70" height="70"/>
-        <image name="hintergrundBlau" width="375" height="812"/>
         <image name="info_blau" width="70" height="70"/>
         <image name="ok_weiss" width="70" height="70"/>
         <image name="plus_blau" width="70" height="70"/>
+        <image name="swipe-right" width="80" height="63"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="biw-ZC-yrp"/>

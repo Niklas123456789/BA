@@ -12,56 +12,49 @@ import UIKit
 
 class InfoViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var imagesView: UIImageView!
-    let imageNames = ["info_blau","hintergrundBlau","hintergrundHell","hintergrundBlau","hintergrundHell"]
+    @IBOutlet weak var mainScrollView: UIScrollView!
+    @IBOutlet weak var swipeRightArrow: UIImageView!
+    
+    var imageArray = [UIImage]()
+    
     var currentImage = 0
     
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        textView.isScrollEnabled = false
-        view.addSubview(imagesView)
-        var swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture")
-        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
-        self.imagesView.addGestureRecognizer(swipeRight)
         
-        var swipeLeft = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture")
-        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
-        self.imagesView.addGestureRecognizer(swipeLeft)
+        swipeRightArrow.alpha = 0.0
+        textView.isScrollEnabled = false
+        //Image Literal
+        imageArray = [#imageLiteral(resourceName: "Zeichenfläche 1-1"), #imageLiteral(resourceName: "ok_weiss"), #imageLiteral(resourceName: "hintergrundHell")]
+    
+        mainScrollView.frame = view.frame
+        for i in 0..<imageArray.count{
+            
+            let imageView = UIImageView()
+            imageView.image = imageArray[i]
+            imageView.contentMode = .scaleAspectFit
+            
+            let xPosition = self.view.frame.width * CGFloat(i)
+            imageView.frame = CGRect(x: xPosition, y: 0, width: self.mainScrollView.frame.width, height: self.mainScrollView.frame.height)
+            
+            mainScrollView.contentSize.width = mainScrollView.frame.width * CGFloat(i + 1)
+            mainScrollView.addSubview(imageView)
+        }
+        
+        
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
 //        textView.isScrollEnabled = true
+        swipeRightArrow.fadeIn()
+        var timer = Timer()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: false, block: { (timer) in
+            self.swipeRightArrow.fadeOut()
+        })
     }
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            
-            print("SWIPE \(swipeGesture.direction)")
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizer.Direction.left:
-                if currentImage == imageNames.count - 1 {
-                    currentImage = 0
-                    
-                }else{
-                    currentImage += 1
-                }
-                imagesView.image = UIImage(named: "info_blau.png")
-                
-            case UISwipeGestureRecognizer.Direction.right:
-                if currentImage == 0 {
-                    currentImage = imageNames.count - 1
-                }else{
-                    currentImage -= 1
-                }
-                imagesView.image = UIImage(named: imageNames[currentImage])
-            default:
-                break
-            }
-        }
-    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
