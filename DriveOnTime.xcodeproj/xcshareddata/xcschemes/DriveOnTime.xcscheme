@@ -17,7 +17,7 @@
                BlueprintIdentifier = "D7CBCA75219324E1001F786B"
                BuildableName = "DailyRhythm.app"
                BlueprintName = "DailyRhythm"
-               ReferencedContainer = "container:DailyRhythm.xcodeproj">
+               ReferencedContainer = "container:DriveOnTime.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "D7CBCA89219324E3001F786B"
                BuildableName = "DailyRhythmTests.xctest"
                BlueprintName = "DailyRhythmTests"
-               ReferencedContainer = "container:DailyRhythm.xcodeproj">
+               ReferencedContainer = "container:DriveOnTime.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "D7CBCA75219324E1001F786B"
             BuildableName = "DailyRhythm.app"
             BlueprintName = "DailyRhythm"
-            ReferencedContainer = "container:DailyRhythm.xcodeproj">
+            ReferencedContainer = "container:DriveOnTime.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -68,7 +68,7 @@
             BlueprintIdentifier = "D7CBCA75219324E1001F786B"
             BuildableName = "DailyRhythm.app"
             BlueprintName = "DailyRhythm"
-            ReferencedContainer = "container:DailyRhythm.xcodeproj">
+            ReferencedContainer = "container:DriveOnTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -87,7 +87,7 @@
             BlueprintIdentifier = "D7CBCA75219324E1001F786B"
             BuildableName = "DailyRhythm.app"
             BlueprintName = "DailyRhythm"
-            ReferencedContainer = "container:DailyRhythm.xcodeproj">
+            ReferencedContainer = "container:DriveOnTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

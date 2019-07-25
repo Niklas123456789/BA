@@ -163,7 +163,8 @@
 				D737AF2022AA8C2E008BA068 /* nobackground720.gif */,
 				D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */,
 			);
-			path = DailyRhythm;
+			name = DailyRhythm;
+			path = DriveOnTime;
 			sourceTree = "<group>";
 		};
 		D7CBCA8D219324E3001F786B /* DailyRhythmTests */ = {
@@ -244,7 +245,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D7CBCA71219324E1001F786B /* Build configuration list for PBXProject "DailyRhythm" */;
+			buildConfigurationList = D7CBCA71219324E1001F786B /* Build configuration list for PBXProject "DriveOnTime" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -476,12 +477,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B3CRTN6SZR;
-				INFOPLIST_FILE = DailyRhythm/Info.plist;
+				INFOPLIST_FILE = DriveOnTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.DailyRhythm;
+				PRODUCT_BUNDLE_IDENTIFIER = app.DriveOnTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -494,12 +495,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B3CRTN6SZR;
-				INFOPLIST_FILE = DailyRhythm/Info.plist;
+				INFOPLIST_FILE = DriveOnTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.DailyRhythm;
+				PRODUCT_BUNDLE_IDENTIFIER = app.DriveOnTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -551,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D7CBCA71219324E1001F786B /* Build configuration list for PBXProject "DailyRhythm" */ = {
+		D7CBCA71219324E1001F786B /* Build configuration list for PBXProject "DriveOnTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D7CBCA91219324E3001F786B /* Debug */,
