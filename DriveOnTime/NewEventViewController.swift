@@ -779,6 +779,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
             var timeTillNextCheck: Int = 0
             
+            print("[NEWEVENTVIEWCONTROLLER] about to call getTimeTillNextCheckAction")
             EventManager.getInstance().getTimeTillNextCheckAction(from: newEvent) { (tempTimeTillNextCheck: Int) in
                 timeTillNextCheck = tempTimeTillNextCheck
                 print("tempTimeTillNextCheck: \(tempTimeTillNextCheck) \(timeTillNextCheck)")
@@ -801,7 +802,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
                             print("In timer repeatTimecheck")
                             if (timeTillNextCheck >= 0) {
-                                EventManager.getInstance().repeatTimeCheck(event: newEvent)
+//                                EventManager.getInstance().repeatTimeCheck(event: newEvent)
+                                
                             }
                         })
                         EventManager.getInstance().removeDuplicateEvents(from: newEvent)

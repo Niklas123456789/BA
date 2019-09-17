@@ -193,9 +193,10 @@ class EventManager {
         }
         print("CountDays: \(countDays)")
         if countDays == 0 {
+//            todo fix eventHours
             let eventSecondsThisDay = eventHours * 3600 + eventMin * 60 - (event.bufferTime + event.parkingTime + event.walkingTime) * 60
             if ((Int(todaysDate.secondsFromBeginningOfTheDay()) - secondsFromGMT) >= eventSecondsThisDay) {
-                print("todaysDate.secondsFromBeginningOfTheDay() \(todaysDate.secondsFromBeginningOfTheDay())")
+                print("todaysDate.secondsFromBeginningOfTheDay() \(todaysDate.secondsFromBeginningOfTheDay()) EventSecondsThisDay \(eventSecondsThisDay)")
                 return 7
             }
         }
@@ -225,7 +226,7 @@ class EventManager {
 //    }
     
     //<24h
-     func repeatTimeCheck(event: Event) {
+    /*func repeatTimeCheck(event: Event) {
         print("In repeatTimeCheck")
         EventManager.getInstance().updateJSONEvents()
         
@@ -243,7 +244,7 @@ class EventManager {
             }
         }
     }
-    
+    */
      func callTimeTillNextCheckAction(in timeTillNextCheck: Int, event: Event) {
         print("In repeatTimeCheck")
         EventManager.getInstance().updateJSONEvents()
@@ -506,7 +507,7 @@ class EventManager {
     //repeats event after notification
      func checkIfEventShouldRepeat(for event: Event) {
         var weeksTillNextEvent: Double = 0
-        
+        event.deleteEventInJSON()
         //event has repeatDuration
         if event.repeatDuration != 0 {
             if event.repeatDuration == 1 {
@@ -531,10 +532,11 @@ class EventManager {
                 timeTillNextCheck = tempResult
                 
             }
-            
+            /*
             if (timeTillNextCheck >= 0){
                 EventManager.getInstance().repeatTimeCheck(event: newEvent)
             }
+            */
         })
     }
     

@@ -65,7 +65,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W62-OJ-kaM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1652.1739130434785" y="180.80357142857142"/>
+            <point key="canvasLocation" x="-1417" y="181"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -892,7 +892,7 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
                                 <rect key="frame" x="0.0" y="-24" width="414" height="801"/>
                             </scrollView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="UPe-1r-Hvc">
-                                <rect key="frame" x="336" y="418" width="80" height="63"/>
+                                <rect key="frame" x="336" y="441.5" width="16" height="16"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1289,8 +1289,8 @@ Auf dieser Seite sind all deine Ereignisse geordnet abgebildet. Um ein Ereignis 
         <image name="swipe-right" width="80" height="63"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3Zu-lv-Hpd"/>
+        <segue reference="vw4-1X-Ecx"/>
         <segue reference="rVY-NE-BpK"/>
-        <segue reference="QaS-ms-p1s"/>
+        <segue reference="bhj-aV-JXF"/>
     </inferredMetricsTieBreakers>
 </document>
