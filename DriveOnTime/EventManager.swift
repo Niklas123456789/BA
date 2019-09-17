@@ -245,6 +245,44 @@ class EventManager {
         }
     }
     */
+    
+    func countTillNextEventDay2(event: Event) -> Int {
+        var count = 0
+        var countTillNext = 0
+        let todaysDate = EventManager.getInstance().getDate()
+        
+        var eventWeekdaysBinary = [0,0,0,0,0,0,0]
+        var tempCount = 0
+        for temp in event.repeatAtWeekdays {
+            if (temp == true){
+                eventWeekdaysBinary[tempCount] = 1
+            }
+            tempCount = tempCount + 1
+        }
+//        print("EventWeekdaysBinary: \(eventWeekdaysBinary)")
+        
+        let todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
+        var tempCount2 = 0
+        while(tempCount2 < 7){
+            if ((todaysWeekday + count) <= 6){
+                if(eventWeekdaysBinary[todaysWeekday + count] == 1){
+                    if(countTillNext == 0) {
+                        countTillNext = count + 1
+                    }
+                }
+            }else{
+                if(eventWeekdaysBinary[todaysWeekday + count - 7] == 1){
+                    if(countTillNext == 0) {
+                        countTillNext = count + 1
+                    }
+                }
+            }
+            tempCount2 = tempCount2 + 1
+            count = count + 1
+        }
+        return countTillNext
+    }
+    
      func callTimeTillNextCheckAction(in timeTillNextCheck: Int, event: Event) {
         print("In repeatTimeCheck")
         EventManager.getInstance().updateJSONEvents()

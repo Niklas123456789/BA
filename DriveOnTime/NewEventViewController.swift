@@ -218,8 +218,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         if (settingsSelected == false && tableViewList.isEmpty == false) {
             currentEvent = tableViewList[cellClickedIndex]
         }
-        
-        print("heyo")
+
         
         //Picker Delegates
         self.durationPicker.delegate = self
@@ -442,7 +441,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         print("in enableOkCheck")
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
         //TODO: Add alle anderen pflichtfelder
-        if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false ) {
+        if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false && self.cityTextField.text?.isEmpty == false) {
 //            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
             okButtonIsFullyEnabled = true
             //okButton.isUserInteractionEnabled = true
@@ -621,34 +620,20 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             generator.impactOccurred()
             return
         }
-        //if(validAddess == false) {return}
-        //validAddess = false
+
         loadingWaitCheckingLocationAnimation()
         datePickerAction(sender: timePicker)
         
         
- //       print("Days between today and next event day count: \(countDaysTillNextEventDay(repeatAtWeekdays: repeatAtWeekdays))")
-        
-        
-        //ID = ID + 1
+        /* Event ID */
         let eventID = UUID().uuidString
         print("Event ID: \(eventID)")
-        
-        print("WEGZEIT:\(walkingTime)")
         
         if (houseNumberTextField == nil) {
             houseNrEdited = true
         }
-        
-        //TODO: Check adress
-        
 
-        
-        
-        
-        
         //yyyy.mm.dd hh:mm
-
         var todaysRealDate = EventManager.getInstance().getDate()
         
         let calendar = Calendar.current
@@ -672,8 +657,8 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         print("hour: \(hour)")
         let(difHour, difMin, subSec) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: pickerHour, eventMin: pickerMin)
         
-        //TODO: ERROR when no day is selected
-        
+       
+        /* repeat duration */
         var weeksTillNextEvent: Int = 0
         if repeatDuration == 0 {
             weeksTillNextEvent = 0
@@ -683,57 +668,69 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             weeksTillNextEvent = 1
         }else if repeatDuration == 3 {
             weeksTillNextEvent = 2
-            //monatlich
         }else if repeatDuration == 4 {
             weeksTillNextEvent = 3
         }
 
-        //TODO DriveTime?
+       
         let onlyTimeEvent = Event(eventID: "", eventName: "", streetName: "", houseNr: "", houseNrEdited: false, cityName: "", eventNotes: "", parkingTime: parkingTime, walkingTime: walkingTime, bufferTime: bufferTime, eventDate: EventManager.getInstance().getDate(), repeatDuration: repeatDuration, repeatAtWeekdays: eventWeekdays, weeksTillNextEvent: weeksTillNextEvent, driveTime: 0, timeTillGo: 0, mute: false, latitude: 0.0, longitude: 0.0, notificationId: 0)
         
         
-        print(onlyTimeEvent)
+        print("ONLY TIME EVENT: \(onlyTimeEvent)")
+        
+        print("Days between today and next event day count: \(EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent))")
 
-        var distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 /*+ difHour * 3600 + difMin * 60 - subSec */
+        let distanceToEventInSecounds = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent) * 86400 /*+ difHour * 3600 + difMin * 60 - subSec */
 //        var distanceToEventInSecounds = EventManager.getInstance().calcDiffInSecOfNowAndEventDate(event: onlyTimeEvent)
         
-        var dateFormatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
-//        strPickerDate = dateFormatter.string(from: timePicker.date)
-//        var temp:Int! = Int(strPickerDate)
-//        pickerMin = temp % 100
-//        pickerHour = Int(temp/100)
-        
         
         let eventHours = calendar.component(.hour, from: timePicker.date)
         let eventMin = calendar.component(.minute, from: timePicker.date)
         
-        
-        
 //        print("{NewEventViewController} eventHours: \(eventHours) eventMin: \(eventMin)")
-        var todaysDate = EventManager.getInstance().getDate()
-        var distanceDays = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent)
+        let todaysDate = EventManager.getInstance().getDate()
+        _ = EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent)
         
         print("TodaysDate!: \(todaysDate)")
-        var eventDateNoDaysAdded = Calendar.current.date(bySettingHour: eventHours, minute: eventMin, second: 0, of: todaysDate)!
+        let eventDateNoDaysAdded = Calendar.current.date(bySettingHour: eventHours, minute: eventMin, second: 0, of: todaysDate)!
         var eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDateNoDaysAdded)!
+        
+        let(diffHour, diffMin, _) = EventManager.getInstance().differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHours, eventMin: eventMin)
+        
+        var eventWeekdaysBinary = [0,0,0,0,0,0,0]
+        var tempCount = 0
+        for temp in eventWeekdays {
+            if (temp == true){
+                eventWeekdaysBinary[tempCount] = 1
+            }
+            tempCount = tempCount + 1
+        }
+        print("EventWeekdaysBinary: \(eventWeekdaysBinary)")
+        
+        /* if eventdate passed already */
+        if (Calendar.current.isDate(todaysDate, inSameDayAs:eventDate)){
+            print("SAME DAY ALSO SELECTED")
+            if(((diffHour * 60) + diffMin) < 0){
+                print("Event passed alreadyyy")
+            
+                var countTillNextEventDay = EventManager.getInstance().countTillNextEventDay2(event: onlyTimeEvent)
+                print("countTillNextEventDay: \(countTillNextEventDay)")
+                
+                eventDate = Calendar.current.date(byAdding: .day, value: countTillNextEventDay, to: eventDate)!
+            }
+        }
+        
+        
         eventDate = eventDate.addingTimeInterval(TimeInterval(secondsFromGMT))
         
-//      eventDate = eventDate.addingTimeInterval(TimeInterval(secondsFromGMT))
         print("Eventdate: \(eventDate)")
-        //sets eventDate only seconds to 0
+        /* sets eventDate only seconds to 0 */
         print("DistanceToEventInSeconds \(distanceToEventInSecounds)")
-//        eventDate = todaysRealDate.addingTimeInterval(Double(distanceToEventInSecounds))
         print("EventDate after creating1: \(eventDate)")
-//        eventDate = Calendar.current.date(bySettingHour: Calendar.current.component(.hour, from: eventDate), minute: Calendar.current.component(.minute, from: eventDate), second: 0, of: Date())!
         eventDate = Calendar.current.date(bySetting: .second, value: 0, of: eventDate)!
-//        eventDate = Calendar.current.date(byAdding: .day, value: EventManager.getInstance().countDaysTillNextEventDay(event: onlyTimeEvent), to: eventDate)!
         print("EventDate after creating2: \(eventDate)")
-        
-        
-        
-        //var timeTillNextCheck = EventManager.getInstance().calcTimeTillNextCheck()
-
         
         /* gets lat and long */
         let geoCoder = CLGeocoder()
@@ -799,7 +796,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                         
                         //timer that triggers the reapeat of timeTillNextCheck
                         print("before repeatTimeCheck")
-                        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+                        _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
                             print("In timer repeatTimecheck")
                             if (timeTillNextCheck >= 0) {
 //                                EventManager.getInstance().repeatTimeCheck(event: newEvent)
@@ -851,11 +848,11 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         boxView.layer.cornerRadius = 10
         
         //Here the spinnier is initialized
-        var activityView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        let activityView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
         activityView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         activityView.startAnimating()
         
-        var textLabel = UILabel(frame: CGRect(x: 60, y: 0, width: 200, height: 50))
+        let textLabel = UILabel(frame: CGRect(x: 60, y: 0, width: 200, height: 50))
         textLabel.textColor = UIColor.gray
         textLabel.text = "Prüfe Ereignisort"
         
@@ -864,36 +861,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         view.addSubview(boxView)
     }
-    
-//    func updateEventTimes(event: Event) -> (Int, Int, Int){
-//
-//        var eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: repeatDuration
-//        var timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
-//        //TODO Timer that calls the updateEventTimes when timeTillnextcheck is 0
-//        //        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-//        //            updateEventTimes(event: self)
-//        //        })
-//
-//
-//
-//        var timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-//
-//        if event.weeksTillNextEvent != 0 && event.weeksTillNextEvent != 1 {
-//            eventTotalSeconds = eventTotalSeconds + ((event.weeksTillNextEvent - 1) * 604800)
-//            timeTillNextCheck = timeTillNextCheck + ((event.weeksTillNextEvent - 1) * 604800)
-//            timeTillGo = timeTillGo + ((event.weeksTillNextEvent - 1) * 604800)
-//        }
-//        return (eventTotalSeconds, timeTillNextCheck, timeTillGo)
-//    }
-    //TODO
-    func calcDriveTime(event: Event) -> Int {
-        return 0
-    }
-    
-//    func repeatTimeCheck(event: inout Event) {
-//        EventManager.getInstance().updateEventTimes(event: &event)
-//    }
-    
     
     @IBAction func exitButtonAction(_ sender: Any) {
         if (settingsSelected == false) {
@@ -905,20 +872,23 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         
     }
+    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if(identifier == "saveNewEvent" || identifier == "saveEvent") {
             if (okButtonIsFullyEnabled == true) {
                 return true
             } else {
-                //TODO: Rückmeldung via vibration
+                //Rückmeldung via vibration
                 AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
         }
+        
         if (identifier == "exit" || identifier == "exitToEvent") {
             return true
         }
         return false
     }
+    
     /* picker row hight */
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         if pickerView.isEqual(durationPicker) {
@@ -949,6 +919,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             return newLength <= 42
         }
     }
+    
 }
 
 
