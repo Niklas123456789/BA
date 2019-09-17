@@ -248,6 +248,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName.capitalizingFirstLetter()
+        
         cell.checkTwoDays(time: tableViewList[indexPath.row].timeTillGo, event: tableViewList[indexPath.row])
         cell.layer.backgroundColor = UIColor.clear.cgColor
 //        cell.cellTime.text = "..."
@@ -391,7 +392,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         print("ETARequest \(interval)")
                         
                         self.updateTableWithETA(travelTime: Int(interval), event: event, index: index)
-                        
+//                        self.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: 0))
                     }
                     
                 } else {
@@ -412,13 +413,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         allEventsArray = JSONDataManager.loadAll(Event.self)
         
         group6.enter()
+        var tempCount = 0
         for tempEvent in allEventsArray {
             if (event.eventID == tempEvent.eventID) {
                 tableViewList[index].timeTillGo = EventManager.getInstance().calcDifNowAndEvent(event: event) - (event.bufferTime + event.walkingTime + event.parkingTime) * 60 - (Int(travelTime))
                 
-//                var cell = tableView.cellForRow(at: IndexPath(row: index, section: 0))
-//                cell?.textLabel?.textColor = .lightGray
-                print(allEventsArray[index].timeTillGo)
+                let indexPath = IndexPath(row: tempCount, section: 0)
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ViewContollerTableViewCell
+                cell.checkTwoDays(time: tableViewList[index].timeTillGo, event: event)
+//                print(allEventsArray[index].timeTillGo)
+                
+//                THIS LINE COULD BE IMPORTANT
+                self.tableView.reloadRows(at: [indexPath], with: .fade)
+                tempCount = tempCount + 1
+//
             }
             
             print("TimeTillGo3 in ViewController: \(tableViewList[index].timeTillGo)")

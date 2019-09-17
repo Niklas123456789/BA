@@ -38,6 +38,8 @@ class ViewContollerTableViewCell: UITableViewCell {
 //        self.cellLabel.font = self.cellLabel.font.withSize(34)
         self.cellLabel.layer.zPosition = 10
         
+        print("{ViewContollerTableViewCell} checkTwoDays time \(time)   event: \(event.eventName)")
+        
         //self.cellTime.font = UIFont (name: Font.thinNumbers, size: 55)
         self.cellTime.textColor = UIColor.darkGray
         
@@ -48,7 +50,7 @@ class ViewContollerTableViewCell: UITableViewCell {
             //self.cellTime.text = "Fahr bitte los"
             self.backgroundColor = UIColor.red
             
-        }else if(time <= 86400) {
+        }else if(time <= Int.max) {
             startTimer(timeInSeconds: time, event: event)
         } else {
             //was tun wenn Zeit noch über 24h?
@@ -59,48 +61,55 @@ class ViewContollerTableViewCell: UITableViewCell {
     
     func startTimer(timeInSeconds: Int, event: Event){
         if (timer != nil) {timer.invalidate()}
-        
+        cellTime.text = "..."
         var secondsLeft: Int = timeInSeconds
+        
+
+        
         //TODO  86400
-        if(time <= 86400){ // 24hours
+        if(secondsLeft <= 86400){ // 24hours
             
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
             
-            var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
-            
-//            self.ausgeben(h: h, m: m, s: s)
+                var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
+                
+            //            self.ausgeben(h: h, m: m, s: s)
                 EventManager.getInstance().hmsFrom(seconds: secondsLeft, completion: { (hours, minutes, seconds) in
-                    let hours = EventManager.getInstance().getStringFrom(seconds: hours)
-                    let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
-                    let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
-                    
-                    self.cellTime.text = "\(hours):\(minutes):\(seconds)"
-                })
-            secondsLeft = secondsLeft - 1
+                        let hours = EventManager.getInstance().getStringFrom(seconds: hours)
+                        let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
+                        let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
+                        
+                        self.cellTime.text = "\(hours):\(minutes):\(seconds)"
+                    })
+                secondsLeft = secondsLeft - 1
             
-            if secondsLeft == 1 {
-                //benachrichtigung muss raus
-                //EventManager.getInstance().createNotification(for: event)
-            }
-                //Todo farbe dynamisch verändern
-            if secondsLeft < event.bufferTime * 60 {
-                    //schoener machen
-                var colorIncrediant: CGFloat = (CGFloat(secondsLeft) / CGFloat(event.bufferTime * 60))
-                if colorIncrediant >= 0 {
-                    self.backgroundColor = UIColor.red.withAlphaComponent((CGFloat(1 - colorIncrediant))/2)
+                if secondsLeft == 1 {
+                    //benachrichtigung muss raus
+                    //EventManager.getInstance().createNotification(for: event)
                 }
-//                print("color \(colorIncrediant)")
-                //TODO muss noch an event angepasst werden
+                    //Todo farbe dynamisch verändern
+                if secondsLeft < event.bufferTime * 60 {
+                        //schoener machen
+                    var colorIncrediant: CGFloat = (CGFloat(secondsLeft) / CGFloat(event.bufferTime * 60))
+                    if colorIncrediant >= 0 {
+                        self.backgroundColor = UIColor.red.withAlphaComponent((CGFloat(1 - colorIncrediant))/2)
+                    }
+                    //print("color \(colorIncrediant)")
+                    //TODO muss noch an event angepasst werden
+                }
+                
+                if(secondsLeft < -2){
+                    print("EVENT IN SECONDSLEFT < 0 START TIMER: \(event.eventName) WITH SECONDSLEFT: \(secondsLeft)")
+                    self.cellTime.text = "Fahre bitte los"
+                    self.cellTime.textColor = UIColor.black
+                    self.backgroundColor = UIColor.red.withAlphaComponent(0.6)
+                    print("REEED")
+                    self.cellTime.textColor = UIColor.init(rgb: 0xbf0000)
+                    self.timer.invalidate()
+                    return
+                }
+
             }
-            if(secondsLeft < 0){
-                self.cellTime.text = "Fahre bitte los"
-                self.cellTime.textColor = UIColor.black
-                self.backgroundColor = UIColor.red.withAlphaComponent(0.6)
-//                print("REEED")
-                self.cellTime.textColor = UIColor.init(rgb: 0xbf0000)
-                self.timer.invalidate()
-            }
-        }
         )}else{
             //was tun wenn Zeit noch über 24h?
             self.cellTime.text = "+24h"
