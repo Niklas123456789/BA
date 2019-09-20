@@ -47,7 +47,7 @@ class ViewContollerTableViewCell: UITableViewCell {
 //        ViewController.getInstance().getETARequest(destination: CLLocationCoordinate2DMake(event.latitude, event.longitude), event: event, index: 0)
         //TODO  86400
         if(time < 0){
-            //self.cellTime.text = "Fahr bitte los"
+            self.cellTime.text = "Fahre bitte los"
             self.backgroundColor = UIColor.red
             
         }else if(time <= Int.max) {
@@ -61,34 +61,41 @@ class ViewContollerTableViewCell: UITableViewCell {
     
     func startTimer(timeInSeconds: Int, event: Event){
         if (timer != nil) {timer.invalidate()}
-        cellTime.text = "..."
+//        cellTime.text = "..."
         var secondsLeft: Int = timeInSeconds
+        var count = 0
         
 
         
         //TODO  86400
         if(secondsLeft <= 86400){ // 24hours
             
-            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
+
             
-                var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (_) in
+                
+                
+            
+                
+                if(secondsLeft == 0 && count > 0) {
+                    self.cellTime.text = "..."
+                }
+                
+//                var(h, m, s) = self.secondsToHoursMinutesSeconds(seconds: secondsLeft)
                 
             //            self.ausgeben(h: h, m: m, s: s)
-                EventManager.getInstance().hmsFrom(seconds: secondsLeft, completion: { (hours, minutes, seconds) in
-                        let hours = EventManager.getInstance().getStringFrom(seconds: hours)
-                        let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
-                        let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
+                else if (secondsLeft > 0) {
+                    EventManager.getInstance().hmsFrom(seconds: secondsLeft, completion: { (hours, minutes, seconds) in
+                            let hours = EventManager.getInstance().getStringFrom(seconds: hours)
+                            let minutes = EventManager.getInstance().getStringFrom(seconds: minutes)
+                            let seconds = EventManager.getInstance().getStringFrom(seconds: seconds)
                         
-                        self.cellTime.text = "\(hours):\(minutes):\(seconds)"
-                    })
-                secondsLeft = secondsLeft - 1
-            
-                if secondsLeft == 1 {
-                    //benachrichtigung muss raus
-                    //EventManager.getInstance().createNotification(for: event)
+                            self.cellTime.text = "\(hours):\(minutes):\(seconds)"
+                        })
+                    secondsLeft = secondsLeft - 1
                 }
                     //Todo farbe dynamisch verändern
-                if secondsLeft < event.bufferTime * 60 {
+                else if secondsLeft < event.bufferTime * 60 && secondsLeft > 1{
                         //schoener machen
                     var colorIncrediant: CGFloat = (CGFloat(secondsLeft) / CGFloat(event.bufferTime * 60))
                     if colorIncrediant >= 0 {
@@ -98,7 +105,7 @@ class ViewContollerTableViewCell: UITableViewCell {
                     //TODO muss noch an event angepasst werden
                 }
                 
-                if(secondsLeft < -2){
+                else if(secondsLeft < 0 && count > 1){
                     print("EVENT IN SECONDSLEFT < 0 START TIMER: \(event.eventName) WITH SECONDSLEFT: \(secondsLeft)")
                     self.cellTime.text = "Fahre bitte los"
                     self.cellTime.textColor = UIColor.black
@@ -108,7 +115,7 @@ class ViewContollerTableViewCell: UITableViewCell {
                     self.timer.invalidate()
                     return
                 }
-
+                count = count + 1
             }
         )}else{
             //was tun wenn Zeit noch über 24h?
