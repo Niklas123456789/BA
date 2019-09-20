@@ -12,7 +12,7 @@ import CoreLocation
 import Contacts
 
 
-class EventViewController: UIViewController, MKMapViewDelegate {
+class EventViewControllerOLD: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var infoStack: UIStackView!
     @IBOutlet weak var buttonsStack: UIStackView!
@@ -67,8 +67,8 @@ class EventViewController: UIViewController, MKMapViewDelegate {
         cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight /*- self.timeLabel.frame.height - self.buttonsStack.frame.height*/, width: self.view.bounds.width, height: cardHeight)
         cardViewController.view.clipsToBounds = true
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewController.handleCardTap(recognizer:)))
-        let panGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewController.handleCardPan(recognizer:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewControllerOLD.handleCardTap(recognizer:)))
+        let panGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EventViewControllerOLD.handleCardPan(recognizer:)))
         
         cardViewController.handleArea.addGestureRecognizer(tapGestureRecognizer)
         cardViewController.handleArea.addGestureRecognizer(panGestureRecognizer)
@@ -532,7 +532,7 @@ extension Date
         return dateFormatter.string(from: self)
     }
 }
-extension EventViewController: CLLocationManagerDelegate {
+extension EventViewControllerOLD: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
@@ -549,7 +549,7 @@ extension EventViewController: CLLocationManagerDelegate {
     }
 }
 
-extension EventViewController {
+extension EventViewControllerOLD {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
         //TODO: routenfarbe anpassen. vllt hellblau

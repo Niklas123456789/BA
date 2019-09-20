@@ -70,23 +70,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
-//        print("Enter background")
-//        EventManager.getInstance().updateJSONEvents()
-//        var allEventArray = JSONDataManager.loadAll(Event.self)
-//        var allRestTimes: [Int]
-//        var index = 0
-//        for tempEvent in allEventArray {
-//            EventManager.getInstance().getTimeTillNextCheckAction(from: tempEvent, completion: { (tempResult: Int) in
-//                allRestTimes[index] = tempResult
-//            })
-//            index = index + 1
-//        }
-//        DispatchQueue.main.async {
-//            allRestTimes.sort()
-//
-//        }
+        print("Enter background")
+        EventManager.getInstance().updateJSONEvents()
         
-//        UIApplication.shared.setMinimumBackgroundFetchInterval(3600)
+        var smallestTimeTillEvent = Int.max
+
+        let allJsonEvents = JSONDataManager.loadAll(Event.self)
+        
+        if allJsonEvents.isEmpty {
+            locationManager.stopMonitoringSignificantLocationChanges()
+            return
+        }
+        
+        for event in allJsonEvents {
+            
+            EventManager.getInstance().getTimeTillNextCheckAction(from: event) { (result) in
+                if result < smallestTimeTillEvent {
+                    smallestTimeTillEvent = result
+                }
+            }
+        }
+        if (smallestTimeTillEvent > 86400) {
+            smallestTimeTillEvent = smallestTimeTillEvent - 86400
+        }
+        UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(smallestTimeTillEvent))
         
     }
 

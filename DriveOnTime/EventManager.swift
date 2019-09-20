@@ -14,7 +14,7 @@ import MapKit
 
 class EventManager {
     
-    
+    let locationManager = CLLocationManager()
     static var eventNotificationIds = [String : Int]()
     var group7 = DispatchGroup()
     
@@ -26,15 +26,11 @@ class EventManager {
     
      init() {
     }
-
     
-    
-    
-    
-    //TODO
-     func calcDriveTime(event: Event) -> Int {
+     func zeroReturn(event: Event) -> Int {
         return 0
     }
+    
      func calcDifNowAndEvent(event: Event) -> Int {
         let date = EventManager.getInstance().getDate()
         let difference = event.eventDate.timeIntervalSince(date)
@@ -54,24 +50,16 @@ class EventManager {
         let seconds: Int! = components.second
         
         
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "HHmm"
-//        let strPickerDate = dateFormatter.string(from: event.eventDate)
-//        print("StrPickerDate: \(strPickerDate)")
-//        let temp:Int! = Int(strPickerDate)
-//        let eventMin = temp % 100
-//        let eventHour = Int(temp/100)
-//        print("Time datePicker: \(strPickerDate)")
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
         let eventHour = eventComponents.hour!
         
-        var(difHour, difMin, subSec) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventComponents.minute!)
-        var realDifHour = difHour  - (secondsFromGMT/3600)
+        let(difHour, difMin, subSec) = differenceTwoHourAndMin(currentHours: hour, currentMin: minute, eventHours: eventHour, eventMin: eventComponents.minute!)
+        let realDifHour = difHour  - (secondsFromGMT/3600)
         
 //        print("eventComponents.hour!, eventMin: eventComponents.minute! \(eventHour) \(eventComponents.minute)")
         
         /* sets distanceToEventInSecounds */
-        let todaysDate = getDate()
+        _ = getDate()
         
         let eventSecondsThisDay = eventHour * 3600 + eventComponents.minute! * 60
         var distanceToEventInSecounds = 0
@@ -204,47 +192,6 @@ class EventManager {
         return countDays
     }
     
-//     func updateEventTimes(event: inout Event) -> Event{
-//
-//        var eventTotalSeconds = calcDiffInSecOfNowAndEventDate(eventDate: event.eventDate, eventWeekdays: event.repeatAtWeekdays, duration: event.repeatDuration) // MARK: hi
-//        var timeTillNextCheck = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)) / 2
-//
-//
-//        var timeTillGo = (event.eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-//        //TODO: Soll nicht beim ersten mal erstellen passieren, sodass ein event was alle 3 woche geht diese woche startet
-//        if event.weeksTillNextEvent != 0 && event.weeksTillNextEvent != 1 {
-//            eventTotalSeconds = eventTotalSeconds + ((event.weeksTillNextEvent - 1) * 604800)
-//            timeTillNextCheck = timeTillNextCheck + ((event.weeksTillNextEvent - 1) * 604800)
-//            timeTillGo = timeTillGo + ((event.weeksTillNextEvent - 1) * 604800)
-//        }
-//
-//        event.eventTotalSeconds = eventTotalSeconds
-//        event.timeTillNextCheck = timeTillNextCheck
-//        event.timeTillGo = timeTillGo
-//
-//        return event
-//    }
-    
-    //<24h
-    /*func repeatTimeCheck(event: Event) {
-        print("In repeatTimeCheck")
-        EventManager.getInstance().updateJSONEvents()
-        
-        var timeTillNextCheck: Int = 0
-        
-        self.getTimeTillNextCheckAction(from: event) { (tempResult: Int) in
-            timeTillNextCheck = tempResult
-            DispatchQueue.main.async {
-                let newEvent = event
-                if timeTillNextCheck > 0 {
-                    let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
-                        EventManager.getInstance().repeatTimeCheck(event: newEvent)
-                    })
-                }
-            }
-        }
-    }
-    */
     
     func countTillNextEventDay2(event: Event) -> Int {
         var count = 0
@@ -259,7 +206,6 @@ class EventManager {
             }
             tempCount = tempCount + 1
         }
-//        print("EventWeekdaysBinary: \(eventWeekdaysBinary)")
         
         let todaysWeekday = Calendar.current.component(.weekday, from: todaysDate)
         var tempCount2 = 0
@@ -287,7 +233,7 @@ class EventManager {
         print("In repeatTimeCheck")
         EventManager.getInstance().updateJSONEvents()
         
-        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
+        _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeTillNextCheck), repeats: false, block: { (timer) in
             self.getTimeTillNextCheckAction(from: event, completion: { (tempResult: Int) in
                 
             })
@@ -304,21 +250,20 @@ class EventManager {
         }
     }
     
+        /* updates JSON */
      func updateJSONEvents() {
         let loadedEvents = JSONDataManager.loadAll(Event.self)
-        /*  */
+
         
         let todaysDate = getDate()
         
         for event in loadedEvents {
             
             if(todaysDate <= event.eventDate) {
-                //update? what?
             }else{
                 if(event.repeatDuration == 0){
                     event.deleteEventInJSON()
                 } else {
-                    //TODO: check if event is repeated
                     
                 }
                 
@@ -339,7 +284,6 @@ class EventManager {
         } else {
             content.body = "Mit deinem Puffer von \(event.bufferTime) Minuten musst du jetzt los! \nNotiz: \(event.eventNotes)"
         }
-        //content.subtitle = "Unterschrift"
         content.sound = UNNotificationSound.default
         
         let todaysDate = Date()
@@ -347,8 +291,8 @@ class EventManager {
         //that the notification doesn't go off by 1 min
         if secondsNow == 0 {secondsNow = 59}
         
-        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(61 - secondsNow)), repeats: false)
-        var request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(61 - secondsNow)), repeats: false)
+        let request = UNNotificationRequest(identifier: "\(event.eventID)", content: content, trigger: trigger)
         center.add(request) { (error) in
             if (error != nil) {
                 print("error creating notification for id: \(event.eventID): \(error!.localizedDescription)")
@@ -395,13 +339,12 @@ class EventManager {
 //        content.subtitle = "Aktuelle Fahrzeit: \(Int(travelTime/60)) min"
         content.sound = UNNotificationSound.default
 
-//        event.increaseNotificationId() // TODO: fix how this shit works
-//        HEEEERE
+
         
         
-        var identifier = event.eventID + "\(event.notificationId)"
-        var trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(time + 1)), repeats: false)
-        var request = UNNotificationRequest(identifier: eventId, content: content, trigger: trigger)
+        _ = event.eventID + "\(event.notificationId)"
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: (TimeInterval(time + 1)), repeats: false)
+        let request = UNNotificationRequest(identifier: eventId, content: content, trigger: trigger)
         center.add(request) { (error) in
             if (error != nil) {
                 print("error creating notification for id: \(eventId): \(error!.localizedDescription)")
@@ -411,41 +354,6 @@ class EventManager {
         }
     }
     
-//     func getTimeTillNextCheck(from event: Event) -> Int {
-//
-//        let eventTotalSeconds = calcDiffInSecOfNowAndEventDate(event: event)
-//        var timeTillNextCheck = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-//        let timeTillGo = (eventTotalSeconds - ((event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event))
-//
-//        if timeTillNextCheck / 2 <= 86400 {
-//
-//            if timeTillGo <= 60 {
-////                    print("Push event notification")
-////                    self.createNotification(for: event)
-//                return -1
-//                // 3 min check every 30 sec
-//            } else if timeTillGo <= 180 {
-//                timeTillNextCheck = 30
-//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-//                // 10 min check every 3 min
-//            } else if timeTillGo <= 600 {
-//                timeTillNextCheck = 180
-//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-//                // 25 min check every 5 min
-//            } else if timeTillGo <= 1500 {
-//                timeTillNextCheck = 300
-//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-//                //60 min check every 10 min
-//            } else if timeTillGo <= 3600 {
-//                timeTillNextCheck = 600
-//                print("Set timeTillNextCheck: \(timeTillNextCheck)")
-//            }
-//        } else {
-//            timeTillNextCheck = timeTillNextCheck / 2
-//        }
-//        return timeTillNextCheck
-//
-//    }
     
      func getTimeTillNextCheckAction(from event: Event, completion: @escaping (Int) -> ()) {
         removePendingNotifications(with: event.eventID, notId: EventManager.eventNotificationIds[event.eventID] ?? 0)
@@ -467,7 +375,7 @@ class EventManager {
                     if timeTillGo < 0 {
                         print("Event \(event.eventName) has passed already")
                         
-                        //TODO
+                        
                         self.checkIfEventShouldRepeat(for: event)
                         result = -1
                         completion(-1)
@@ -475,7 +383,7 @@ class EventManager {
                         print("Push event notification")
 //                        self.createNotification(for: event)
                         self.createNotification(time: timeTillGo, for: event, travelTime: travelTime)
-                        //TODO: anpassen TimeInterval
+                        
                         //repeats if needed event 5 min after notification went of
                         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(300.0), repeats: false, block: { (timer) in
                             self.checkIfEventShouldRepeat(for: event)
@@ -524,6 +432,7 @@ class EventManager {
                     timeTillNextCheck = timeTillNextCheck / 2
                     completion(timeTillNextCheck)
                 }
+                self.startMySignificantLocationChanges()
                 result = timeTillNextCheck
                 print("Inside Dispatchqueue with travelTime:\(travelTime) eventTotalSeconds: \(eventTotalSeconds) timeTillNextCheck: \(timeTillNextCheck) timeTillGo: \(timeTillGo)")
 
@@ -542,7 +451,35 @@ class EventManager {
         center.removePendingNotificationRequests(withIdentifiers: notIds)
     }
     
-    //repeats event after notification
+    func startMySignificantLocationChanges() {
+        if !CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            // The device does not support this service.
+            return
+        }
+        let allJsonEvents = JSONDataManager.loadAll(Event.self)
+        if (allJsonEvents.isEmpty){
+            locationManager.startMonitoringSignificantLocationChanges()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
+        _ = locations.last!
+        
+        var smallestTimeTillEvent = 64000
+        let allJsonEvents = JSONDataManager.loadAll(Event.self)
+        for event in allJsonEvents {
+            getTimeTillNextCheckAction(from: event) { (result) in
+                if result < smallestTimeTillEvent {
+                    smallestTimeTillEvent = result
+                }
+            }
+        }
+        if smallestTimeTillEvent > 64000 {
+            locationManager.stopMonitoringSignificantLocationChanges()
+        }
+    }
+    
+    /* repeats event after notification */
      func checkIfEventShouldRepeat(for event: Event) {
         var weeksTillNextEvent: Double = 0
         event.deleteEventInJSON()
@@ -570,17 +507,12 @@ class EventManager {
                 timeTillNextCheck = tempResult
                 
             }
-            /*
-            if (timeTillNextCheck >= 0){
-                EventManager.getInstance().repeatTimeCheck(event: newEvent)
-            }
-            */
         })
     }
     
      func getTimeTillGo(event: Event) -> Int {
         var temp = calcDifNowAndEvent(event: event)
-        temp = (temp - (event.bufferTime + event.walkingTime + event.parkingTime) * 60) - calcDriveTime(event: event)
+        temp = (temp - (event.bufferTime + event.walkingTime + event.parkingTime) * 60) - zeroReturn(event: event)
         if temp <= 0 {
             return 0
         }
@@ -613,45 +545,7 @@ class EventManager {
         print("convertDateToTimeZoneDate Return\(temp)")
         return temp
     }
-//     func getTodaysDateWithTimeZone() -> Date {
-//        let date = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        let defaultTimeZoneStr = formatter.string(from: date)
-//        let todaysTimeWithTimeZone = self.convertDateToTimeZoneDate(dateToConvert: defaultTimeZoneStr)
-////        let calendar = Calendar.current
-////        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: todaysTimeWithTimeZone)
-//        print("timeZone: \(TimeZone.current)")
-//
-//        let tempDate = Date()
-//        let calendar = Calendar.current
-//        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: tempDate)
-//
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZ"
-//        guard let todaysDate = dateFormatter.date(from: todaysTimeWithTimeZone) else { return calendar.date(from: components)! }
-//        print("{EventHelper} not in getTodaysDateWithTimeZone Guard")
-//        return todaysDate
-//    }
-//
-//     func getTodaysDate() -> Date {
-//        let date1 = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-//        let defaultTimeZoneStr = formatter.string(from: date1)
-//        let todaysTimeWithTimeZone = self.convertDateToTimeZoneDate(dateToConvert: defaultTimeZoneStr)
-////        let isoDate = "2016-04-14T10:44:00+0000"
-//
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-////        dateFormatter.locale = Locale.autoupdatingCurrent// set locale to reliable US_POSIX
-//        let date = dateFormatter.date(from:todaysTimeWithTimeZone)!
-//        let calendar = Calendar.current
-//        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date)
-//        let finalDate = calendar.date(from:components)
-//        print("FinalDate \(finalDate)")
-//        return finalDate!
-//    }
+
     
      func getDate() -> Date {
         var date = Date()

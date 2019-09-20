@@ -77,44 +77,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    /* Swipe right for cells */
-    /*func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, sourceView, completionHandler) in
-            print("row of delete: \(indexPath.row)")
-            // handle delete (by removing the data from your array and updating the tableview)
-            var allEventsArray = [Event]()
-            
-            EventManager.getInstance().updateJSONEvents()
-            
-            allEventsArray = JSONDataManager.loadAll(Event.self)
-            
-            JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
-            
-            tableViewList.remove(at: indexPath.row)
-            
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.reloadData()
-            tableView.endUpdates()
-            completionHandler(true)
-        }
-        
-        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, sourceView, completionHandler) in
-            print("row of edit: \(indexPath.row)")
-            completionHandler(true)
-        }
-//        edit.backgroundColor = UIColor(patternImage: UIImage(named: "Settings_white")!)
-//        let image = imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 60, height: 60))
-//        edit.backgroundColor = UIColor(patternImage: image)
-        let mute = UIContextualAction(style: UIContextualAction.Style.normal, title: "mute") { (action, sourceView, completionHandler) in
-            print("row of mute: \(indexPath.row)")
-            completionHandler(true)
-        }
-        mute.backgroundColor = UIColor.lightText
-        let swipeActionConfig = UISwipeActionsConfiguration(actions: [delete])
-        swipeActionConfig.performsFirstActionWithFullSwipe = false
-        return swipeActionConfig
-    }*/
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action =  UIContextualAction(style: .normal, title: "Edit", handler: { (action,view,completionHandler ) in
@@ -132,39 +94,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return confrigation
     }
-    /*
-    /* Swipe left for cells */
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, sourceView, completionHandler) in
-            print("row of edit: \(indexPath.row)")
-            settingsSelected = true
-            currentEvent = tableViewList[indexPath.row]
-            self.performSegue(withIdentifier: "toSettings", sender: nil)
-            completionHandler(true)
-        }
-        //        edit.backgroundColor = UIColor(patternImage: UIImage(named: "Settings_white")!)
-        //        let image = imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 60, height: 60))
-        //        edit.backgroundColor = UIColor(patternImage: image)
-        let mute = UIContextualAction(style: .normal, title: "mute") { (action, sourceView, completionHandler) in
-            print("row of mute: \(indexPath.row)")
-            if (tableViewList[indexPath.row].mute == true) {
-                tableViewList[indexPath.row].mute = false
-                //TODO Image
-                
-            } else {
-                tableViewList[indexPath.row].mute = false
-                //TODO Image
-            }
-            tableViewList[indexPath.row].saveEventInJSON()
-            completionHandler(true)
-        }
-        mute.backgroundColor = UIColor.blue
-        //edit.backgroundColor = UIColor(patternImage: imageWithImage(image: UIImage(named: "Settings_white")!, scaledToSize: CGSize(width: 90, height: 90)))
-        let swipeActionConfig = UISwipeActionsConfiguration(actions: [edit, mute])
-        swipeActionConfig.performsFirstActionWithFullSwipe = false
-        return swipeActionConfig
-    }
- */
+
     
     /* scales UIImages */
     func imageWithImage(image:UIImage, scaledToSize newSize:CGSize) -> UIImage{
@@ -206,30 +136,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return confrigation
     }
-    /*
-    /* delete Event swipe right side */
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == .delete) {
-            // handle delete (by removing the data from your array and updating the tableview)
-            var allEventsArray = [Event]()
-            
-            EventManager.getInstance().updateJSONEvents()
-            
-            allEventsArray = JSONDataManager.loadAll(Event.self)
-            if !(allEventsArray.isEmpty) {
-                JSONDataManager.delete("\(allEventsArray[indexPath.row].eventID)")
-            }
-            
-            
-            
-            tableViewList.remove(at: indexPath.row)
-            
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.reloadData()
-            tableView.endUpdates()
-        }
-    }*/
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //Number of cells equal to listings in tableViewList
@@ -240,11 +147,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ViewContollerTableViewCell
         
-//        if(tableViewList[0].eventID == -1){
-//            cell.cellLabel.text = ""
-//            cell.textLabel?.text = ""
-//            tableViewList.dropFirst()
-//        }
+
         
         //writes the cellLabels
         cell.cellLabel.text = tableViewList[indexPath.row].eventName.capitalizingFirstLetter()
@@ -255,20 +158,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return(cell)
     }
     
-//    func updateTableViewList(event: Event) {
-//        var index = 0
-//        if tableViewList.count == 0 { return }
-//
-//        for listElem in tableViewList {
-//            var indexPath = IndexPath(row: index, section: 0)
-//            if (listElem.eventID == event.eventID) {
-//                tableViewList[index] = event
-//                tableView(tableView, cellForRowAt: indexPath)
-//                tableView.reloadData()
-//            }
-//            index = index + 1
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellClickedIndex = indexPath.row
@@ -307,23 +196,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         print("{ViewController}")
         addRefreshControl()
-//        view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundBlau")!)
         view.backgroundColor = UIColor(rgb: 0x08acf9)
-//        gifLogo.loadGif(name: "gif-dark-blue")
-
-//        let img = UIImage(named: "mamor")!.alpha(1.0)
-//        tableView.backgroundColor = UIColor(patternImage: img)
         tableView.backgroundColor = UIColor.white
         
-//        print("getDate():\(EventManager.getInstance().getDate()) ")
-//        let todaysDate = EventManager.getInstance().getTodaysDateWithTimeZone()
-//        print("Das heutige Datum ist: \(todaysDate)")
-     
-        
-        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "hintergrundHell")!)
+
         //sets line between cells
         tableView.separatorInset = .zero
-//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         
         
         if(settingsSelected == true) {
@@ -351,18 +229,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         for indexEventCount in 0..<allEventsArray.count {
             //loads Events into allEventArray
             
-
-//
             allEventsArray.sort(by: {$0.timeTillGo < $1.timeTillGo})
-//
-//        //adds to each notification an alarm
-   //    pushNotifivation(allEventsArray: allEventsArray)
-//
+
 //        //deletes all Events and then adds all Events to the Table View
             tableViewList.removeAll()
             tableViewList.append(contentsOf: allEventsArray)
-        
-
         }
     }
     
@@ -531,20 +402,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     @IBAction func settingsButtonAction(_ sender: Any) {
-        /*presentAlertWithTitle(title: "Titel", message: "Das ist die nachricht", options: "OK", "OK1", completion: {
-            (option) in
-            print("option: \(option)")
-            switch(option) {
-            case 0:
-                print("option one")
-                break
-            case 1:
-                print("option two")
-            default:
-                break
-            }
-        })*/
-        
-        
     }
 }

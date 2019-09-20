@@ -94,15 +94,13 @@ class ViewContollerTableViewCell: UITableViewCell {
                         })
                     secondsLeft = secondsLeft - 1
                 }
-                    //Todo farbe dynamisch verändern
+                    /* color change of cell */
                 else if secondsLeft < event.bufferTime * 60 && secondsLeft > 1{
-                        //schoener machen
                     var colorIncrediant: CGFloat = (CGFloat(secondsLeft) / CGFloat(event.bufferTime * 60))
                     if colorIncrediant >= 0 {
                         self.backgroundColor = UIColor.red.withAlphaComponent((CGFloat(1 - colorIncrediant))/2)
                     }
-                    //print("color \(colorIncrediant)")
-                    //TODO muss noch an event angepasst werden
+
                 }
                 
                 else if(secondsLeft < 0 && count > 1){
@@ -118,7 +116,6 @@ class ViewContollerTableViewCell: UITableViewCell {
                 count = count + 1
             }
         )}else{
-            //was tun wenn Zeit noch über 24h?
             self.cellTime.text = "+24h"
         }
     }
@@ -133,12 +130,10 @@ class ViewContollerTableViewCell: UITableViewCell {
             }else{
                 self.cellTime.text = "\(m):\(s)"
                 if(m==0){
-                    //TODO -9 muss noch entschieden werden wie lange weiterlaeuft
                     if(abs(s) <= 9 && s >= -9 && s != 0){
                     
                         self.cellTime.text = "\(s)"
                         
-                    //groesere Schrift vllt
                     }else{
                         self.cellTime.text = "\(m):\(s)"
                     }

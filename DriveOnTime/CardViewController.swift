@@ -98,8 +98,6 @@ class CardViewController: UIViewController {
         setLabelsWithNoETT()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
             if (expectedTravelTime == -1) {
-                //print("no expectedTavelTime")
-                //self.handleArea.isUserInteractionEnabled = false
             } else {
                 if (expectedTravelTime/60 > 60) {
                     var (h, m, s) = EventViewController2.getInstance().secondsToHoursMinutesSeconds(seconds: expectedTravelTime)

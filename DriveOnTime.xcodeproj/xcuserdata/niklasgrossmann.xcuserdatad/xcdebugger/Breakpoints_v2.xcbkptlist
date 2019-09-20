@@ -312,11 +312,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DriveOnTime/EventManager.swift"
-            timestampString = "590430844.429383"
+            timestampString = "590669616.525943"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "450"
-            endingLineNumber = "450"
+            startingLineNumber = "366"
+            endingLineNumber = "366"
             landmarkName = "getTimeTillNextCheckAction(from:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -328,11 +328,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DriveOnTime/EventManager.swift"
-            timestampString = "590430844.429438"
+            timestampString = "590669616.526046"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "countDaysTillNextEventDay(event:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -360,11 +360,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DriveOnTime/ViewController.swift"
-            timestampString = "590436912.127273"
+            timestampString = "590669616.526106"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
             landmarkName = "updateTableWithETA(travelTime:event:index:)"
             landmarkType = "7">
          </BreakpointContent>

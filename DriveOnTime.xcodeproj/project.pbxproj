@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D737AF1B22AA8293008BA068 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737AF1A22AA8293008BA068 /* Gif.swift */; };
-		D737AF2122AA8C2F008BA068 /* nobackground720.gif in Resources */ = {isa = PBXBuildFile; fileRef = D737AF2022AA8C2E008BA068 /* nobackground720.gif */; };
 		D73B59EE21944827000CA37B /* EventOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B59ED21944827000CA37B /* EventOLD.swift */; };
 		D73B59F021944C93000CA37B /* IterationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B59EF21944C93000CA37B /* IterationEnum.swift */; };
 		D7413BB422870E32007A4229 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7413BB322870E32007A4229 /* CardViewController.xib */; };
@@ -18,9 +17,8 @@
 		D74741F422882D3700CCFE6D /* EventViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74741F322882D3700CCFE6D /* EventViewController2.swift */; };
 		D757AD302280326900445133 /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D757AD2F2280326900445133 /* MapMarker.swift */; };
 		D75EA98A223419AF00A258C7 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75EA989223419AF00A258C7 /* EventManager.swift */; };
-		D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02621EB952B00AA2617 /* EventViewController.swift */; };
+		D763E02721EB952B00AA2617 /* EventViewControllerOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02621EB952B00AA2617 /* EventViewControllerOLD.swift */; };
 		D763E02921EDF19500AA2617 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763E02821EDF19500AA2617 /* Extentions.swift */; };
-		D775F43022BBE8240006D9EC /* gif-dark-blue.gif in Resources */ = {isa = PBXBuildFile; fileRef = D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */; };
 		D779839A2198DD2000764577 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983992198DD2000764577 /* Constants.swift */; };
 		D77983B221A4B6B600764577 /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77983B121A4B6B600764577 /* NewEventViewController.swift */; };
 		D7CAC2A022916A4F00E648C0 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAC29F22916A4F00E648C0 /* Helper.swift */; };
@@ -51,7 +49,6 @@
 /* Begin PBXFileReference section */
 		D705A7D422C0D2E1001F5905 /* DailyRhythm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DailyRhythm.entitlements; sourceTree = "<group>"; };
 		D737AF1A22AA8293008BA068 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
-		D737AF2022AA8C2E008BA068 /* nobackground720.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = nobackground720.gif; sourceTree = "<group>"; };
 		D73B59ED21944827000CA37B /* EventOLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventOLD.swift; sourceTree = "<group>"; };
 		D73B59EF21944C93000CA37B /* IterationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterationEnum.swift; sourceTree = "<group>"; };
 		D7413BB322870E32007A4229 /* CardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
@@ -61,9 +58,8 @@
 		D74741F322882D3700CCFE6D /* EventViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController2.swift; sourceTree = "<group>"; };
 		D757AD2F2280326900445133 /* MapMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		D75EA989223419AF00A258C7 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
-		D763E02621EB952B00AA2617 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		D763E02621EB952B00AA2617 /* EventViewControllerOLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewControllerOLD.swift; sourceTree = "<group>"; };
 		D763E02821EDF19500AA2617 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
-		D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "gif-dark-blue.gif"; sourceTree = "<group>"; };
 		D77983992198DD2000764577 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D77983B121A4B6B600764577 /* NewEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
 		D7CAC29F22916A4F00E648C0 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -142,7 +138,7 @@
 				D7CAFE0621FF5C4400272E8B /* JSONDataManager.swift */,
 				D7CBCA9B2193514A001F786B /* TimerController.swift */,
 				D73B59ED21944827000CA37B /* EventOLD.swift */,
-				D763E02621EB952B00AA2617 /* EventViewController.swift */,
+				D763E02621EB952B00AA2617 /* EventViewControllerOLD.swift */,
 				D74741F322882D3700CCFE6D /* EventViewController2.swift */,
 				D7CBCA7D219324E1001F786B /* Main.storyboard */,
 				D7CBCA9921934389001F786B /* ViewContollerTableViewCell.swift */,
@@ -160,8 +156,6 @@
 				D7CAC29F22916A4F00E648C0 /* Helper.swift */,
 				D737AF1A22AA8293008BA068 /* Gif.swift */,
 				D7E8277522E3557D00507F7F /* CAR3.gif */,
-				D737AF2022AA8C2E008BA068 /* nobackground720.gif */,
-				D775F42F22BBE8240006D9EC /* gif-dark-blue.gif */,
 			);
 			name = DailyRhythm;
 			path = DriveOnTime;
@@ -269,13 +263,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D737AF2122AA8C2F008BA068 /* nobackground720.gif in Resources */,
 				D7CBCA84219324E3001F786B /* LaunchScreen.storyboard in Resources */,
 				D7CBCA81219324E3001F786B /* Assets.xcassets in Resources */,
 				D7413BB422870E32007A4229 /* CardViewController.xib in Resources */,
 				D7E8277622E3557D00507F7F /* CAR3.gif in Resources */,
 				D7CBCA7F219324E1001F786B /* Main.storyboard in Resources */,
-				D775F43022BBE8240006D9EC /* gif-dark-blue.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +299,7 @@
 				D74741F422882D3700CCFE6D /* EventViewController2.swift in Sources */,
 				D7413BB622870EA2007A4229 /* CardViewController.swift in Sources */,
 				D7EC354E22B2BAD0006281D7 /* LaunchScreenViewController.swift in Sources */,
-				D763E02721EB952B00AA2617 /* EventViewController.swift in Sources */,
+				D763E02721EB952B00AA2617 /* EventViewControllerOLD.swift in Sources */,
 				D737AF1B22AA8293008BA068 /* Gif.swift in Sources */,
 				D779839A2198DD2000764577 /* Constants.swift in Sources */,
 				D7CBCA7A219324E1001F786B /* AppDelegate.swift in Sources */,

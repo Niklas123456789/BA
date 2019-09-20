@@ -40,9 +40,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         }
         startCheckingValityOfFields()
         
-//        checkAddressIsValid({
-//            jkfgskjfgjsD
-//        })
     }
 
     var di: Bool = false
@@ -142,18 +139,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         startCheckingValityOfFields()
     }
     
-    
-//
-//    @IBOutlet weak var containerStackView: UIStackView!
-//    @IBOutlet weak var firstContainerStackView: UIStackView!
-//    @IBOutlet weak var topLabel: UILabel!
-//    @IBOutlet weak var bufferLabel: UILabel!
-//    @IBOutlet weak var walkingLabel: UILabel!
-//    @IBOutlet weak var parkingLabel: UILabel!
-//
-//    @IBOutlet weak var firstContainer: UIView!
-//    @IBOutlet weak var secondContainer: UIView!
-//    @IBOutlet weak var thirdContainer: UIView!
     var okButtonIsFullyEnabled: Bool!
     
     @IBOutlet weak var parkingLabel: UILabel!
@@ -260,10 +245,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         cityTextField.inputAccessoryView = toolBar
         notesTextField.inputAccessoryView = toolBar
         
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(NewEventViewController.tapFunction))
-//        labelMO.isUserInteractionEnabled = true
-//        labelMO.addGestureRecognizer(tap)
-        
         /* this screen is setting screen */
         print("Settingselected: \(settingsSelected)")
         if settingsSelected == true {
@@ -328,19 +309,11 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
                 SOButton.setTitleColor(UIColor.white, for: .normal)
             }
             titleLabel.text = "Einstellungen"
-            //self.okButton.setImage(UIImage(named: "OK"), for: .normal)
         }
-        
-        // neues ereigniss hidden "Neues Ereignis"
-        //settingsSelected = false
         
     }
     
-    
-    //@objc func tapFunction(sender:UITapGestureRecognizer) {
 
-        //print("tap working")
-    //}
     
     @IBAction func datePickerAction(sender: AnyObject) {
         var dateFormatter = DateFormatter()
@@ -405,83 +378,20 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         
         
     }
-    
-    /*func checkAddressIsValid() -> Bool {
-        let geoCoder = CLGeocoder()
-        var address = "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)"
-        var valid = false
-        
-        func helpFunc(placemarks: [CLPlacemark]) -> Bool{
-            print("In helpFunc")
-            if placemarks.isEmpty {
-                valid = false
-                return false
-            } else {
-                print("TRUUUUE")
-                valid = true
-                return true
-            }
-        }
-        
-        geoCoder.geocodeAddressString(address) { (placemarks, error) in
-            guard
-                let placemarks = placemarks,
-                let location = placemarks.first?.location,
-                helpFunc(placemarks: placemarks)
-            else {
-                    // TODO handle no location found
-                    print("ERROR no location found \(error.debugDescription)")
-                    return
-                
-            }
-        }
-        return valid
-    }*/
+
     func enableOkCheck() {
         print("in enableOkCheck")
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
-        //TODO: Add alle anderen pflichtfelder
         if (eventWeekdays.contains(true) && self.nameTextField.text?.isEmpty == false && self.cityTextField.text?.isEmpty == false) {
-//            self.okButton.setImage(UIImage(named: "OK"), for: .normal)
             okButtonIsFullyEnabled = true
-            //okButton.isUserInteractionEnabled = true
             
         }else{
-//            self.okButton.setImage(UIImage(named: "OK_white_grey"), for: .normal)
             okButtonIsFullyEnabled = false
-            //okButton.isUserInteractionEnabled = false
         }
         
         
     }
     
-    /*func checkAddressIsValid() {
-        let geoCoder = CLGeocoder()
-        let group = DispatchGroup()
-        var address = "Germany, \(cityTextField.text), \(streetTextField.text) \(houseNumberTextField.text)"
-        
-        let timer = Timer.scheduledTimer(withTimeInterval: 100, repeats: false, block: { (timer) in
-            geoCoder.cancelGeocode()
-        })
-        group.enter()
-        
-        geoCoder.geocodeAddressString(address) { (placemarks, error) in
-            guard
-                let placemarks = placemarks,
-                let location = placemarks.first?.location
-            else {
-                // TODO handle no location found
-                print("ERROR no location found \(error.debugDescription)")
-                return
-            }
-            self.enableOkCheck()
-//            if error == nil {
-//                self.enableOkCheck()
-//            } else {
-//                print("ERROR no location found \(error.debugDescription)")
-//            }
-        }
-    }*/
     
     func readyToCheckAddress() -> Bool {
         let eventWeekdays = [so, mo, di, mi, dO, fr, sa]
@@ -560,7 +470,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
-    //TODO: Change Keyboardlayout with hide keyboard button
+
     //jumps between textFields when pressing return on keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         startCheckingValityOfFields()
@@ -584,7 +494,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
 
 
     
-    //Function that trigger wenn OK-Button is pressed
+    /* Function that trigger wenn OK-Button is pressed */
     @IBAction func okButtonAction(_ sender: UIButton) {
         print("--------------OK BUTTON---------------")
         
@@ -648,7 +558,6 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
         hour = hour - Int(secondsFromGMT / 3600)
         
-//        let componentsReal = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: todaysRealDate)
         
         print("DATE: \(year):"+"\(month):"+"\(day)   "+"\(hour):\(minute)")
 
