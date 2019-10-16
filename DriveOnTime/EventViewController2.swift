@@ -119,7 +119,6 @@ class EventViewController2: UIViewController, MKMapViewDelegate {
     func setupCard() {
 
         cardViewController = CardViewController(nibName:"CardViewController", bundle:nil)
-        //TODO: setCardLabels()
         
         self.addChild(cardViewController)
         self.view.addSubview(cardViewController.view)

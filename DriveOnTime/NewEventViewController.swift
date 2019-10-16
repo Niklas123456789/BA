@@ -450,9 +450,9 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = (view as? UILabel) ?? UILabel()
         
-        
+        label.textColor = .black
         if(pickerView.isEqual(durationPicker)){
-            //label.textColor = .black
+            label.textColor = .black
             label.textAlignment = .center
             label.font = UIFont(name: Font.helveticaLight, size: 22)
         
@@ -465,6 +465,7 @@ class NewEventViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             
             // where data is an Array of String
             label.text = "\(timePickerData[row])"
+            label.textColor = .black
         }
         return label
     }

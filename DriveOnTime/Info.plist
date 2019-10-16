@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Klicke "Immer erlauben", da die App auch im Hintergrund deinen Standort aktualisieren muss. Deine standortbezogenen Daten werden nur für die Navigationsfunktionalität der App verwendet. Dabei werden von der App keine standortbezogenen Daten gespeichert.</string>
+	<string>Klicke &quot;Immer erlauben&quot;, da die App auch im Hintergrund deinen Standort aktualisieren muss. Deine standortbezogenen Daten werden nur für die Navigationsfunktionalität der App verwendet. Dabei werden von der App keine standortbezogenen Daten gespeichert.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Klicke "Immer erlauben", da die App auch im Hintergrund deinen Standort aktualisieren muss. Deine standortbezogenen Daten werden nur für die Navigationsfunktionalität der App verwendet. Dabei werden von der App keine standortbezogenen Daten gespeichert.</string>
+	<string>Klicke &quot;Immer erlauben&quot;, da die App auch im Hintergrund deinen Standort aktualisieren muss. Deine standortbezogenen Daten werden nur für die Navigationsfunktionalität der App verwendet. Dabei werden von der App keine standortbezogenen Daten gespeichert.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -46,6 +46,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

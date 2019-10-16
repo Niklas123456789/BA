@@ -76,11 +76,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             expectedTravelTime = -1
         }
     }
-    
+    /* Edit swipe */
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let action =  UIContextualAction(style: .normal, title: "Edit", handler: { (action,view,completionHandler ) in
-            //do stuff
+        let action =  UIContextualAction(style: .normal, title: nil, handler: { (action,view,completionHandler ) in
+            
             print("row of edit: \(indexPath.row)")
             settingsSelected = true
             currentEvent = tableViewList[indexPath.row]
@@ -88,7 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             completionHandler(true)
         })
-        action.image = UIImage(named: "settings.png")
+        action.image = UIImage(named: "settings-neu1.png")
         action.backgroundColor = .lightGray
         let confrigation = UISwipeActionsConfiguration(actions: [action])
         
@@ -107,7 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     /* delete swipe */
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let action =  UIContextualAction(style: .normal, title: "Delete", handler: { (action,view,completionHandler ) in
+        let action =  UIContextualAction(style: .normal, title: nil, handler: { (action,view,completionHandler ) in
             
             // handle delete (by removing the data from your array and updating the tableview)
             var allEventsArray = [Event]()
@@ -130,7 +130,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             completionHandler(true)
         })
-        action.image = UIImage(named: "bin.png")
+        action.image = UIImage(named: "bin-neu1.png")
         action.backgroundColor = .red
         let confrigation = UISwipeActionsConfiguration(actions: [action])
         
